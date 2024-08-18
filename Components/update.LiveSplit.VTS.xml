@@ -1,0 +1,75 @@
+<updates>
+<update version="1.3.1">
+<files>
+<file path="Components/LiveSplit.DXIW.dll" status="changed"/>
+</files>
+<changelog>
+<change>Disabled ProcessLenght checking, since it sometimes caused issues (blame DXIW!).</change>
+</changelog>
+</update>
+<update version="1.3.0">
+<files>
+<file path="Components/LiveSplit.DXIW.dll" status="changed"/>
+</files>
+<changelog>
+<change>Alternative method for reading memory.</change>
+<change>Mess which should work!</change>
+</changelog>
+</update>
+<update version="1.2.3">
+<files>
+<file path="Components/LiveSplit.DXIW.dll" status="changed"/>
+</files>
+<changelog>
+<change>Maybe try hiring a developer who knows how to program...</change>
+</changelog>
+</update>
+<update version="1.2.2">
+<files>
+<file path="Components/LiveSplit.DXIW.dll" status="changed"/>
+</files>
+<changelog>
+<change>Reverted changes, as SafeMethods forced by 1.6 are not reliable enough.</change>
+</changelog>
+</update>
+<update version="1.2.1">
+<files>
+<file path="Components/LiveSplit.DXIW.dll" status="changed"/>
+</files>
+<changelog>
+<change>Updated to be compatible with Livesplit 1.6</change>
+</changelog>
+</update>
+<update version="1.2.0">
+<files>
+<file path="Components/LiveSplit.DXIW.dll" status="changed"/>
+</files>
+<changelog>
+<change>Added checking for process length and using that support for Steam version</change>
+</changelog>
+</update>
+<update version="1.1.0">
+<files>
+<file path="Components/LiveSplit.DXIW.dll" status="changed"/>
+</files>
+<changelog>
+<change>Added 1s delay after catching the process in order to make up for false value that just got allocated.</change>
+</changelog>
+</update>
+<update version="1.0.1">
+<files>
+<file path="Components/LiveSplit.DXIW.dll" status="changed"/>
+</files>
+<changelog>
+<change>Fixed typeo.</change>
+</changelog>
+</update>
+<update version="1.0.0">
+<files>
+<file path="Components/LiveSplit.DXIW.dll" status="changed"/>
+</files>
+<changelog>
+<change>Initial release.</change>
+</changelog>
+</update>
+</updates>

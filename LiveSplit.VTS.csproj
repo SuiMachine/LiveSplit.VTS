@@ -37,6 +37,10 @@
       <HintPath>C:\LiveSplit\LiveSplit.Core.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libs\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -47,8 +51,16 @@
       <HintPath>C:\LiveSplit\UpdateManager.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="VTS-Sharp">
+      <HintPath>Libs\VTS-Sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="websocket-sharp">
+      <HintPath>Libs\websocket-sharp.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomLiveSplitAttributes.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="VTSComponent.cs" />
     <Compile Include="VTSFactory.cs" />
     <Compile Include="VTSSettings.cs">

@@ -1,64 +1,112 @@
-﻿using System;
+﻿using LiveSplit.VTS.CustomAttributes;
+using System;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Xml;
+using System.Collections.Generic;
+using LiveSplit.VTS.Extensions;
+using Newtonsoft.Json.Linq;
 
 namespace LiveSplit.VTS
 {
 	public partial class VTSSettings : UserControl
 	{
+		[LiveSplitVTSStoreLayoutSetting][LiveSplitVTSSettingsAttributeBool("Autoconnect", false)]
+		public bool Autoconnect { get; set; }
+
+		[LiveSplitVTSStoreLayoutSetting][LiveSplitVTSSettingsAttributeString("Api_Address", "ws://127.0.0.1:8001")]
+		public string Api_Address { get; set; }
+
 		public bool AutoReset { get; set; }
 		public bool AutoStart { get; set; }
 
 		private const bool DEFAULT_AUTORESET = false;
 		private const bool DEFAULT_AUTOSTART = true;
 
+		private List<(PropertyInfo Property, LiveSplitVTSSettingsAttribute Attribute)> mappings;
+		private List<(PropertyInfo Property, LiveSplitVTSSettingsAttribute Attribute)> layout_settingsMappings;
+
 		public VTSSettings()
 		{
 			InitializeComponent();
 
-			this.chkUnsafeReading.DataBindings.Add("Checked", this, "UseNonSafeMemoryReading", false, DataSourceUpdateMode.OnPropertyChanged);
-
-			this.chkAutoReset.DataBindings.Add("Checked", this, "AutoReset", false, DataSourceUpdateMode.OnPropertyChanged);
-			this.chkAutoStart.DataBindings.Add("Checked", this, "AutoStart", false, DataSourceUpdateMode.OnPropertyChanged);
-
+			this.CB_Autoconnect.DataBindings.Add("Checked", this, nameof(Autoconnect), false, DataSourceUpdateMode.OnPropertyChanged);
+			this.TB_Address.DataBindings.Add("Text", this, nameof(Api_Address), false, DataSourceUpdateMode.OnPropertyChanged);
 
 			// defaults
-			this.AutoReset = DEFAULT_AUTORESET;
-			this.AutoStart = DEFAULT_AUTOSTART;
+			ApplyDefaults();
+		}
+
+		private void CreateMappings()
+		{
+			if (mappings == null)
+			{
+				mappings = new List<(PropertyInfo, LiveSplitVTSSettingsAttribute)>();
+
+				var properties = typeof(VTSSettings).GetProperties();
+				foreach (var property in properties)
+				{
+					var value = (LiveSplitVTSSettingsAttribute)property.GetCustomAttribute(typeof(LiveSplitVTSSettingsAttribute));
+					if (value != null)
+					{
+						mappings.Add((property, value));
+					}
+				}
+			}
+
+			if (layout_settingsMappings == null)
+			{
+				layout_settingsMappings = new List<(PropertyInfo Property, LiveSplitVTSSettingsAttribute Attribute)>();
+
+				var properties = typeof(VTSSettings).GetProperties();
+				foreach (var property in properties)
+				{
+					var storeAttribute = (LiveSplitVTSStoreLayoutSetting)property.GetCustomAttribute(typeof(LiveSplitVTSStoreLayoutSetting));
+					if(storeAttribute != null)
+					{
+						var value = (LiveSplitVTSSettingsAttribute)property.GetCustomAttribute(typeof(LiveSplitVTSSettingsAttribute));
+
+						if (value != null && !string.IsNullOrEmpty(value.NAME))
+						{
+							layout_settingsMappings.Add((property, value));
+						}
+					}
+				}
+			}
+		}
+
+		private void ApplyDefaults()
+		{
+			CreateMappings();
+
+			foreach (var mapping in mappings)
+				mapping.Property.SetValue(this, mapping.Attribute.GetDefaultValue());
 		}
 
 		public XmlNode GetSettings(XmlDocument doc)
 		{
 			XmlElement settingsNode = doc.CreateElement("Settings");
 
-			settingsNode.AppendChild(ToElement(doc, "Version", Assembly.GetExecutingAssembly().GetName().Version.ToString(3)));
+			settingsNode.AppendChild(doc.ToElement("Version", Assembly.GetExecutingAssembly().GetName().Version.ToString(3)));
 
-			settingsNode.AppendChild(ToElement(doc, "AutoReset", this.AutoReset));
-			settingsNode.AppendChild(ToElement(doc, "AutoStart", this.AutoStart));
+			settingsNode.AppendChild(doc.ToElement("AutoReset", this.AutoReset));
+			settingsNode.AppendChild(doc.ToElement("AutoStart", this.AutoStart));
+
+			foreach (var mapping in layout_settingsMappings)
+				mapping.Attribute.GetSetting(settingsNode, mapping.Property.GetValue(this));
 
 			return settingsNode;
 		}
 
 		public void SetSettings(XmlNode settings)
 		{
-			this.AutoReset = ParseBool(settings, "AutoReset", DEFAULT_AUTORESET);
-			this.AutoStart = ParseBool(settings, "AutoStart", DEFAULT_AUTOSTART);
-		}
+			CreateMappings();
 
-		static bool ParseBool(XmlNode settings, string setting, bool default_ = false)
-		{
-			bool val;
-			return settings[setting] != null ?
-				(Boolean.TryParse(settings[setting].InnerText, out val) ? val : default_)
-				: default_;
-		}
+			this.AutoReset = XML_Utils.ReadBool(settings, "AutoReset", DEFAULT_AUTORESET);
+			this.AutoStart = XML_Utils.ReadBool(settings, "AutoStart", DEFAULT_AUTOSTART);
 
-		static XmlElement ToElement<T>(XmlDocument document, string name, T value)
-		{
-			XmlElement str = document.CreateElement(name);
-			str.InnerText = value.ToString();
-			return str;
+			foreach (var mapping in layout_settingsMappings)
+				mapping.Property.SetValue(this, mapping.Attribute.SetSetting(settings, mapping.Property.GetValue(this)));
 		}
 	}
 }

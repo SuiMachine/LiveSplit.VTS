@@ -28,119 +28,184 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.gbStartSplits = new System.Windows.Forms.GroupBox();
-            this.tlpStartSplits = new System.Windows.Forms.TableLayoutPanel();
-            this.chkAutoStart = new System.Windows.Forms.CheckBox();
-            this.chkAutoReset = new System.Windows.Forms.CheckBox();
-            this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
-            this.chkUnsafeReading = new System.Windows.Forms.CheckBox();
-            this.gbStartSplits.SuspendLayout();
-            this.tlpStartSplits.SuspendLayout();
-            this.tlpMain.SuspendLayout();
-            this.SuspendLayout();
-            // 
-            // gbStartSplits
-            // 
-            this.gbStartSplits.AutoSize = true;
-            this.gbStartSplits.Controls.Add(this.tlpStartSplits);
-            this.gbStartSplits.Dock = System.Windows.Forms.DockStyle.Top;
-            this.gbStartSplits.Location = new System.Drawing.Point(3, 3);
-            this.gbStartSplits.Name = "gbStartSplits";
-            this.gbStartSplits.Size = new System.Drawing.Size(470, 85);
-            this.gbStartSplits.TabIndex = 5;
-            this.gbStartSplits.TabStop = false;
-            this.gbStartSplits.Text = "Options";
-            // 
-            // tlpStartSplits
-            // 
-            this.tlpStartSplits.AutoSize = true;
-            this.tlpStartSplits.BackColor = System.Drawing.Color.Transparent;
-            this.tlpStartSplits.ColumnCount = 1;
-            this.tlpStartSplits.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpStartSplits.Controls.Add(this.chkUnsafeReading, 0, 0);
-            this.tlpStartSplits.Controls.Add(this.chkAutoReset, 0, 1);
-            this.tlpStartSplits.Controls.Add(this.chkAutoStart, 0, 2);
-            this.tlpStartSplits.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpStartSplits.Location = new System.Drawing.Point(3, 16);
-            this.tlpStartSplits.Name = "tlpStartSplits";
-            this.tlpStartSplits.RowCount = 3;
-            this.tlpStartSplits.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpStartSplits.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpStartSplits.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpStartSplits.Size = new System.Drawing.Size(464, 66);
-            this.tlpStartSplits.TabIndex = 4;
-            // 
-            // chkAutoStart
-            // 
-            this.chkAutoStart.AutoSize = true;
-            this.chkAutoStart.Checked = true;
-            this.chkAutoStart.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkAutoStart.Location = new System.Drawing.Point(3, 49);
-            this.chkAutoStart.Name = "chkAutoStart";
-            this.chkAutoStart.Size = new System.Drawing.Size(48, 14);
-            this.chkAutoStart.TabIndex = 5;
-            this.chkAutoStart.Text = "Start";
-            this.chkAutoStart.UseVisualStyleBackColor = true;
-            // 
-            // chkAutoReset
-            // 
-            this.chkAutoReset.AutoSize = true;
-            this.chkAutoReset.Checked = true;
-            this.chkAutoReset.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkAutoReset.Location = new System.Drawing.Point(3, 26);
-            this.chkAutoReset.Name = "chkAutoReset";
-            this.chkAutoReset.Size = new System.Drawing.Size(54, 17);
-            this.chkAutoReset.TabIndex = 4;
-            this.chkAutoReset.Text = "Reset";
-            this.chkAutoReset.UseVisualStyleBackColor = true;
-            // 
-            // tlpMain
-            // 
-            this.tlpMain.ColumnCount = 1;
-            this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpMain.Controls.Add(this.gbStartSplits, 0, 0);
-            this.tlpMain.Location = new System.Drawing.Point(0, 0);
-            this.tlpMain.Name = "tlpMain";
-            this.tlpMain.RowCount = 1;
-            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpMain.Size = new System.Drawing.Size(476, 376);
-            this.tlpMain.TabIndex = 0;
-            // 
-            // chkUnsafeReading
-            // 
-            this.chkUnsafeReading.AutoSize = true;
-            this.chkUnsafeReading.Checked = true;
-            this.chkUnsafeReading.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkUnsafeReading.Location = new System.Drawing.Point(3, 3);
-            this.chkUnsafeReading.Name = "chkUnsafeReading";
-            this.chkUnsafeReading.Size = new System.Drawing.Size(171, 17);
-            this.chkUnsafeReading.TabIndex = 6;
-            this.chkUnsafeReading.Text = "Use Non-Safe Memory Reader";
-            this.chkUnsafeReading.UseVisualStyleBackColor = true;
-            // 
-            // DXIWSettings
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.tlpMain);
-            this.Name = "DXIWSettings";
-            this.Size = new System.Drawing.Size(476, 382);
-            this.gbStartSplits.ResumeLayout(false);
-            this.gbStartSplits.PerformLayout();
-            this.tlpStartSplits.ResumeLayout(false);
-            this.tlpStartSplits.PerformLayout();
-            this.tlpMain.ResumeLayout(false);
-            this.tlpMain.PerformLayout();
-            this.ResumeLayout(false);
+			this.gbStartSplits = new System.Windows.Forms.GroupBox();
+			this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
+			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+			this.TB_Address = new System.Windows.Forms.TextBox();
+			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+			this.label1 = new System.Windows.Forms.Label();
+			this.B_Connect = new System.Windows.Forms.Button();
+			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+			this.label2 = new System.Windows.Forms.Label();
+			this.L_ConnectionStatus = new System.Windows.Forms.Label();
+			this.CB_Autoconnect = new System.Windows.Forms.CheckBox();
+			this.gbStartSplits.SuspendLayout();
+			this.tlpMain.SuspendLayout();
+			this.tableLayoutPanel1.SuspendLayout();
+			this.tableLayoutPanel2.SuspendLayout();
+			this.tableLayoutPanel3.SuspendLayout();
+			this.SuspendLayout();
+			// 
+			// gbStartSplits
+			// 
+			this.gbStartSplits.Controls.Add(this.tableLayoutPanel1);
+			this.gbStartSplits.Dock = System.Windows.Forms.DockStyle.Top;
+			this.gbStartSplits.Location = new System.Drawing.Point(3, 3);
+			this.gbStartSplits.Name = "gbStartSplits";
+			this.gbStartSplits.Size = new System.Drawing.Size(470, 373);
+			this.gbStartSplits.TabIndex = 5;
+			this.gbStartSplits.TabStop = false;
+			this.gbStartSplits.Text = "`";
+			// 
+			// tlpMain
+			// 
+			this.tlpMain.ColumnCount = 1;
+			this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tlpMain.Controls.Add(this.gbStartSplits, 0, 0);
+			this.tlpMain.Location = new System.Drawing.Point(0, 0);
+			this.tlpMain.Name = "tlpMain";
+			this.tlpMain.RowCount = 1;
+			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpMain.Size = new System.Drawing.Size(476, 376);
+			this.tlpMain.TabIndex = 0;
+			// 
+			// tableLayoutPanel1
+			// 
+			this.tableLayoutPanel1.ColumnCount = 1;
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 0);
+			this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel3, 0, 1);
+			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
+			this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 16);
+			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+			this.tableLayoutPanel1.RowCount = 2;
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(464, 244);
+			this.tableLayoutPanel1.TabIndex = 0;
+			// 
+			// TB_Address
+			// 
+			this.TB_Address.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+			this.TB_Address.Location = new System.Drawing.Point(77, 5);
+			this.TB_Address.Name = "TB_Address";
+			this.TB_Address.Size = new System.Drawing.Size(278, 20);
+			this.TB_Address.TabIndex = 0;
+			// 
+			// tableLayoutPanel2
+			// 
+			this.tableLayoutPanel2.ColumnCount = 3;
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 74F));
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+			this.tableLayoutPanel2.Controls.Add(this.TB_Address, 1, 0);
+			this.tableLayoutPanel2.Controls.Add(this.label1, 0, 0);
+			this.tableLayoutPanel2.Controls.Add(this.CB_Autoconnect, 2, 0);
+			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 3);
+			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+			this.tableLayoutPanel2.RowCount = 1;
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(458, 31);
+			this.tableLayoutPanel2.TabIndex = 1;
+			// 
+			// label1
+			// 
+			this.label1.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.label1.AutoSize = true;
+			this.label1.Location = new System.Drawing.Point(3, 9);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(64, 13);
+			this.label1.TabIndex = 0;
+			this.label1.Text = "API address";
+			// 
+			// B_Connect
+			// 
+			this.B_Connect.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+			this.B_Connect.Location = new System.Drawing.Point(376, 4);
+			this.B_Connect.Name = "B_Connect";
+			this.B_Connect.Size = new System.Drawing.Size(79, 23);
+			this.B_Connect.TabIndex = 1;
+			this.B_Connect.Text = "Connect";
+			this.B_Connect.UseVisualStyleBackColor = true;
+			// 
+			// tableLayoutPanel3
+			// 
+			this.tableLayoutPanel3.ColumnCount = 3;
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.15721F));
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 65.28384F));
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 18.34061F));
+			this.tableLayoutPanel3.Controls.Add(this.B_Connect, 2, 0);
+			this.tableLayoutPanel3.Controls.Add(this.label2, 0, 0);
+			this.tableLayoutPanel3.Controls.Add(this.L_ConnectionStatus, 1, 0);
+			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Top;
+			this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 40);
+			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+			this.tableLayoutPanel3.RowCount = 1;
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(458, 32);
+			this.tableLayoutPanel3.TabIndex = 2;
+			// 
+			// label2
+			// 
+			this.label2.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.label2.AutoSize = true;
+			this.label2.Location = new System.Drawing.Point(3, 9);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(40, 13);
+			this.label2.TabIndex = 2;
+			this.label2.Text = "Status:";
+			// 
+			// L_ConnectionStatus
+			// 
+			this.L_ConnectionStatus.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.L_ConnectionStatus.AutoSize = true;
+			this.L_ConnectionStatus.Location = new System.Drawing.Point(77, 9);
+			this.L_ConnectionStatus.Name = "L_ConnectionStatus";
+			this.L_ConnectionStatus.Size = new System.Drawing.Size(13, 13);
+			this.L_ConnectionStatus.TabIndex = 3;
+			this.L_ConnectionStatus.Text = "?";
+			// 
+			// CB_Autoconnect
+			// 
+			this.CB_Autoconnect.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.CB_Autoconnect.AutoSize = true;
+			this.CB_Autoconnect.Location = new System.Drawing.Point(361, 7);
+			this.CB_Autoconnect.Name = "CB_Autoconnect";
+			this.CB_Autoconnect.Size = new System.Drawing.Size(87, 17);
+			this.CB_Autoconnect.TabIndex = 1;
+			this.CB_Autoconnect.Text = "Autoconnect";
+			this.CB_Autoconnect.UseVisualStyleBackColor = true;
+			// 
+			// VTSSettings
+			// 
+			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.Controls.Add(this.tlpMain);
+			this.Name = "VTSSettings";
+			this.Size = new System.Drawing.Size(476, 382);
+			this.gbStartSplits.ResumeLayout(false);
+			this.tlpMain.ResumeLayout(false);
+			this.tableLayoutPanel1.ResumeLayout(false);
+			this.tableLayoutPanel2.ResumeLayout(false);
+			this.tableLayoutPanel2.PerformLayout();
+			this.tableLayoutPanel3.ResumeLayout(false);
+			this.tableLayoutPanel3.PerformLayout();
+			this.ResumeLayout(false);
 
         }
 
         #endregion
         private System.Windows.Forms.GroupBox gbStartSplits;
-        private System.Windows.Forms.TableLayoutPanel tlpStartSplits;
-        private System.Windows.Forms.CheckBox chkAutoStart;
-        private System.Windows.Forms.CheckBox chkAutoReset;
         private System.Windows.Forms.TableLayoutPanel tlpMain;
-        private System.Windows.Forms.CheckBox chkUnsafeReading;
-    }
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+		private System.Windows.Forms.TextBox TB_Address;
+		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.Button B_Connect;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
+		private System.Windows.Forms.Label label2;
+		private System.Windows.Forms.Label L_ConnectionStatus;
+		private System.Windows.Forms.CheckBox CB_Autoconnect;
+	}
 }

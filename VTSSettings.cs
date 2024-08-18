@@ -11,10 +11,12 @@ namespace LiveSplit.VTS
 {
 	public partial class VTSSettings : UserControl
 	{
-		[LiveSplitVTSStoreLayoutSetting][LiveSplitVTSSettingsAttributeBool("Autoconnect", false)]
+		[LiveSplitVTSStoreLayoutSetting]
+		[LiveSplitVTSSettingsAttributeBool("Autoconnect", false)]
 		public bool Autoconnect { get; set; }
 
-		[LiveSplitVTSStoreLayoutSetting][LiveSplitVTSSettingsAttributeString("Api_Address", "ws://127.0.0.1:8001")]
+		[LiveSplitVTSStoreLayoutSetting]
+		[LiveSplitVTSSettingsAttributeString("Api_Address", "ws://127.0.0.1:8001")]
 		public string Api_Address { get; set; }
 
 		public bool AutoReset { get; set; }
@@ -35,6 +37,11 @@ namespace LiveSplit.VTS
 
 			// defaults
 			ApplyDefaults();
+
+			if (this.Autoconnect && !VTS_Connection.GetInstance().Connected)
+			{
+				VTS_Connection.GetInstance().Connect();
+			}
 		}
 
 		private void CreateMappings()
@@ -62,7 +69,7 @@ namespace LiveSplit.VTS
 				foreach (var property in properties)
 				{
 					var storeAttribute = (LiveSplitVTSStoreLayoutSetting)property.GetCustomAttribute(typeof(LiveSplitVTSStoreLayoutSetting));
-					if(storeAttribute != null)
+					if (storeAttribute != null)
 					{
 						var value = (LiveSplitVTSSettingsAttribute)property.GetCustomAttribute(typeof(LiveSplitVTSSettingsAttribute));
 

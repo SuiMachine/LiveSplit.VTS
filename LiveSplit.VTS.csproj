@@ -76,6 +76,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="VTS_Connection.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="VTSSettings.resx">

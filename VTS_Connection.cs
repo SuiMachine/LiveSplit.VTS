@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using VTS.Core;
 
@@ -12,7 +13,18 @@ namespace LiveSplit.VTS
 		public CoreVTSPlugin Plugin { get; private set; }
 		//HostApplicationBuilder builder = Host.CreateApplicationBuilder(args); // Create a host builder so the program doesn't exit immediately
 
-		public bool Connected { get; private set; } = false;
+		public bool Connected
+		{
+			get => m_Connected;
+			set
+			{
+				m_Connected = value;
+				if (OnConnectionChanged != null)
+					OnConnectionChanged.Invoke(m_Connected);
+			}
+		}
+		private bool m_Connected = false;
+		public Action<bool> OnConnectionChanged;
 		public bool IsAutheniticated => Plugin != null ? Plugin.IsAuthenticated : false;
 
 		public static VTS_Connection GetInstance()
@@ -34,7 +46,7 @@ namespace LiveSplit.VTS
 			{
 				try
 				{
-					await Plugin.InitializeAsync(new WebSocketImpl(Logger),	new NewtonsoftJsonUtilityImpl(), new TokenStorageImpl(""), () => Logger.LogWarning("Disconnected!"));
+					await Plugin.InitializeAsync(new WebSocketImpl(Logger), new NewtonsoftJsonUtilityImpl(), new TokenStorageImpl(""), () => Logger.LogWarning("Disconnected!"));
 					Logger.Log("Connected!");
 					Connected = true;
 					var apiState = await Plugin.GetAPIState();
@@ -51,6 +63,7 @@ namespace LiveSplit.VTS
 						Logger.Log($"The background was changed to: {backgroundInfo.data.backgroundName}");
 					});
 					// To unsubscribe, use the plugin.UnsubscribeFrom* methods
+					Debug.WriteLine("Stop");
 				}
 				catch (VTSException error)
 				{
@@ -62,10 +75,14 @@ namespace LiveSplit.VTS
 
 		public async Task Disconnect()
 		{
-			if(Connected && Plugin.IsAuthenticated)
+			if (Connected && Plugin.IsAuthenticated)
 			{
 				var apiState = await Plugin.GetAPIState();
+				if (!apiState.data.currentSessionAuthenticated || !apiState.data.active)
+					return;
 
+				Plugin.Disconnect();
+				Connected = false;
 			}
 		}
 	}

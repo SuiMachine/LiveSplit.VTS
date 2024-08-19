@@ -126,6 +126,8 @@ namespace LiveSplit.VTS
 		{
 			if (!VTS_Connection.GetInstance().Connected)
 				Task.Factory.StartNew(VTS_Connection.GetInstance().Connect);
+			else
+				Task.Factory.StartNew(VTS_Connection.GetInstance().Disconnect);
 		}
 	}
 }

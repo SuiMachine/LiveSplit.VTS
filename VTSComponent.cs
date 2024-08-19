@@ -17,16 +17,14 @@ namespace LiveSplit.VTS
 		public VTSSettings Settings { get; set; }
 
 		public bool Disposed { get; private set; }
-		public bool IsLayoutComponent { get; private set; }
 
 		private TimerModel _timer;
 		private GameMemory _gameMemory;
 		private LiveSplitState _state;
 
-		public VTSComponent(LiveSplitState state, bool isLayoutComponent)
+		public VTSComponent(LiveSplitState state)
 		{
 			_state = state;
-			this.IsLayoutComponent = isLayoutComponent;
 
 			this.Settings = new VTSSettings();
 

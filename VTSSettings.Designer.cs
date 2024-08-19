@@ -29,21 +29,21 @@
         private void InitializeComponent()
         {
 			this.gbStartSplits = new System.Windows.Forms.GroupBox();
-			this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-			this.TB_Address = new System.Windows.Forms.TextBox();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+			this.TB_Address = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
-			this.B_Connect = new System.Windows.Forms.Button();
+			this.CB_Autoconnect = new System.Windows.Forms.CheckBox();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+			this.B_Connect = new System.Windows.Forms.Button();
 			this.label2 = new System.Windows.Forms.Label();
 			this.L_ConnectionStatus = new System.Windows.Forms.Label();
-			this.CB_Autoconnect = new System.Windows.Forms.CheckBox();
+			this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
 			this.gbStartSplits.SuspendLayout();
-			this.tlpMain.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
 			this.tableLayoutPanel3.SuspendLayout();
+			this.tlpMain.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// gbStartSplits
@@ -56,18 +56,6 @@
 			this.gbStartSplits.TabIndex = 5;
 			this.gbStartSplits.TabStop = false;
 			this.gbStartSplits.Text = "`";
-			// 
-			// tlpMain
-			// 
-			this.tlpMain.ColumnCount = 1;
-			this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tlpMain.Controls.Add(this.gbStartSplits, 0, 0);
-			this.tlpMain.Location = new System.Drawing.Point(0, 0);
-			this.tlpMain.Name = "tlpMain";
-			this.tlpMain.RowCount = 1;
-			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tlpMain.Size = new System.Drawing.Size(476, 376);
-			this.tlpMain.TabIndex = 0;
 			// 
 			// tableLayoutPanel1
 			// 
@@ -83,14 +71,6 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(464, 244);
 			this.tableLayoutPanel1.TabIndex = 0;
-			// 
-			// TB_Address
-			// 
-			this.TB_Address.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-			this.TB_Address.Location = new System.Drawing.Point(77, 5);
-			this.TB_Address.Name = "TB_Address";
-			this.TB_Address.Size = new System.Drawing.Size(278, 20);
-			this.TB_Address.TabIndex = 0;
 			// 
 			// tableLayoutPanel2
 			// 
@@ -109,6 +89,14 @@
 			this.tableLayoutPanel2.Size = new System.Drawing.Size(458, 31);
 			this.tableLayoutPanel2.TabIndex = 1;
 			// 
+			// TB_Address
+			// 
+			this.TB_Address.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+			this.TB_Address.Location = new System.Drawing.Point(77, 5);
+			this.TB_Address.Name = "TB_Address";
+			this.TB_Address.Size = new System.Drawing.Size(278, 20);
+			this.TB_Address.TabIndex = 0;
+			// 
 			// label1
 			// 
 			this.label1.Anchor = System.Windows.Forms.AnchorStyles.Left;
@@ -119,15 +107,16 @@
 			this.label1.TabIndex = 0;
 			this.label1.Text = "API address";
 			// 
-			// B_Connect
+			// CB_Autoconnect
 			// 
-			this.B_Connect.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-			this.B_Connect.Location = new System.Drawing.Point(376, 4);
-			this.B_Connect.Name = "B_Connect";
-			this.B_Connect.Size = new System.Drawing.Size(79, 23);
-			this.B_Connect.TabIndex = 1;
-			this.B_Connect.Text = "Connect";
-			this.B_Connect.UseVisualStyleBackColor = true;
+			this.CB_Autoconnect.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.CB_Autoconnect.AutoSize = true;
+			this.CB_Autoconnect.Location = new System.Drawing.Point(361, 7);
+			this.CB_Autoconnect.Name = "CB_Autoconnect";
+			this.CB_Autoconnect.Size = new System.Drawing.Size(87, 17);
+			this.CB_Autoconnect.TabIndex = 1;
+			this.CB_Autoconnect.Text = "Autoconnect";
+			this.CB_Autoconnect.UseVisualStyleBackColor = true;
 			// 
 			// tableLayoutPanel3
 			// 
@@ -145,6 +134,17 @@
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
 			this.tableLayoutPanel3.Size = new System.Drawing.Size(458, 32);
 			this.tableLayoutPanel3.TabIndex = 2;
+			// 
+			// B_Connect
+			// 
+			this.B_Connect.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+			this.B_Connect.Location = new System.Drawing.Point(376, 4);
+			this.B_Connect.Name = "B_Connect";
+			this.B_Connect.Size = new System.Drawing.Size(79, 23);
+			this.B_Connect.TabIndex = 1;
+			this.B_Connect.Text = "Connect";
+			this.B_Connect.UseVisualStyleBackColor = true;
+			this.B_Connect.Click += new System.EventHandler(this.B_Connect_Click);
 			// 
 			// label2
 			// 
@@ -166,16 +166,17 @@
 			this.L_ConnectionStatus.TabIndex = 3;
 			this.L_ConnectionStatus.Text = "?";
 			// 
-			// CB_Autoconnect
+			// tlpMain
 			// 
-			this.CB_Autoconnect.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.CB_Autoconnect.AutoSize = true;
-			this.CB_Autoconnect.Location = new System.Drawing.Point(361, 7);
-			this.CB_Autoconnect.Name = "CB_Autoconnect";
-			this.CB_Autoconnect.Size = new System.Drawing.Size(87, 17);
-			this.CB_Autoconnect.TabIndex = 1;
-			this.CB_Autoconnect.Text = "Autoconnect";
-			this.CB_Autoconnect.UseVisualStyleBackColor = true;
+			this.tlpMain.ColumnCount = 1;
+			this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tlpMain.Controls.Add(this.gbStartSplits, 0, 0);
+			this.tlpMain.Location = new System.Drawing.Point(0, 0);
+			this.tlpMain.Name = "tlpMain";
+			this.tlpMain.RowCount = 1;
+			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpMain.Size = new System.Drawing.Size(476, 376);
+			this.tlpMain.TabIndex = 0;
 			// 
 			// VTSSettings
 			// 
@@ -185,12 +186,12 @@
 			this.Name = "VTSSettings";
 			this.Size = new System.Drawing.Size(476, 382);
 			this.gbStartSplits.ResumeLayout(false);
-			this.tlpMain.ResumeLayout(false);
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel2.ResumeLayout(false);
 			this.tableLayoutPanel2.PerformLayout();
 			this.tableLayoutPanel3.ResumeLayout(false);
 			this.tableLayoutPanel3.PerformLayout();
+			this.tlpMain.ResumeLayout(false);
 			this.ResumeLayout(false);
 
         }

@@ -25,7 +25,7 @@ namespace LiveSplit.VTS
 
 		public ComponentCategory Category
 		{
-			get { return ComponentCategory.Control; }
+			get { return ComponentCategory.Other; }
 		}
 
 		public IComponent Create(LiveSplitState state)

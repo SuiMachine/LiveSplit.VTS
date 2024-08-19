@@ -6,11 +6,13 @@ using System.Xml;
 using System.Collections.Generic;
 using LiveSplit.VTS.Extensions;
 using Newtonsoft.Json.Linq;
+using System.Threading.Tasks;
 
 namespace LiveSplit.VTS
 {
 	public partial class VTSSettings : UserControl
 	{
+		private bool Loaded;
 		[LiveSplitVTSStoreLayoutSetting]
 		[LiveSplitVTSSettingsAttributeBool("Autoconnect", false)]
 		public bool Autoconnect { get; set; }
@@ -37,11 +39,6 @@ namespace LiveSplit.VTS
 
 			// defaults
 			ApplyDefaults();
-
-			if (this.Autoconnect && !VTS_Connection.GetInstance().Connected)
-			{
-				VTS_Connection.GetInstance().Connect();
-			}
 		}
 
 		private void CreateMappings()
@@ -114,6 +111,21 @@ namespace LiveSplit.VTS
 
 			foreach (var mapping in layout_settingsMappings)
 				mapping.Property.SetValue(this, mapping.Attribute.SetSetting(settings, mapping.Property.GetValue(this)));
+
+			if(!Loaded)
+			{
+				Loaded = true;
+				if (this.Autoconnect && !VTS_Connection.GetInstance().Connected)
+				{
+					Task.Factory.StartNew(VTS_Connection.GetInstance().Connect);
+				}
+			}
+		}
+
+		private void B_Connect_Click(object sender, EventArgs e)
+		{
+			if (!VTS_Connection.GetInstance().Connected)
+				Task.Factory.StartNew(VTS_Connection.GetInstance().Connect);
 		}
 	}
 }

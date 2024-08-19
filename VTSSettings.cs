@@ -1,12 +1,11 @@
 ﻿using LiveSplit.VTS.CustomAttributes;
+using LiveSplit.VTS.Extensions;
 using System;
+using System.Collections.Generic;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
-using System.Collections.Generic;
-using LiveSplit.VTS.Extensions;
-using Newtonsoft.Json.Linq;
-using System.Threading.Tasks;
 
 namespace LiveSplit.VTS
 {
@@ -20,6 +19,9 @@ namespace LiveSplit.VTS
 		[LiveSplitVTSStoreLayoutSetting]
 		[LiveSplitVTSSettingsAttributeString("Api_Address", "ws://127.0.0.1:8001")]
 		public string Api_Address { get; set; }
+		[LiveSplitVTSStoreLayoutSetting]
+		[LiveSplitVTSSettingsAttributeBool("DebugLog", false)]
+		public bool DebugLog { get; set; }
 
 		public bool AutoReset { get; set; }
 		public bool AutoStart { get; set; }
@@ -29,6 +31,8 @@ namespace LiveSplit.VTS
 
 		private List<(PropertyInfo Property, LiveSplitVTSSettingsAttribute Attribute)> mappings;
 		private List<(PropertyInfo Property, LiveSplitVTSSettingsAttribute Attribute)> layout_settingsMappings;
+		private volatile Queue<string> messagesToAdd = new Queue<string>(); //Because invokes don't seem to work and I can't be bothered
+		private Timer timer;
 
 		public VTSSettings()
 		{
@@ -36,9 +40,17 @@ namespace LiveSplit.VTS
 
 			this.CB_Autoconnect.DataBindings.Add("Checked", this, nameof(Autoconnect), false, DataSourceUpdateMode.OnPropertyChanged);
 			this.TB_Address.DataBindings.Add("Text", this, nameof(Api_Address), false, DataSourceUpdateMode.OnPropertyChanged);
+			this.CB_Log_DebugMessages.DataBindings.Add("Checked", this, nameof(DebugLog), false, DataSourceUpdateMode.OnPropertyChanged);
+
+			//Stupid workaround
+			timer = new Timer();
+			timer.Interval = 150;
+			timer.Tick += ProcessLogManually;
+			timer.Start();
 
 			// defaults
 			ApplyDefaults();
+			VTS_Connection.GetInstance().SetFormReference(this);
 		}
 
 		private void CreateMappings()
@@ -112,7 +124,7 @@ namespace LiveSplit.VTS
 			foreach (var mapping in layout_settingsMappings)
 				mapping.Property.SetValue(this, mapping.Attribute.SetSetting(settings, mapping.Property.GetValue(this)));
 
-			if(!Loaded)
+			if (!Loaded)
 			{
 				Loaded = true;
 				if (this.Autoconnect && !VTS_Connection.GetInstance().Connected)
@@ -128,6 +140,23 @@ namespace LiveSplit.VTS
 				Task.Factory.StartNew(VTS_Connection.GetInstance().Connect);
 			else
 				Task.Factory.StartNew(VTS_Connection.GetInstance().Disconnect);
+		}
+
+		public void AppendMessage(string text) => messagesToAdd.Enqueue(text);
+
+		private void ProcessLogManually(object sender, EventArgs e)
+		{
+			if (!DebugLog)
+				return;
+
+			while (messagesToAdd.Count > 0)
+			{
+				var message = messagesToAdd.Dequeue();
+				if (!string.IsNullOrEmpty(message))
+				{
+					RB_LogText.AppendText(message + "\n");
+				}
+			}
 		}
 	}
 }

@@ -19,74 +19,22 @@ namespace LiveSplit.VTS
 		public bool Disposed { get; private set; }
 
 		private TimerModel _timer;
-		private GameMemory _gameMemory;
 		private LiveSplitState _state;
 
 		public VTSComponent(LiveSplitState state)
 		{
 			_state = state;
 
+			_timer = new TimerModel { CurrentState = state };
+			VTS_Connection.GetInstance().RegisterEvents(_state);
 			this.Settings = new VTSSettings();
 
-			_timer = new TimerModel { CurrentState = state };
-			_timer.CurrentState.OnStart += timer_OnStart;
-
-			_gameMemory = new GameMemory(this.Settings);
-			_gameMemory.OnFirstLevelLoading += gameMemory_OnFirstLevelLoading;
-			_gameMemory.OnPlayerGainedControl += gameMemory_OnPlayerGainedControl;
-			_gameMemory.OnLoadStarted += gameMemory_OnLoadStarted;
-			_gameMemory.OnLoadFinished += gameMemory_OnLoadFinished;
-			state.OnStart += State_OnStart;
-			_gameMemory.StartMonitoring();
 		}
 
 		public override void Dispose()
 		{
 			this.Disposed = true;
-
-			_state.OnStart -= State_OnStart;
-			_timer.CurrentState.OnStart -= timer_OnStart;
-
-			if (_gameMemory != null)
-			{
-				_gameMemory.Stop();
-			}
-
-		}
-
-		void State_OnStart(object sender, EventArgs e)
-		{
-		}
-
-		void timer_OnStart(object sender, EventArgs e)
-		{
-			_timer.InitializeGameTime();
-		}
-
-		void gameMemory_OnFirstLevelLoading(object sender, EventArgs e)
-		{
-			if (this.Settings.AutoReset)
-			{
-				_timer.Reset();
-			}
-		}
-
-		void gameMemory_OnPlayerGainedControl(object sender, EventArgs e)
-		{
-			if (this.Settings.AutoStart)
-			{
-				_timer.Start();
-			}
-		}
-
-		void gameMemory_OnLoadStarted(object sender, EventArgs e)
-		{
-			_state.IsGameTimePaused = true;
-		}
-
-		void gameMemory_OnLoadFinished(object sender, EventArgs e)
-		{
-			_state.IsGameTimePaused = false;
+			VTS_Connection.GetInstance().UnregisterEvents(_state);
 		}
 
 		public override XmlNode GetSettings(XmlDocument document)

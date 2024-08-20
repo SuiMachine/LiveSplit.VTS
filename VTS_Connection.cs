@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LiveSplit.Model;
+using System;
 using System.Threading.Tasks;
 using VTS.Core;
 
@@ -11,6 +12,7 @@ namespace LiveSplit.VTS
 		public ConsoleVTSLoggerImpl Logger { get; private set; }
 		public CoreVTSPlugin Plugin { get; private set; }
 		private VTSSettings m_settingsForm;
+		private VTS_TimerEvents timerEvents = new VTS_TimerEvents();
 		//HostApplicationBuilder builder = Host.CreateApplicationBuilder(args); // Create a host builder so the program doesn't exit immediately
 
 		public bool Connected
@@ -79,6 +81,11 @@ namespace LiveSplit.VTS
 						Log($"Model changed: {e.data.modelName}");
 					});
 
+					var postProcessingEventConfig = new VTSPostProcessingEventConfigOptions();
+					await Plugin.SubscribeToPostProcessingEvent(postProcessingEventConfig, e =>
+					{
+						Log($"Post processing changed changed: {e.data.currentPreset}");
+					});
 				}
 				catch (VTSException error)
 				{
@@ -132,5 +139,19 @@ namespace LiveSplit.VTS
 		}
 
 		public void SetFormReference(VTSSettings form) => m_settingsForm = form;
+
+		public void RegisterEvents(LiveSplitState state)
+		{
+			timerEvents.RegisterEvents(state, this);
+		}
+
+		public void UnregisterEvents(LiveSplitState state) => timerEvents.UnregisterEvents(state);
+
+		public async Task SetPostProcessing(VTSPostProcessingUpdateOptions options, PostProcessingValue[] values)
+		{
+			if (!Connected)
+				return;
+			await Plugin.SetPostProcessingEffectValues(options, values);
+		}
 	}
 }

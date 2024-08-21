@@ -24,6 +24,7 @@ namespace LiveSplit.VTS
 					OnConnectionChanged.Invoke(m_Connected);
 			}
 		}
+
 		private bool m_Connected = false;
 		public Action<bool> OnConnectionChanged;
 		public bool IsAutheniticated => Plugin != null ? Plugin.IsAuthenticated : false;

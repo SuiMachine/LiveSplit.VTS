@@ -73,5 +73,4 @@ namespace LiveSplit.VTS.CustomAttributes
 			return value;
 		}
 	}
-
 }

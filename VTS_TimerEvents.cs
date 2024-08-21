@@ -1,4 +1,5 @@
 ﻿using LiveSplit.Model;
+using LiveSplit.VTS.Extensions;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ namespace LiveSplit.VTS
 		Task ProcessTimeTask;
 		CancellationTokenSource token;
 		LiveSplitState state;
+		private bool Flag_SendRedSplits;
 
 		public void RegisterEvents(LiveSplitState state, VTS_Connection vtsConnection)
 		{
@@ -52,6 +54,7 @@ namespace LiveSplit.VTS
 			{
 				await vtsConnection.SetPostProcessing(options, values);
 			}));
+			Flag_SendRedSplits = true;
 		}
 
 		private void State_OnReset(object sender, TimerPhase value)
@@ -69,6 +72,7 @@ namespace LiveSplit.VTS
 			{
 				await vtsConnection.SetPostProcessing(options, values);
 			}));
+			Flag_SendRedSplits = true;
 		}
 
 		private void State_OnResume(object sender, System.EventArgs e)
@@ -79,9 +83,10 @@ namespace LiveSplit.VTS
 		{
 			if (state.CurrentSplit != null)
 			{
-				var time = state.CurrentSplit.BestSegmentTime;
+				var currentTime = state.CurrentTime[state.CurrentTimingMethod];
+				var pbTime = state.Run[state.CurrentSplitIndex - 1].PersonalBestSplitTime[state.CurrentTimingMethod];
 
-				if (state.CurrentTime.GameTime > time.GameTime)
+				if (currentTime > pbTime)
 				{
 					VTSPostProcessingUpdateOptions options = new VTSPostProcessingUpdateOptions(true, true, false, "RedSplits", 0.25f, false, false, false, 0);
 					PostProcessingValue[] values = new PostProcessingValue[0];
@@ -89,15 +94,25 @@ namespace LiveSplit.VTS
 					{
 						await vtsConnection.SetPostProcessing(options, values);
 					}));
+					Flag_SendRedSplits = false;
 				}
 				else
 				{
-					VTSPostProcessingUpdateOptions options = new VTSPostProcessingUpdateOptions(true, true, false, "GreenSplits", 0.25f, false, false, false, 0);
+					var personalBest = state.Run[state.CurrentSplitIndex - 1].BestSegmentTime[state.CurrentTimingMethod];
+					var lastSegmentTime = state.Run.GetLastSegmentTime(state.CurrentSplitIndex - 1, state.CurrentTimingMethod);
+
+					VTSPostProcessingUpdateOptions options;
+					if (lastSegmentTime < personalBest)
+						options = new VTSPostProcessingUpdateOptions(true, true, false, "Gold", 0.25f, false, false, false, 0);
+					else
+						options = new VTSPostProcessingUpdateOptions(true, true, false, "GreenSplits", 0.25f, false, false, false, 0);
+
 					PostProcessingValue[] values = new PostProcessingValue[0];
 					Task.Factory.StartNew(new Action(async () =>
 					{
 						await vtsConnection.SetPostProcessing(options, values);
 					}));
+					Flag_SendRedSplits = false;
 				}
 			}
 		}
@@ -115,12 +130,14 @@ namespace LiveSplit.VTS
 			if (ProcessTimeTask == null)
 			{
 				token = new CancellationTokenSource();
-				ProcessTimeTask = Task.Factory.StartNew(trackTimerTask);
+				ProcessTimeTask = Task.Factory.StartNew(TrackTimerTask);
 			}
+			Flag_SendRedSplits = true;
 		}
 
 		private void State_OnUndoSplit(object sender, System.EventArgs e)
 		{
+			Flag_SendRedSplits = true;
 			VTSPostProcessingUpdateOptions options = new VTSPostProcessingUpdateOptions(true, true, false, "Nothing", 0.25f, false, false, false, 0);
 			PostProcessingValue[] values = new PostProcessingValue[0];
 			Task.Factory.StartNew(new Action(async () =>
@@ -131,6 +148,7 @@ namespace LiveSplit.VTS
 
 		private void State_OnSkipSplit(object sender, System.EventArgs e)
 		{
+			Flag_SendRedSplits = true;
 			VTSPostProcessingUpdateOptions options = new VTSPostProcessingUpdateOptions(true, true, false, "Nothing", 0.25f, false, false, false, 0);
 			PostProcessingValue[] values = new PostProcessingValue[0];
 			Task.Factory.StartNew(new Action(async () =>
@@ -139,26 +157,29 @@ namespace LiveSplit.VTS
 			}));
 		}
 
-		private async Task trackTimerTask()
+		private async Task TrackTimerTask()
 		{
 			while (true)
 			{
 				await Task.Delay(200);
+
 				if (token.IsCancellationRequested)
 				{
 					ProcessTimeTask = null;
 					return;
 				}
 
-				if (state.CurrentSplit != null)
+				if (state.CurrentSplit != null && Flag_SendRedSplits)
 				{
-					var time = state.CurrentSplit.BestSegmentTime;
+					var time = state.CurrentSplit.PersonalBestSplitTime[state.CurrentTimingMethod];
 
-					if (state.CurrentTime.GameTime > time.GameTime)
+					if (state.CurrentTime[state.CurrentTimingMethod] > time)
 					{
+						//Debug.WriteLine("Send update");
 						VTSPostProcessingUpdateOptions options = new VTSPostProcessingUpdateOptions(true, true, false, "RedSplits", 0.25f, false, false, false, 0);
 						PostProcessingValue[] values = new PostProcessingValue[0];
 						await vtsConnection.SetPostProcessing(options, values);
+						Flag_SendRedSplits = false;
 					}
 				}
 			}

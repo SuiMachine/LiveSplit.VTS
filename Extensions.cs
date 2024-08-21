@@ -1,4 +1,6 @@
-﻿using System.Xml;
+﻿using LiveSplit.Model;
+using System;
+using System.Xml;
 
 namespace LiveSplit.VTS.Extensions
 {
@@ -41,6 +43,18 @@ namespace LiveSplit.VTS.Extensions
 			}
 			else
 				return default_;
+		}
+
+		public static TimeSpan? GetLastSegmentTime(this IRun run, int split, TimingMethod method)
+		{
+			if (split == 0)
+			{
+				return run[0].SplitTime[method];
+			}
+			else
+			{
+				return run[split].SplitTime[method] - run[split - 1].SplitTime[method];
+			}
 		}
 	}
 }

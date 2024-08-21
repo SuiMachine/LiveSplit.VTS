@@ -41,12 +41,6 @@ namespace LiveSplit.VTS
 
 		private void State_OnPause(object sender, System.EventArgs e)
 		{
-			if (ProcessTimeTask != null)
-			{
-				token.Cancel();
-				ProcessTimeTask.Wait();
-			}
-
 			VTSPostProcessingUpdateOptions options = new VTSPostProcessingUpdateOptions(true, true, false, "Nothing", 0.25f, false, false, false, 0);
 			PostProcessingValue[] values = new PostProcessingValue[0];
 
@@ -112,7 +106,7 @@ namespace LiveSplit.VTS
 					{
 						await vtsConnection.SetPostProcessing(options, values);
 					}));
-					Flag_SendRedSplits = false;
+					Flag_SendRedSplits = true;
 				}
 			}
 		}
@@ -128,10 +122,9 @@ namespace LiveSplit.VTS
 			}));
 
 			if (ProcessTimeTask == null)
-			{
-				token = new CancellationTokenSource();
 				ProcessTimeTask = Task.Factory.StartNew(TrackTimerTask);
-			}
+			token = new CancellationTokenSource();
+
 			Flag_SendRedSplits = true;
 		}
 

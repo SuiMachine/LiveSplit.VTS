@@ -13,12 +13,11 @@ namespace LiveSplit.VTS
 		public CoreVTSPlugin Plugin { get; private set; }
 		private VTSSettings m_settingsForm;
 		private VTS_TimerEvents timerEvents = new VTS_TimerEvents();
-		//HostApplicationBuilder builder = Host.CreateApplicationBuilder(args); // Create a host builder so the program doesn't exit immediately
 
 		public bool Connected
 		{
 			get => m_Connected;
-			set
+			private set
 			{
 				m_Connected = value;
 				if (OnConnectionChanged != null)

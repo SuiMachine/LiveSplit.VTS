@@ -19,6 +19,10 @@ namespace LiveSplit.VTS
 		[LiveSplitVTSStoreLayoutSetting]
 		[LiveSplitVTSSettingsAttributeString("Api_Address", "ws://127.0.0.1:8001")]
 		public string Api_Address { get; set; }
+
+		[LiveSplitVTSStoreLayoutSetting]
+		[LiveSplitVTSSettingsAttributeString("ScriptFile", "LiveSplit.VTS.lua")]
+		public string ScriptFile { get; set; }
 		[LiveSplitVTSStoreLayoutSetting]
 		[LiveSplitVTSSettingsAttributeBool("DebugLog", false)]
 		public bool DebugLog { get; set; }
@@ -41,6 +45,7 @@ namespace LiveSplit.VTS
 			this.CB_Autoconnect.DataBindings.Add("Checked", this, nameof(Autoconnect), false, DataSourceUpdateMode.OnPropertyChanged);
 			this.TB_Address.DataBindings.Add("Text", this, nameof(Api_Address), false, DataSourceUpdateMode.OnPropertyChanged);
 			this.CB_Log_DebugMessages.DataBindings.Add("Checked", this, nameof(DebugLog), false, DataSourceUpdateMode.OnPropertyChanged);
+			this.TB_ScriptFile.DataBindings.Add("Text", this, nameof(ScriptFile), false,  DataSourceUpdateMode.OnPropertyChanged);
 
 			//Stupid workaround
 			timer = new Timer();
@@ -51,6 +56,7 @@ namespace LiveSplit.VTS
 			// defaults
 			ApplyDefaults();
 			VTS_Connection.GetInstance().SetFormReference(this);
+			ProcessLua();
 		}
 
 		private void CreateMappings()
@@ -157,6 +163,31 @@ namespace LiveSplit.VTS
 					RB_LogText.AppendText(message + "\n");
 				}
 			}
+		}
+
+		private void B_BrowseScript_Click(object sender, EventArgs e)
+		{
+			var browseFile = new OpenFileDialog()
+			{
+				Filter = "Lua file|*.lua",
+				Multiselect = false,
+			};
+
+			var result = browseFile.ShowDialog();
+			if (result == DialogResult.Cancel)
+				return;
+
+			ScriptFile = browseFile.FileName;
+		}
+
+		private void ProcessLua()
+		{
+			LuaMapping.ReadFile(ScriptFile);
+
+			if (LuaMapping.Compiled)
+				L_CompileState.Text = "Success";
+			else
+				L_CompileState.Text = "Failed to compile";
 		}
 	}
 }

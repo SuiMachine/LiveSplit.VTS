@@ -37,6 +37,9 @@
       <HintPath>C:\LiveSplit\LiveSplit.Core.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="MoonSharp.Interpreter">
+      <HintPath>Libs\MoonSharp.Interpreter.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Libs\Newtonsoft.Json.dll</HintPath>
@@ -61,6 +64,7 @@
   <ItemGroup>
     <Compile Include="CustomLiveSplitAttributes.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="LuaMapping.cs" />
     <Compile Include="VTSComponent.cs" />
     <Compile Include="VTSFactory.cs" />
     <Compile Include="VTSSettings.cs">

@@ -151,6 +151,9 @@ namespace LiveSplit.VTS
 		{
 			if (!Connected)
 				return;
+
+			var auth = Plugin.IsAuthenticated;
+
 			await Plugin.SetPostProcessingEffectValues(options, values);
 		}
 	}

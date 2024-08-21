@@ -1,4 +1,14 @@
 <updates>
+    <update version="0.2.0">
+    <files>
+        <file path="Components/LiveSplit.VTS.dll" status="changed"/>
+    </files>
+    <changelog>
+        <change>Corrected split time recognition.</change>
+        <change>Current timing method is now used when comparing splits.</change>    
+        <change>Corrected restart.</change>    
+    </changelog>
+    </update>
     <update version="0.1.0">
     <files>
         <file path="Components/LiveSplit.VTS.dll" status="changed"/>

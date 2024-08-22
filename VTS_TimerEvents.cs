@@ -1,4 +1,5 @@
 ﻿using LiveSplit.Model;
+using LiveSplit.Options;
 using LiveSplit.VTS.Extensions;
 using System;
 using System.Threading;
@@ -44,10 +45,22 @@ namespace LiveSplit.VTS
 			VTSPostProcessingUpdateOptions options = new VTSPostProcessingUpdateOptions(true, true, false, "Nothing", 0.25f, false, false, false, 0);
 			PostProcessingValue[] values = new PostProcessingValue[0];
 
-			Task.Factory.StartNew(new Action(async () =>
+			if (LuaMapping.OnPause != null)
 			{
-				await vtsConnection.SetPostProcessing(options, values);
-			}));
+				try
+				{
+					LuaMapping.OnPause.Call();
+/*					Task.Factory.StartNew(new Action(async () =>
+					{
+						await vtsConnection.SetPostProcessing(options, values);
+					}));*/
+				}
+				catch (Exception ex)
+				{
+					vtsConnection.LogError(ex.ToString());
+				}
+			}
+
 			Flag_SendRedSplits = true;
 		}
 
@@ -59,22 +72,56 @@ namespace LiveSplit.VTS
 				ProcessTimeTask.Wait();
 			}
 
-			VTSPostProcessingUpdateOptions options = new VTSPostProcessingUpdateOptions(true, true, false, "Nothing", 0.25f, false, false, false, 0);
+			if (LuaMapping.OnReset != null)
+			{
+				try
+				{
+					LuaMapping.OnReset.Call();
+				}
+				catch (Exception ex)
+				{
+					vtsConnection.LogError(ex.ToString());
+				}
+			}
+/*				VTSPostProcessingUpdateOptions options = new VTSPostProcessingUpdateOptions(true, true, false, "Nothing", 0.25f, false, false, false, 0);
 			PostProcessingValue[] values = new PostProcessingValue[0];
 
 			Task.Factory.StartNew(new Action(async () =>
 			{
 				await vtsConnection.SetPostProcessing(options, values);
-			}));
+			}));*/
 			Flag_SendRedSplits = true;
 		}
 
 		private void State_OnResume(object sender, System.EventArgs e)
 		{
+			if (LuaMapping.OnResume != null)
+			{
+				try
+				{
+					LuaMapping.OnResume.Call();
+				}
+				catch (Exception ex)
+				{
+					vtsConnection.LogError(ex.ToString());
+				}
+			}
 		}
 
 		private void State_OnSplit(object sender, System.EventArgs e)
 		{
+			if (LuaMapping.OnSplit != null)
+			{
+				try
+				{
+					LuaMapping.OnSplit.Call();
+				}
+				catch (Exception ex)
+				{
+					vtsConnection.LogError(ex.ToString());
+				}
+			}
+
 			if (state.CurrentSplit != null)
 			{
 				var currentTime = state.CurrentTime[state.CurrentTimingMethod];
@@ -82,12 +129,18 @@ namespace LiveSplit.VTS
 
 				if (currentTime > pbTime)
 				{
-					VTSPostProcessingUpdateOptions options = new VTSPostProcessingUpdateOptions(true, true, false, "RedSplits", 0.25f, false, false, false, 0);
-					PostProcessingValue[] values = new PostProcessingValue[0];
-					Task.Factory.StartNew(new Action(async () =>
+					if (LuaMapping.OnRedSplit != null)
 					{
-						await vtsConnection.SetPostProcessing(options, values);
-					}));
+						try
+						{
+							LuaMapping.OnRedSplit.Call();
+						}
+						catch (Exception ex)
+						{
+							vtsConnection.LogError(ex.ToString());
+						}
+					}
+					
 					Flag_SendRedSplits = false;
 				}
 				else
@@ -95,17 +148,35 @@ namespace LiveSplit.VTS
 					var personalBest = state.Run[state.CurrentSplitIndex - 1].BestSegmentTime[state.CurrentTimingMethod];
 					var lastSegmentTime = state.Run.GetLastSegmentTime(state.CurrentSplitIndex - 1, state.CurrentTimingMethod);
 
-					VTSPostProcessingUpdateOptions options;
 					if (lastSegmentTime < personalBest)
-						options = new VTSPostProcessingUpdateOptions(true, true, false, "Gold", 0.25f, false, false, false, 0);
-					else
-						options = new VTSPostProcessingUpdateOptions(true, true, false, "GreenSplits", 0.25f, false, false, false, 0);
-
-					PostProcessingValue[] values = new PostProcessingValue[0];
-					Task.Factory.StartNew(new Action(async () =>
 					{
-						await vtsConnection.SetPostProcessing(options, values);
-					}));
+						if (LuaMapping.OnGoldSplit != null)
+						{
+							try
+							{
+								LuaMapping.OnGoldSplit.Call();
+							}
+							catch (Exception ex)
+							{
+								vtsConnection.LogError(ex.ToString());
+							}
+						}
+					}
+					else
+					{
+						if (LuaMapping.OnGreenSplit != null)
+						{
+							try
+							{
+								LuaMapping.OnGreenSplit.Call();
+							}
+							catch (Exception ex)
+							{
+								vtsConnection.LogError(ex.ToString());
+							}
+						}
+					}
+
 					Flag_SendRedSplits = true;
 				}
 			}
@@ -113,13 +184,17 @@ namespace LiveSplit.VTS
 
 		private void State_OnStart(object sender, System.EventArgs e)
 		{
-			VTSPostProcessingUpdateOptions options = new VTSPostProcessingUpdateOptions(true, true, false, "Nothing", 0.25f, false, false, false, 0);
-			PostProcessingValue[] values = new PostProcessingValue[0];
-
-			Task.Factory.StartNew(new Action(async () =>
+			if (LuaMapping.OnStart != null)
 			{
-				await vtsConnection.SetPostProcessing(options, values);
-			}));
+				try
+				{
+					LuaMapping.OnStart.Call();
+				}
+				catch (Exception ex)
+				{
+					vtsConnection.LogError(ex.ToString());
+				}
+			}
 
 			if (ProcessTimeTask == null)
 				ProcessTimeTask = Task.Factory.StartNew(TrackTimerTask);
@@ -131,23 +206,33 @@ namespace LiveSplit.VTS
 		private void State_OnUndoSplit(object sender, System.EventArgs e)
 		{
 			Flag_SendRedSplits = true;
-			VTSPostProcessingUpdateOptions options = new VTSPostProcessingUpdateOptions(true, true, false, "Nothing", 0.25f, false, false, false, 0);
-			PostProcessingValue[] values = new PostProcessingValue[0];
-			Task.Factory.StartNew(new Action(async () =>
+			if (LuaMapping.OnUndoSplit != null)
 			{
-				await vtsConnection.SetPostProcessing(options, values);
-			}));
+				try
+				{
+					LuaMapping.OnUndoSplit.Call();
+				}
+				catch (Exception ex)
+				{
+					vtsConnection.LogError(ex.ToString());
+				}
+			}
 		}
 
 		private void State_OnSkipSplit(object sender, System.EventArgs e)
 		{
 			Flag_SendRedSplits = true;
-			VTSPostProcessingUpdateOptions options = new VTSPostProcessingUpdateOptions(true, true, false, "Nothing", 0.25f, false, false, false, 0);
-			PostProcessingValue[] values = new PostProcessingValue[0];
-			Task.Factory.StartNew(new Action(async () =>
+			if (LuaMapping.OnSkipSplit != null)
 			{
-				await vtsConnection.SetPostProcessing(options, values);
-			}));
+				try
+				{
+					LuaMapping.OnSkipSplit.Call();
+				}
+				catch (Exception ex)
+				{
+					vtsConnection.LogError(ex.ToString());
+				}
+			}
 		}
 
 		private async Task TrackTimerTask()
@@ -168,10 +253,18 @@ namespace LiveSplit.VTS
 
 					if (state.CurrentTime[state.CurrentTimingMethod] > time)
 					{
-						//Debug.WriteLine("Send update");
-						VTSPostProcessingUpdateOptions options = new VTSPostProcessingUpdateOptions(true, true, false, "RedSplits", 0.25f, false, false, false, 0);
-						PostProcessingValue[] values = new PostProcessingValue[0];
-						await vtsConnection.SetPostProcessing(options, values);
+						if (LuaMapping.OnRedSplit != null)
+						{
+							try
+							{
+								LuaMapping.OnRedSplit.Call();
+							}
+							catch (Exception ex)
+							{
+								vtsConnection.LogError(ex.ToString());
+							}
+						}
+
 						Flag_SendRedSplits = false;
 					}
 				}

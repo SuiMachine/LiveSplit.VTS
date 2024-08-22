@@ -13,6 +13,7 @@ namespace LiveSplit.VTS
 		public CoreVTSPlugin Plugin { get; private set; }
 		private VTSSettings m_settingsForm;
 		private VTS_TimerEvents timerEvents = new VTS_TimerEvents();
+		public LiveSplitState LiveSplitState { get; private set; }
 
 		public bool Connected
 		{
@@ -111,7 +112,7 @@ namespace LiveSplit.VTS
 			}
 		}
 
-		private void Log(string message)
+		public void Log(string message)
 		{
 			Logger.Log(message);
 			if (m_settingsForm != null && m_settingsForm.DebugLog)
@@ -120,7 +121,7 @@ namespace LiveSplit.VTS
 			}
 		}
 
-		private void LogWarning(string message)
+		public void LogWarning(string message)
 		{
 			Logger.Log(message);
 			if (m_settingsForm != null && m_settingsForm.DebugLog)
@@ -129,7 +130,7 @@ namespace LiveSplit.VTS
 			}
 		}
 
-		private void LogError(string error)
+		public void LogError(string error)
 		{
 			Logger.LogError(error); // Log any errors that occur during initialization
 			if (m_settingsForm != null && m_settingsForm.DebugLog)
@@ -142,6 +143,7 @@ namespace LiveSplit.VTS
 
 		public void RegisterEvents(LiveSplitState state)
 		{
+			this.LiveSplitState = state;
 			timerEvents.RegisterEvents(state, this);
 		}
 

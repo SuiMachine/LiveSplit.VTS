@@ -178,6 +178,8 @@ namespace LiveSplit.VTS
 				return;
 
 			ScriptFile = browseFile.FileName;
+			TB_ScriptFile.Text = ScriptFile;
+			ProcessLua();
 		}
 
 		private void ProcessLua()

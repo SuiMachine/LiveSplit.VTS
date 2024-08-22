@@ -46,9 +46,12 @@ namespace LiveSplit.VTS
 			UserData.RegisterType<VTSModelAnimationEventConfigOptions>();
 			UserData.RegisterType<VTSModelLoadedEventConfigOptions>();
 			UserData.RegisterType<VTSPostProcessingEventConfigOptions>();
+			UserData.RegisterType<LiveSplit.Model.LiveSplitState>();
+
 
 			script = new Script();
 			script.DoFile(scriptFile);
+			SetGlobals(script);
 
 			try
 			{
@@ -70,7 +73,16 @@ namespace LiveSplit.VTS
 			{
 				Console.WriteLine(ex.ToString());
 			}
+		}
 
+		private static void SetGlobals(Script script)
+		{
+			script.Globals["Log"] = (Action<string>)VTS_Connection.GetInstance().Log;
+			script.Globals["LogError"] = (Action<string>)VTS_Connection.GetInstance().LogError;
+			script.Globals["LogWarning"] = (Action<string>)VTS_Connection.GetInstance().LogWarning;
+
+			script.Globals["VTSPLugin"] = VTS_Connection.GetInstance().Plugin;
+			script.Globals["LiveSplitState"] = VTS_Connection.GetInstance().LiveSplitState;
 		}
 	}
 }

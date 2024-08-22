@@ -28,7 +28,6 @@ namespace LiveSplit.VTS
 			_timer = new TimerModel { CurrentState = state };
 			VTS_Connection.GetInstance().RegisterEvents(_state);
 			this.Settings = new VTSSettings();
-
 		}
 
 		public override void Dispose()

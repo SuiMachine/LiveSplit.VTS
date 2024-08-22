@@ -13,18 +13,19 @@ namespace LiveSplit.VTS
 		public CoreVTSPlugin Plugin { get; private set; }
 		private VTSSettings m_settingsForm;
 		private VTS_TimerEvents timerEvents = new VTS_TimerEvents();
-		//HostApplicationBuilder builder = Host.CreateApplicationBuilder(args); // Create a host builder so the program doesn't exit immediately
+		public LiveSplitState LiveSplitState { get; private set; }
 
 		public bool Connected
 		{
 			get => m_Connected;
-			set
+			private set
 			{
 				m_Connected = value;
 				if (OnConnectionChanged != null)
 					OnConnectionChanged.Invoke(m_Connected);
 			}
 		}
+
 		private bool m_Connected = false;
 		public Action<bool> OnConnectionChanged;
 		public bool IsAutheniticated => Plugin != null ? Plugin.IsAuthenticated : false;
@@ -111,7 +112,7 @@ namespace LiveSplit.VTS
 			}
 		}
 
-		private void Log(string message)
+		public void Log(string message)
 		{
 			Logger.Log(message);
 			if (m_settingsForm != null && m_settingsForm.DebugLog)
@@ -120,7 +121,7 @@ namespace LiveSplit.VTS
 			}
 		}
 
-		private void LogWarning(string message)
+		public void LogWarning(string message)
 		{
 			Logger.Log(message);
 			if (m_settingsForm != null && m_settingsForm.DebugLog)
@@ -129,7 +130,7 @@ namespace LiveSplit.VTS
 			}
 		}
 
-		private void LogError(string error)
+		public void LogError(string error)
 		{
 			Logger.LogError(error); // Log any errors that occur during initialization
 			if (m_settingsForm != null && m_settingsForm.DebugLog)
@@ -142,19 +143,10 @@ namespace LiveSplit.VTS
 
 		public void RegisterEvents(LiveSplitState state)
 		{
+			this.LiveSplitState = state;
 			timerEvents.RegisterEvents(state, this);
 		}
 
 		public void UnregisterEvents(LiveSplitState state) => timerEvents.UnregisterEvents(state);
-
-		public async Task SetPostProcessing(VTSPostProcessingUpdateOptions options, PostProcessingValue[] values)
-		{
-			if (!Connected)
-				return;
-
-			var auth = Plugin.IsAuthenticated;
-
-			await Plugin.SetPostProcessingEffectValues(options, values);
-		}
 	}
 }

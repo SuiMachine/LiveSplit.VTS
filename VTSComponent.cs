@@ -1,7 +1,6 @@
 ﻿using LiveSplit.Model;
 using LiveSplit.UI;
 using LiveSplit.UI.Components;
-using System;
 using System.Windows.Forms;
 using System.Xml;
 
@@ -28,7 +27,6 @@ namespace LiveSplit.VTS
 			_timer = new TimerModel { CurrentState = state };
 			VTS_Connection.GetInstance().RegisterEvents(_state);
 			this.Settings = new VTSSettings();
-
 		}
 
 		public override void Dispose()

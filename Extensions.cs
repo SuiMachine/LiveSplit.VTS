@@ -36,7 +36,7 @@ namespace LiveSplit.VTS.Extensions
 
 			if (assign != null)
 			{
-				if (string.IsNullOrEmpty(settings[setting].InnerText))
+				if (!string.IsNullOrEmpty(settings[setting].InnerText))
 					return settings[setting].InnerText;
 				else
 					return default_;

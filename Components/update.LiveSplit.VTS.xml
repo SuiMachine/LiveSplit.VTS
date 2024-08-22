@@ -1,4 +1,14 @@
 <updates>
+    <update version="0.3.0">
+    <files>
+        <file path="Components/LiveSplit.VTS.dll" status="changed"/>
+        <file path="Components/MoonSharp.Interpreter.dll" status="changed"/>
+    </files>
+    <changelog>
+        <change>Fixed serialization of string that were marked with an attribute.</change>
+        <change>Implemented initial Lua support for writing a custom logic (Post process only for now).</change>    
+    </changelog>
+    </update>
     <update version="0.2.0">
     <files>
         <file path="Components/LiveSplit.VTS.dll" status="changed"/>

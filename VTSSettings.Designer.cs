@@ -35,17 +35,23 @@
 			this.label1 = new System.Windows.Forms.Label();
 			this.CB_Autoconnect = new System.Windows.Forms.CheckBox();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
-			this.B_Connect = new System.Windows.Forms.Button();
 			this.label2 = new System.Windows.Forms.Label();
 			this.L_ConnectionStatus = new System.Windows.Forms.Label();
-			this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
 			this.CB_Log_DebugMessages = new System.Windows.Forms.CheckBox();
+			this.B_Connect = new System.Windows.Forms.Button();
+			this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+			this.B_BrowseScript = new System.Windows.Forms.Button();
+			this.TB_ScriptFile = new System.Windows.Forms.TextBox();
+			this.label3 = new System.Windows.Forms.Label();
+			this.L_CompileState = new System.Windows.Forms.Label();
+			this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
 			this.gbLog = new System.Windows.Forms.GroupBox();
 			this.RB_LogText = new System.Windows.Forms.RichTextBox();
 			this.gbStartSplits.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
 			this.tableLayoutPanel3.SuspendLayout();
+			this.tableLayoutPanel4.SuspendLayout();
 			this.tlpMain.SuspendLayout();
 			this.gbLog.SuspendLayout();
 			this.SuspendLayout();
@@ -67,14 +73,14 @@
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 0);
 			this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel3, 0, 1);
+			this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel4, 0, 2);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 16);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-			this.tableLayoutPanel1.RowCount = 2;
+			this.tableLayoutPanel1.RowCount = 3;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 120F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 39F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 101F));
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(464, 351);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
@@ -143,17 +149,6 @@
 			this.tableLayoutPanel3.Size = new System.Drawing.Size(458, 32);
 			this.tableLayoutPanel3.TabIndex = 2;
 			// 
-			// B_Connect
-			// 
-			this.B_Connect.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-			this.B_Connect.Location = new System.Drawing.Point(366, 4);
-			this.B_Connect.Name = "B_Connect";
-			this.B_Connect.Size = new System.Drawing.Size(89, 23);
-			this.B_Connect.TabIndex = 1;
-			this.B_Connect.Text = "Connect";
-			this.B_Connect.UseVisualStyleBackColor = true;
-			this.B_Connect.Click += new System.EventHandler(this.B_Connect_Click);
-			// 
 			// label2
 			// 
 			this.label2.Anchor = System.Windows.Forms.AnchorStyles.Left;
@@ -174,6 +169,87 @@
 			this.L_ConnectionStatus.TabIndex = 3;
 			this.L_ConnectionStatus.Text = "?";
 			// 
+			// CB_Log_DebugMessages
+			// 
+			this.CB_Log_DebugMessages.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+			this.CB_Log_DebugMessages.AutoSize = true;
+			this.CB_Log_DebugMessages.Location = new System.Drawing.Point(224, 7);
+			this.CB_Log_DebugMessages.Name = "CB_Log_DebugMessages";
+			this.CB_Log_DebugMessages.Size = new System.Drawing.Size(136, 17);
+			this.CB_Log_DebugMessages.TabIndex = 4;
+			this.CB_Log_DebugMessages.Text = "Log debug messages";
+			this.CB_Log_DebugMessages.UseVisualStyleBackColor = true;
+			// 
+			// B_Connect
+			// 
+			this.B_Connect.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+			this.B_Connect.Location = new System.Drawing.Point(366, 4);
+			this.B_Connect.Name = "B_Connect";
+			this.B_Connect.Size = new System.Drawing.Size(89, 23);
+			this.B_Connect.TabIndex = 1;
+			this.B_Connect.Text = "Connect";
+			this.B_Connect.UseVisualStyleBackColor = true;
+			this.B_Connect.Click += new System.EventHandler(this.B_Connect_Click);
+			// 
+			// tableLayoutPanel4
+			// 
+			this.tableLayoutPanel4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.tableLayoutPanel4.ColumnCount = 4;
+			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 79F));
+			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 64F));
+			this.tableLayoutPanel4.Controls.Add(this.B_BrowseScript, 0, 0);
+			this.tableLayoutPanel4.Controls.Add(this.TB_ScriptFile, 0, 0);
+			this.tableLayoutPanel4.Controls.Add(this.label3, 0, 0);
+			this.tableLayoutPanel4.Controls.Add(this.L_CompileState, 3, 0);
+			this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 78);
+			this.tableLayoutPanel4.Name = "tableLayoutPanel4";
+			this.tableLayoutPanel4.RowCount = 1;
+			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel4.Size = new System.Drawing.Size(458, 34);
+			this.tableLayoutPanel4.TabIndex = 3;
+			// 
+			// B_BrowseScript
+			// 
+			this.B_BrowseScript.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+			this.B_BrowseScript.Location = new System.Drawing.Point(318, 5);
+			this.B_BrowseScript.Name = "B_BrowseScript";
+			this.B_BrowseScript.Size = new System.Drawing.Size(73, 23);
+			this.B_BrowseScript.TabIndex = 5;
+			this.B_BrowseScript.Text = "Browse";
+			this.B_BrowseScript.UseVisualStyleBackColor = true;
+			this.B_BrowseScript.Click += new System.EventHandler(this.B_BrowseScript_Click);
+			// 
+			// TB_ScriptFile
+			// 
+			this.TB_ScriptFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+			this.TB_ScriptFile.Location = new System.Drawing.Point(43, 7);
+			this.TB_ScriptFile.Name = "TB_ScriptFile";
+			this.TB_ScriptFile.Size = new System.Drawing.Size(269, 20);
+			this.TB_ScriptFile.TabIndex = 4;
+			// 
+			// label3
+			// 
+			this.label3.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.label3.AutoSize = true;
+			this.label3.Location = new System.Drawing.Point(3, 10);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(34, 13);
+			this.label3.TabIndex = 3;
+			this.label3.Text = "Script";
+			// 
+			// L_CompileState
+			// 
+			this.L_CompileState.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+			this.L_CompileState.AutoSize = true;
+			this.L_CompileState.Location = new System.Drawing.Point(397, 10);
+			this.L_CompileState.Name = "L_CompileState";
+			this.L_CompileState.Size = new System.Drawing.Size(58, 13);
+			this.L_CompileState.TabIndex = 6;
+			this.L_CompileState.Text = "Failed";
+			// 
 			// tlpMain
 			// 
 			this.tlpMain.ColumnCount = 1;
@@ -187,17 +263,6 @@
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tlpMain.Size = new System.Drawing.Size(476, 376);
 			this.tlpMain.TabIndex = 0;
-			// 
-			// CB_Log_DebugMessages
-			// 
-			this.CB_Log_DebugMessages.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-			this.CB_Log_DebugMessages.AutoSize = true;
-			this.CB_Log_DebugMessages.Location = new System.Drawing.Point(224, 7);
-			this.CB_Log_DebugMessages.Name = "CB_Log_DebugMessages";
-			this.CB_Log_DebugMessages.Size = new System.Drawing.Size(136, 17);
-			this.CB_Log_DebugMessages.TabIndex = 4;
-			this.CB_Log_DebugMessages.Text = "Log debug messages";
-			this.CB_Log_DebugMessages.UseVisualStyleBackColor = true;
 			// 
 			// gbLog
 			// 
@@ -232,6 +297,8 @@
 			this.tableLayoutPanel2.PerformLayout();
 			this.tableLayoutPanel3.ResumeLayout(false);
 			this.tableLayoutPanel3.PerformLayout();
+			this.tableLayoutPanel4.ResumeLayout(false);
+			this.tableLayoutPanel4.PerformLayout();
 			this.tlpMain.ResumeLayout(false);
 			this.gbLog.ResumeLayout(false);
 			this.ResumeLayout(false);
@@ -253,5 +320,10 @@
 		private System.Windows.Forms.CheckBox CB_Log_DebugMessages;
 		private System.Windows.Forms.GroupBox gbLog;
 		private System.Windows.Forms.RichTextBox RB_LogText;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
+		private System.Windows.Forms.Button B_BrowseScript;
+		private System.Windows.Forms.TextBox TB_ScriptFile;
+		private System.Windows.Forms.Label label3;
+		private System.Windows.Forms.Label L_CompileState;
 	}
 }

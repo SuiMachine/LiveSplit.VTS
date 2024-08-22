@@ -22,3 +22,4 @@ Credits
 -------
   * [SuiMachine](http://twitch.tv/suimachine)
   * Plugin uses a fork of [VTS-Sharp](https://github.com/FomTarro/VTS-Sharp) by FomTarro.
+  * MoonSharp for Lua interpreter.

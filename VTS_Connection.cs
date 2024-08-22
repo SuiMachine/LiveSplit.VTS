@@ -148,15 +148,5 @@ namespace LiveSplit.VTS
 		}
 
 		public void UnregisterEvents(LiveSplitState state) => timerEvents.UnregisterEvents(state);
-
-		public async Task SetPostProcessing(VTSPostProcessingUpdateOptions options, PostProcessingValue[] values)
-		{
-			if (!Connected)
-				return;
-
-			var auth = Plugin.IsAuthenticated;
-
-			await Plugin.SetPostProcessingEffectValues(options, values);
-		}
 	}
 }

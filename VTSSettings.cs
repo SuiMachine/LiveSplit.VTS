@@ -45,7 +45,7 @@ namespace LiveSplit.VTS
 			this.CB_Autoconnect.DataBindings.Add("Checked", this, nameof(Autoconnect), false, DataSourceUpdateMode.OnPropertyChanged);
 			this.TB_Address.DataBindings.Add("Text", this, nameof(Api_Address), false, DataSourceUpdateMode.OnPropertyChanged);
 			this.CB_Log_DebugMessages.DataBindings.Add("Checked", this, nameof(DebugLog), false, DataSourceUpdateMode.OnPropertyChanged);
-			this.TB_ScriptFile.DataBindings.Add("Text", this, nameof(ScriptFile), false,  DataSourceUpdateMode.OnPropertyChanged);
+			this.TB_ScriptFile.DataBindings.Add("Text", this, nameof(ScriptFile), false, DataSourceUpdateMode.OnPropertyChanged);
 
 			//Stupid workaround
 			timer = new Timer();
@@ -137,6 +137,8 @@ namespace LiveSplit.VTS
 				{
 					Task.Factory.StartNew(VTS_Connection.GetInstance().Connect);
 				}
+				if (System.IO.File.Exists(ScriptFile))
+					ProcessLua();
 			}
 		}
 

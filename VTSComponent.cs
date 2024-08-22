@@ -1,7 +1,6 @@
 ﻿using LiveSplit.Model;
 using LiveSplit.UI;
 using LiveSplit.UI.Components;
-using System;
 using System.Windows.Forms;
 using System.Xml;
 

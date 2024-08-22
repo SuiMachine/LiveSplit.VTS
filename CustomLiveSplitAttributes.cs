@@ -40,8 +40,7 @@ namespace LiveSplit.VTS.CustomAttributes
 
 		public override object SetSetting(XmlNode settingNode, object objToStoreTo)
 		{
-			var value = XML_Utils.ReadBool(settingNode, this.NAME, DEFAULT_VALUE);
-			return value;
+			return XML_Utils.ReadBool(settingNode, this.NAME, DEFAULT_VALUE);
 		}
 	}
 

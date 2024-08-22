@@ -1,6 +1,7 @@
 ﻿using MoonSharp.Interpreter;
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using VTS.Core;
 
 namespace LiveSplit.VTS
@@ -45,8 +46,8 @@ namespace LiveSplit.VTS
 			UserData.RegisterType<CoreVTSPlugin>();
 			UserData.RegisterType<VTSModelAnimationEventConfigOptions>();
 			UserData.RegisterType<VTSModelLoadedEventConfigOptions>();
-			UserData.RegisterType<VTSPostProcessingEventConfigOptions>();
-			UserData.RegisterType<LiveSplit.Model.LiveSplitState>();
+			UserData.RegisterType<VTSPostProcessingUpdateOptions>();
+			UserData.RegisterType<Model.LiveSplitState>();
 
 
 			script = new Script();
@@ -69,7 +70,7 @@ namespace LiveSplit.VTS
 				OnGoldSplit = (Closure)script.Globals["OnGoldSplit"];
 				Compiled = true;
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				Console.WriteLine(ex.ToString());
 			}
@@ -83,6 +84,18 @@ namespace LiveSplit.VTS
 
 			script.Globals["VTSPLugin"] = VTS_Connection.GetInstance().Plugin;
 			script.Globals["LiveSplitState"] = VTS_Connection.GetInstance().LiveSplitState;
+
+			script.Globals["CreateVTSPostProcessingUpdateOptions"] = (Func<VTSPostProcessingUpdateOptions>)(() => new VTSPostProcessingUpdateOptions());
+
+			script.Globals[nameof(SetPostProcessingEffectValues)] = (Action<VTSPostProcessingUpdateOptions, PostProcessingValue[]>)SetPostProcessingEffectValues;
+		}
+
+		private static void SetPostProcessingEffectValues(VTSPostProcessingUpdateOptions options, PostProcessingValue[] values)
+		{
+			Task.Factory.StartNew(async () =>
+			{
+				await VTS_Connection.GetInstance().Plugin.SetPostProcessingEffectValues(options, values);
+			});
 		}
 	}
 }

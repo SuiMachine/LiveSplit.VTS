@@ -64,6 +64,16 @@ namespace LiveSplit.VTS
 
 			UserData.RegisterType<VTSHotkeyTriggerData>();
 			UserData.RegisterType<VTSHotkeyTriggerData.Data>();
+
+			UserData.RegisterType<VTSItemPinResponseData>();
+			UserData.RegisterType<VTSItemPinResponseData.Data>();
+
+			UserData.RegisterType<VTSItemUnloadOptions>();
+			UserData.RegisterType<VTSItemUnloadResponseData>();
+			UserData.RegisterType<VTSItemUnloadResponseData.Data>();
+
+			UserData.RegisterType<BarycentricCoordinate>();
+
 			UserData.RegisterType<VTSErrorData>();
 
 			script = new Script();
@@ -107,6 +117,17 @@ namespace LiveSplit.VTS
 			script.Globals[nameof(LoadModel)] = (Action<string, Closure, Closure>)LoadModel;
 			script.Globals[nameof(MoveModel)] = (Action<VTSMoveModelData.Data, Closure, Closure>)MoveModel;
 			script.Globals[nameof(TriggerHotkey)] = (Action<string, Closure, Closure>)TriggerHotkey;
+			script.Globals[nameof(AnimateItem)] = (Action<string, VTSItemAnimationControlOptions, Closure, Closure>)AnimateItem;
+			script.Globals[nameof(GetCurrentModel)] = (Action<Closure, Closure>)GetCurrentModel;
+
+			script.Globals[nameof(UnloadItem)] = (Action<VTSItemUnloadOptions, Closure, Closure>)UnloadItem;
+
+			script.Globals[nameof(PinItemToCenter)] = (Action<string, string, string, float, VTSItemAngleRelativityMode, float, VTSItemSizeRelativityMode, Closure, Closure>)PinItemToCenter;
+			script.Globals[nameof(PinItemToPoint)] = (Action<string, string, string, float, VTSItemAngleRelativityMode, float, VTSItemSizeRelativityMode, BarycentricCoordinate, Closure, Closure>)PinItemToPoint;
+			script.Globals[nameof(PinItemToRandom)] = (Action<string, string, string, float, VTSItemAngleRelativityMode, float, VTSItemSizeRelativityMode, Closure, Closure>)PinItemToRandom;
+			script.Globals[nameof(SetExpressionState)] = (Action<string, bool, Closure, Closure>)SetExpressionState;
+			
+			script.Globals[nameof(UnpinItem)] = (Action<string, Closure, Closure>)UnpinItem;
 		}
 
 		private static void SetPostProcessingEffectValues(VTSPostProcessingUpdateOptions options, PostProcessingValue[] values, Closure onSuccess, Closure onError)
@@ -163,9 +184,17 @@ namespace LiveSplit.VTS
 				});
 		}
 
-		private static void AnimateItem(string itemInstanceId, VTSItemAnimationControlOptions options, Action<VTSItemAnimationControlResponseData> onSuccess, Action<VTSErrorData> onError)
+		private static void AnimateItem(string itemInstanceId, VTSItemAnimationControlOptions options, Closure onSuccess, Closure onError)
 		{
-			VTS_Connection.GetInstance().Plugin.AnimateItem(itemInstanceId, options, onSuccess, onError);
+			VTS_Connection.GetInstance().Plugin.AnimateItem(itemInstanceId, options,
+				(VTSItemAnimationControlResponseData data) =>
+				{
+					onSuccess?.Call(data);
+				},
+				(VTSErrorData error) =>
+				{
+					onError?.Call(error);
+				});
 		}
 
 		private static void GetCurrentModel(Closure onSuccess, Closure onError)
@@ -181,9 +210,85 @@ namespace LiveSplit.VTS
 				});
 		}
 
-		private static void UnpinItem(string itemInstanceID, Action<VTSItemPinResponseData> onSuccess, Action<VTSErrorData> onError)
+		private static void SetExpressionState(string expersion, bool active, Closure onSuccess, Closure onError)
 		{
-			VTS_Connection.GetInstance().Plugin.UnpinItem(itemInstanceID, onSuccess, onError);
+			VTS_Connection.GetInstance().Plugin.SetExpressionState(expersion, active,
+				(VTSExpressionActivationData data) =>
+				{
+					onSuccess?.Call(onSuccess);
+				},
+				(VTSErrorData error) =>
+				{
+					onError?.Call(error);
+				});
+		}
+
+		private static void PinItemToCenter(string itemInstanceID, string modelID, string artMeshID, float angle, VTSItemAngleRelativityMode angleRelativeTo, float size, VTSItemSizeRelativityMode sizeRelativeTo, Closure onSuccess, Closure onError)
+		{
+			VTS_Connection.GetInstance().Plugin.PinItemToCenter(itemInstanceID, modelID, artMeshID,
+				angle, angleRelativeTo, size, sizeRelativeTo,
+				(VTSItemPinResponseData success) =>
+				{
+					onSuccess?.Call(success);
+				},
+				(VTSErrorData error) =>
+				{
+					onError?.Call(error);
+				});
+		}
+
+		private static void PinItemToPoint(string itemInstanceID, string modelID, string artMeshID, float angle, VTSItemAngleRelativityMode angleRelativeTo, float size, VTSItemSizeRelativityMode sizeRelativeTo, BarycentricCoordinate coordinate, Closure onSuccess, Closure onError)
+		{
+			VTS_Connection.GetInstance().Plugin.PinItemToPoint(itemInstanceID, modelID, artMeshID,
+				angle, angleRelativeTo, size, sizeRelativeTo, coordinate,
+				(VTSItemPinResponseData success) =>
+				{
+					onSuccess?.Call(success);
+				},
+				(VTSErrorData error) =>
+				{
+					onError?.Call(error);
+				});
+		}
+
+		private static void PinItemToRandom(string itemInstanceID, string modelID, string artMeshID, float angle, VTSItemAngleRelativityMode angleRelativeTo, float size, VTSItemSizeRelativityMode sizeRelativeTo, Closure onSuccess, Closure onError)
+		{
+			VTS_Connection.GetInstance().Plugin.PinItemToRandom(itemInstanceID, modelID, artMeshID,
+				angle, angleRelativeTo, size, sizeRelativeTo,
+				(VTSItemPinResponseData success) =>
+				{
+					onSuccess?.Call(success);
+				},
+				(VTSErrorData error) =>
+				{
+					onError?.Call(error);
+				});
+		}
+
+		private static void UnpinItem(string itemInstanceID, Closure onSuccess, Closure onError)
+		{
+			VTS_Connection.GetInstance().Plugin.UnpinItem(itemInstanceID,
+				(VTSItemPinResponseData success) =>
+				{
+					onSuccess?.Call(success);
+				},
+				(VTSErrorData error) =>
+				{
+					onError?.Call(error);
+				});
+		}
+
+		private static void UnloadItem(VTSItemUnloadOptions options, Closure onSuccess, Closure onError)
+		{
+			VTS_Connection.GetInstance().Plugin.UnloadItem(options,
+				(VTSItemUnloadResponseData success) =>
+				{
+					onSuccess?.Call(success);
+				},
+				(VTSErrorData error) =>
+				{
+					onError?.Call(error);
+				});
 		}
 	}
 }

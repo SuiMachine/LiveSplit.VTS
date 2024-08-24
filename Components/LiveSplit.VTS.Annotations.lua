@@ -16,6 +16,43 @@ function LoadModel(modelId, onSuccess, onError) end
 ---@return VTSPostProcessingUpdateOptions
 function Create_VTSPostProcessingUpdateOptions() end
 
+---Triggers a Hotkey action in VTS
+---@param hotkey string
+---@param onSuccess function Function that accepts VTSHotkeyTriggerData as argument
+---@param onError function Function that accepts VTSErrorData as argument
+function TriggerHotkey(hotkey, onSuccess, onError) end
+
+---Used to animate certain item
+---@param itemInstanceId string
+---@param options VTSItemAnimationControlOptions
+---@param onSuccess function
+---@param onError function
+function AnimateItem(itemInstanceId, options, onSuccess, onError) end
+
+---Moves a model
+---@param position VTSMoveModelData_Data
+---@param onSuccess function Function that accepts VTSMoveModelData as an argument
+---@param onError function Function that accepts VTSErrorData as argument
+function MoveModel(position, onSuccess, onError) end
+
+---Used to obtain current model info
+---@param onSuccess function Function that accepts VTSCurrentModelData as argument
+---@param onError function Function that accepts VTSErrorData as argument
+function GetCurrentModel(onSuccess, onError) end
+
+---Used to unpin an item
+---@param itemInstanceID string
+---@param onSuccess VTSItemPinResponseData
+---@param onError VTSErrorData
+function UnpinItem(itemInstanceID, onSuccess, onError) end
+
+---Sets an expression
+---@param expersion string
+---@param active boolean
+---@param onSuccess function Function that accepts VTSExpressionActivationData as an argument
+---@param onError function 
+function SetExpressionState(expersion, active, onSuccess, onError) end
+
 ---For moving objects in general
 ---@class VTSMoveModelData
 ---@field data VTSMoveModelData_Data
@@ -475,3 +512,73 @@ EffectConfigs = {
 ---@field positionY number
 ---@field rotation number
 ---@field size number
+
+---@class VTSItemAnimationControlOptions
+---@field framerate integer
+---@field frame integer
+---@field brightness number
+---@field opacity number
+---@field setAutoStopFrames boolean
+---@field autoStopFrames integer[]
+---@field setAnimationPlayState boolean
+---@field animationPlayState boolean
+
+---For unloading item
+---@class VTSItemUnloadOptions
+---@field itemInstanceIDs string[]
+---@field fileNames string[]
+---@field unloadAllInScene boolean
+---@field unloadAllLoadedByThisPlugin boolean
+---@field allowUnloadingItemsLoadedByUserOrOtherPlugins boolean
+
+---@class VTSItemUnloadResponseData
+---@field data VTSItemUnloadResponseData_Data
+
+---@class VTSItemUnloadResponseData_Data
+---@field unloadedItems UnloadedItem[]
+
+---@class UnloadedItem
+---@field instanceID string
+---@field fileName string
+
+
+---Used for pinning / unpinning item
+---@class VTSItemPinResponseData
+---@field data VTSItemPinResponseData_Data
+
+---@class VTSItemPinResponseData_Data
+---@field isPinned boolean
+---@field itemInstanceID string
+---@field itemFileName string
+
+
+
+---@enum VTSItemAngleRelativityMode
+VTSItemAngleRelativityMode = {
+    RelativeToWorld = 0,
+    RelativeToCurrentItemRotation = 1,
+    RelativeToModel = 2,
+    RelativeToPinPosition = 3
+}
+
+---@enum VTSItemSizeRelativityMode
+VTSItemSizeRelativityMode = {
+	RelativeToWorld = 0,
+	RelativeToCurrentItemSize = 1
+}
+
+---@class BarycentricCoordinate
+---@field vertexID1 integer
+---@field vertexID2 integer
+---@field vertexID3 integer
+---@field vertexWeight1 number
+---@field vertexWeight2 number
+---@field vertexWeight3 number
+
+---Expressions etc.
+---@class VTSExpressionActivationData
+---@field data VTSExpressionActivationData_Data
+
+---@class VTSExpressionActivationData_Data
+---@field expressionFile string
+---@field active boolean

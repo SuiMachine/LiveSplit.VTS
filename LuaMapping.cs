@@ -1,13 +1,14 @@
 ﻿using MoonSharp.Interpreter;
 using System;
 using System.IO;
-using System.Threading.Tasks;
 using VTS.Core;
 
 namespace LiveSplit.VTS
 {
 	public class LuaMapping
 	{
+		//TODO: Try and figure out how the call stack looks like and if elements get popped on responses
+		//or is there a chance that in some cases we will have stack overflow due to multiple nested calls
 		private static Script script;
 		public static bool Compiled { get; private set; } = false;
 
@@ -46,9 +47,24 @@ namespace LiveSplit.VTS
 			UserData.RegisterType<CoreVTSPlugin>();
 			UserData.RegisterType<VTSModelAnimationEventConfigOptions>();
 			UserData.RegisterType<VTSModelLoadedEventConfigOptions>();
-			UserData.RegisterType<VTSPostProcessingUpdateOptions>();
+			UserData.RegisterType<VTSMoveModelData>();
+			UserData.RegisterType<VTSMoveModelData.Data>();
 			UserData.RegisterType<Model.LiveSplitState>();
+			UserData.RegisterType<PostProcessingValue>();
 
+			UserData.RegisterType<VTSPostProcessingUpdateOptions>();
+			UserData.RegisterType<VTSPostProcessingUpdateResponseData>();
+			UserData.RegisterType<VTSPostProcessingUpdateResponseData.Data>();
+
+			UserData.RegisterType<VTSModelLoadData>();
+			UserData.RegisterType<VTSModelLoadData.Data>();
+
+			UserData.RegisterType<VTSCurrentModelData>();
+			UserData.RegisterType<VTSCurrentModelData.Data>();
+
+			UserData.RegisterType<VTSHotkeyTriggerData>();
+			UserData.RegisterType<VTSHotkeyTriggerData.Data>();
+			UserData.RegisterType<VTSErrorData>();
 
 			script = new Script();
 			script.DoFile(scriptFile);
@@ -85,17 +101,89 @@ namespace LiveSplit.VTS
 			script.Globals["VTSPLugin"] = VTS_Connection.GetInstance().Plugin;
 			script.Globals["LiveSplitState"] = VTS_Connection.GetInstance().LiveSplitState;
 
-			script.Globals["CreateVTSPostProcessingUpdateOptions"] = (Func<VTSPostProcessingUpdateOptions>)(() => new VTSPostProcessingUpdateOptions());
+			script.Globals["Create_VTSPostProcessingUpdateOptions"] = (Func<VTSPostProcessingUpdateOptions>)(() => new VTSPostProcessingUpdateOptions());
 
-			script.Globals[nameof(SetPostProcessingEffectValues)] = (Action<VTSPostProcessingUpdateOptions, PostProcessingValue[]>)SetPostProcessingEffectValues;
+			script.Globals[nameof(SetPostProcessingEffectValues)] = (Action<VTSPostProcessingUpdateOptions, PostProcessingValue[], Closure, Closure>)SetPostProcessingEffectValues;
+			script.Globals[nameof(LoadModel)] = (Action<string, Closure, Closure>)LoadModel;
+			script.Globals[nameof(MoveModel)] = (Action<VTSMoveModelData.Data, Closure, Closure>)MoveModel;
+			script.Globals[nameof(TriggerHotkey)] = (Action<string, Closure, Closure>)TriggerHotkey;
 		}
 
-		private static void SetPostProcessingEffectValues(VTSPostProcessingUpdateOptions options, PostProcessingValue[] values)
+		private static void SetPostProcessingEffectValues(VTSPostProcessingUpdateOptions options, PostProcessingValue[] values, Closure onSuccess, Closure onError)
 		{
-			Task.Factory.StartNew(async () =>
-			{
-				await VTS_Connection.GetInstance().Plugin.SetPostProcessingEffectValues(options, values);
-			});
+			VTS_Connection.GetInstance().Plugin.SetPostProcessingEffectValues(options, values,
+				(VTSPostProcessingUpdateResponseData successData) =>
+				{
+					onSuccess?.Call(successData);
+				},
+				(VTSErrorData error) =>
+				{
+					onError?.Call(error);
+				}
+			);
+		}
+
+		private static void LoadModel(string modelId, Closure onSuccess, Closure onError)
+		{
+			VTS_Connection.GetInstance().Plugin.LoadModel(modelId,
+				(VTSModelLoadData successData) =>
+				{
+					onSuccess?.Call(successData);
+				},
+				(VTSErrorData error) =>
+				{
+					onError?.Call(error);
+				}
+			);
+		}
+
+		private static void MoveModel(VTSMoveModelData.Data position, Closure onSuccess, Closure onError)
+		{
+			VTS_Connection.GetInstance().Plugin.MoveModel(position,
+				(VTSMoveModelData moveData) =>
+				{
+					onSuccess?.Call(onSuccess);
+				},
+				(VTSErrorData error) =>
+				{
+					onError?.Call(error);
+				});
+		}
+
+		private static void TriggerHotkey(string hotkey, Closure onSuccess, Closure onError)
+		{
+			VTS_Connection.GetInstance().Plugin.TriggerHotkey(hotkey,
+				(VTSHotkeyTriggerData data) =>
+				{
+					onSuccess?.Call(data);
+				},
+				(VTSErrorData error) =>
+				{
+					onError?.Call(error);
+				});
+		}
+
+		private static void AnimateItem(string itemInstanceId, VTSItemAnimationControlOptions options, Action<VTSItemAnimationControlResponseData> onSuccess, Action<VTSErrorData> onError)
+		{
+			VTS_Connection.GetInstance().Plugin.AnimateItem(itemInstanceId, options, onSuccess, onError);
+		}
+
+		private static void GetCurrentModel(Closure onSuccess, Closure onError)
+		{
+			VTS_Connection.GetInstance().Plugin.GetCurrentModel(
+				(VTSCurrentModelData success) =>
+				{
+					onSuccess?.Call(success);
+				},
+				(VTSErrorData error) =>
+				{
+					onError?.Call(error);
+				});
+		}
+
+		private static void UnpinItem(string itemInstanceID, Action<VTSItemPinResponseData> onSuccess, Action<VTSErrorData> onError)
+		{
+			VTS_Connection.GetInstance().Plugin.UnpinItem(itemInstanceID, onSuccess, onError);
 		}
 	}
 }

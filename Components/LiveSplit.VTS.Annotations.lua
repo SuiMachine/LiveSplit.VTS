@@ -1,13 +1,172 @@
 
----Sets a post processing
+---Sets a post processing in VTS
 ---@param options VTSPostProcessingUpdateOptions
 ---@param value array<PostProcessingValue>
-function SetPostProcessingEffectValues(options, value) end
+---@param onSuccess function Function that accepts VTSPostProcessingUpdateResponseData object as an argument
+---@param onError function Function that accepts VTSErrorData as an argument 
+function SetPostProcessingEffectValues(options, value, onSuccess, onError) end
+
+---Sets a model in VTS
+---@param modelId string Id of the model
+---@param onSuccess function Function that accepts VTSModelLoadData object as an argument
+---@param onError function Function that accepts VTSErrorData as an argument 
+function LoadModel(modelId, onSuccess, onError) end
 
 ---Creates VTSPostProcessingUpdateOptions
 ---@return VTSPostProcessingUpdateOptions
-function CreateVTSPostProcessingUpdateOptions() end
+function Create_VTSPostProcessingUpdateOptions() end
 
+---For moving objects in general
+---@class VTSMoveModelData
+---@field data VTSMoveModelData_Data
+
+---@class VTSMoveModelData_Data
+---@field timeInSeconds number
+---@field valuesAreRelativeToModel boolean
+
+---For response to loading a VTS model
+---@class VTSModelLoadData
+---@field data VTSModelLoadData_Data
+
+---@class VTSModelLoadData_Data
+---@field modelID string
+
+---For response to Hotkey Trigger
+---@class VTSHotkeyTriggerData
+---@field data VTSHotkeyTriggerData_Data
+
+---@class VTSHotkeyTriggerData_Data
+---@field hotkeyID string
+---@field itemInstanceID string
+
+---For response when stuff goes wrong
+---@class VTSErrorData
+---@field data VTSErrorData_Data 
+
+---For errors
+---@class VTSErrorData_Data
+---@field errorID ErrorID
+---@field message string
+---@enum ErrorID
+ErrorID = {
+    InternalServerError = 0,
+	APIAccessDeactivated = 1,
+	JSONInvalid = 2,
+	APINameInvalid = 3,
+	APIVersionInvalid = 4,
+	RequestIDInvalid = 5,
+	RequestTypeMissingOrEmpty = 6,
+	RequestTypeUnknown = 7,
+	RequestRequiresAuthetication = 8,
+	RequestRequiresPermission = 9,
+	TokenRequestDenied = 50,
+	TokenRequestCurrentlyOngoing = 51,
+	TokenRequestPluginNameInvalid = 52,
+	TokenRequestDeveloperNameInvalid = 53,
+	TokenRequestPluginIconInvalid = 54,
+	AuthenticationTokenMissing = 100,
+	AuthenticationPluginNameMissing = 101,
+	AuthenticationPluginDeveloperMissing = 102,
+	ModelIDMissing = 150,
+	ModelIDInvalid = 151,
+	ModelIDNotFound = 152,
+	ModelLoadCooldownNotOver = 153,
+	CannotCurrentlyChangeModel = 154,
+	HotkeyQueueFull = 200,
+	HotkeyExecutionFailedBecauseNoModelLoaded = 201,
+	HotkeyIDNotFoundInModel = 202,
+	HotkeyCooldownNotOver = 203,
+	HotkeyIDFoundButHotkeyDataInvalid = 204,
+	HotkeyExecutionFailedBecauseBadState = 205,
+	HotkeyUnknownExecutionFailure = 206,
+	HotkeyExecutionFailedBecauseLive2DItemNotFound = 207,
+	HotkeyExecutionFailedBecauseLive2DItemsDoNotSupportThisHotkeyType = 208,
+	ColorTintRequestNoModelLoaded = 250,
+	ColorTintRequestMatchOrColorMissing = 251,
+	ColorTintRequestInvalidColorValue = 252,
+	MoveModelRequestNoModelLoaded = 300,
+	MoveModelRequestMissingFields = 301,
+	MoveModelRequestValuesOutOfRange = 302,
+	CustomParamNameInvalid = 350,
+	CustomParamValuesInvalid = 351,
+	CustomParamAlreadyCreatedByOtherPlugin = 352,
+	CustomParamExplanationTooLong = 353,
+	CustomParamDefaultParamNameNotAllowed = 354,
+	CustomParamLimitPerPluginExceeded = 355,
+	CustomParamLimitTotalExceeded = 356,
+	CustomParamDeletionNameInvalid = 400,
+	CustomParamDeletionNotFound = 401,
+	CustomParamDeletionCreatedByOtherPlugin = 402,
+	CustomParamDeletionCannotDeleteDefaultParam = 403,
+	InjectDataNoDataProvided = 450,
+	InjectDataValueInvalid = 451,
+	InjectDataWeightInvalid = 452,
+	InjectDataParamNameNotFound = 453,
+	InjectDataParamControlledByOtherPlugin = 454,
+	InjectDataModeUnknown = 455,
+	ParameterValueRequestParameterNotFound = 500,
+	NDIConfigCooldownNotOver = 550,
+	NDIConfigResolutionInvalid = 551,
+	ExpressionStateRequestInvalidFilename = 600,
+	ExpressionStateRequestFileNotFound = 601,
+	ExpressionActivationRequestInvalidFilename = 650,
+	ExpressionActivationRequestFileNotFound = 651,
+	ExpressionActivationRequestNoModelLoaded = 652,
+	SetCurrentModelPhysicsRequestNoModelLoaded = 700,
+	SetCurrentModelPhysicsRequestModelHasNoPhysics = 701,
+	SetCurrentModelPhysicsRequestPhysicsControlledByOtherPlugin = 702,
+	SetCurrentModelPhysicsRequestNoOverridesProvided = 703,
+	SetCurrentModelPhysicsRequestPhysicsGroupIDNotFound = 704,
+	SetCurrentModelPhysicsRequestNoOverrideValueProvided = 705,
+	SetCurrentModelPhysicsRequestDuplicatePhysicsGroupID = 706,
+	ItemFileNameMissing = 750,
+	ItemFileNameNotFound = 751,
+	ItemLoadLoadCooldownNotOver = 752,
+	CannotCurrentlyLoadItem = 753,
+	CannotLoadItemSceneFull = 754,
+	ItemOrderInvalid = 755,
+	ItemOrderAlreadyTaken = 756,
+	ItemLoadValuesInvalid = 757,
+	ItemCustomDataInvalid = 758,
+	ItemCustomDataCannotAskRightNow = 759,
+	ItemCustomDataLoadRequestRejectedByUser = 760,
+	CannotCurrentlyUnloadItem = 800,
+	ItemAnimationControlInstanceIDNotFound = 850,
+	ItemAnimationControlUnsupportedItemType = 851,
+	ItemAnimationControlAutoStopFramesInvalid = 852,
+	ItemAnimationControlTooManyAutoStopFrames = 853,
+	ItemAnimationControlSimpleImageDoesNotSupportAnim = 854,
+	ItemMoveRequestInstanceIDNotFound = 900,
+	ItemMoveRequestInvalidFadeMode = 901,
+	ItemMoveRequestItemOrderTakenOrInvalid = 902,
+	ItemMoveRequestCannotCurrentlyChangeOrder = 903,
+	EventSubscriptionRequestEventTypeUnknown = 950,
+	ArtMeshSelectionRequestNoModelLoaded = 1000,
+	ArtMeshSelectionRequestOtherWindowsOpen = 1001,
+	ArtMeshSelectionRequestModelDoesNotHaveArtMesh = 1002,
+	ArtMeshSelectionRequestArtMeshIDListError = 1003,
+	ItemPinRequestGivenItemNotLoaded = 1050,
+	ItemPinRequestInvalidAngleOrSizeType = 1051,
+	ItemPinRequestModelNotFound = 1052,
+	ItemPinRequestArtMeshNotFound = 1053,
+	ItemPinRequestPinPositionInvalid = 1054,
+	PermissionRequestUnknownPermission = 1100,
+	PermissionRequestCannotRequestRightNow = 1101,
+	PermissionRequestFileProblem = 1102,
+	PostProcessingListReqestInvalidFilter = 1150,
+	PostProcessingUpdateReqestCannotUpdateRightNow = 1200,
+	PostProcessingUpdateRequestFadeTimeInvalid = 1201,
+	PostProcessingUpdateRequestLoadingPresetAndValues = 1202,
+	PostProcessingUpdateRequestPresetFileLoadFailed = 1203,
+	PostProcessingUpdateRequestValueListInvalid = 1204,
+	PostProcessingUpdateRequestValueListContainsDuplicates = 1205,
+	PostProcessingUpdateRequestTriedToLoadRestrictedEffect = 1206,
+	EVENT_OFFSET = 100000,
+	Event_TestEvent_TestMessageTooLong = 100000,
+	Event_ModelLoadedEvent_ModelIDInvalid = 100050
+}
+
+---For setting post processing
 ---@class VTSPostProcessingUpdateOptions
 ---@field postProcessingOn boolean
 ---@field setPostProcessingPreset boolean
@@ -287,7 +446,32 @@ EffectConfigs = {
     ModelGlitch_StrengthLiquify = 257
 }
 
+---For response to setting post processing
+---@class VTSPostProcessingUpdateResponseData
+---@field data VTSPostProcessingUpdateResponseData_Data
 
+---@class VTSPostProcessingUpdateResponseData_Data
+---@field postProcessingActive boolean
+---@field presetIsActive boolean
+---@field activePreset string
+---@field activeEffectCount integer
 
+---For responses to getting current model
+---@class VTSCurrentModelData
 
+---@class VTSCurrentModelData_Data
+---@field live2DModelName string
+---@field modelLoadTime integer
+---@field timeSinceModelLoaded integer
+---@field numberOfLive2DParameters integer
+---@field numberOfLive2DArtmeshes integer
+---@field hasPhysicsFile boolean
+---@field numberOfTextures integer
+---@field textureResolution integer
+---@field modelPosition ModelPosition
 
+---@class ModelPosition
+---@field positionX number
+---@field positionY number
+---@field rotation number
+---@field size number

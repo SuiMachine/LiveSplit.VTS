@@ -1,5 +1,6 @@
 ﻿using LiveSplit.Model;
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using VTS.Core;
 
@@ -117,7 +118,9 @@ namespace LiveSplit.VTS
 			Logger.Log(message);
 			if (m_settingsForm != null && m_settingsForm.DebugLog)
 			{
-				m_settingsForm.AppendMessage(message);
+				string t = "[Lua VTS]: " + message;
+				m_settingsForm.AppendMessage(t);
+				Debug.WriteLine(t);
 			}
 		}
 
@@ -126,7 +129,9 @@ namespace LiveSplit.VTS
 			Logger.Log(message);
 			if (m_settingsForm != null && m_settingsForm.DebugLog)
 			{
-				m_settingsForm.AppendMessage("Warning: " + message);
+				string t = "[Lua VTS] Warning: " + message;
+				m_settingsForm.AppendMessage(t);
+				Debug.WriteLine(t);
 			}
 		}
 
@@ -135,7 +140,9 @@ namespace LiveSplit.VTS
 			Logger.LogError(error); // Log any errors that occur during initialization
 			if (m_settingsForm != null && m_settingsForm.DebugLog)
 			{
-				m_settingsForm.AppendMessage("Error: " + error);
+				string t = "[Lua VTS] Error: " + error;
+				m_settingsForm.AppendMessage(t);
+				Debug.WriteLine(t);
 			}
 		}
 

@@ -49,10 +49,6 @@ namespace LiveSplit.VTS
 				try
 				{
 					LuaMapping.OnPause.Call();
-					/*					Task.Factory.StartNew(new Action(async () =>
-										{
-											await vtsConnection.SetPostProcessing(options, values);
-										}));*/
 				}
 				catch (Exception ex)
 				{
@@ -82,13 +78,7 @@ namespace LiveSplit.VTS
 					vtsConnection.LogError(ex.ToString());
 				}
 			}
-			/*				VTSPostProcessingUpdateOptions options = new VTSPostProcessingUpdateOptions(true, true, false, "Nothing", 0.25f, false, false, false, 0);
-						PostProcessingValue[] values = new PostProcessingValue[0];
 
-						Task.Factory.StartNew(new Action(async () =>
-						{
-							await vtsConnection.SetPostProcessing(options, values);
-						}));*/
 			Flag_SendRedSplits = true;
 		}
 

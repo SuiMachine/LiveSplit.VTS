@@ -1,3 +1,5 @@
+---This script should set post processing to "Nothing" on restart, "RedSplits", "GreenSplits" and "Gold"
+---Make sure such post process presets are set up in VTS
 
 function ResetPostProcess()
     local p = CreateVTSPostProcessingUpdateOptions()

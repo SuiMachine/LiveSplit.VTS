@@ -68,6 +68,7 @@ namespace LiveSplit.VTS
 			UserData.RegisterType<VTSItemPinResponseData>();
 			UserData.RegisterType<VTSItemPinResponseData.Data>();
 
+			UserData.RegisterType<VTSItemLoadOptions>();
 			UserData.RegisterType<VTSItemUnloadOptions>();
 			UserData.RegisterType<VTSItemUnloadResponseData>();
 			UserData.RegisterType<VTSItemUnloadResponseData.Data>();
@@ -112,21 +113,24 @@ namespace LiveSplit.VTS
 			script.Globals["LiveSplitState"] = VTS_Connection.GetInstance().LiveSplitState;
 
 			script.Globals["Create_VTSPostProcessingUpdateOptions"] = (Func<VTSPostProcessingUpdateOptions>)(() => new VTSPostProcessingUpdateOptions());
+			script.Globals["Create_VTSItemLoadOptions"] = (Func<VTSItemLoadOptions>)(() => new VTSItemLoadOptions());
+			script.Globals["Create_VTSItemUnloadOptions"] = (Func<VTSItemUnloadOptions>)(() => new VTSItemUnloadOptions());
 
 			script.Globals[nameof(SetPostProcessingEffectValues)] = (Action<VTSPostProcessingUpdateOptions, PostProcessingValue[], Closure, Closure>)SetPostProcessingEffectValues;
 			script.Globals[nameof(LoadModel)] = (Action<string, Closure, Closure>)LoadModel;
 			script.Globals[nameof(MoveModel)] = (Action<VTSMoveModelData.Data, Closure, Closure>)MoveModel;
 			script.Globals[nameof(TriggerHotkey)] = (Action<string, Closure, Closure>)TriggerHotkey;
-			script.Globals[nameof(AnimateItem)] = (Action<string, VTSItemAnimationControlOptions, Closure, Closure>)AnimateItem;
 			script.Globals[nameof(GetCurrentModel)] = (Action<Closure, Closure>)GetCurrentModel;
 
+			script.Globals[nameof(AnimateItem)] = (Action<string, VTSItemAnimationControlOptions, Closure, Closure>)AnimateItem;
+			script.Globals[nameof(LoadItem)] = (Action<string, VTSItemLoadOptions, Closure, Closure>)LoadItem;
 			script.Globals[nameof(UnloadItem)] = (Action<VTSItemUnloadOptions, Closure, Closure>)UnloadItem;
 
 			script.Globals[nameof(PinItemToCenter)] = (Action<string, string, string, float, VTSItemAngleRelativityMode, float, VTSItemSizeRelativityMode, Closure, Closure>)PinItemToCenter;
 			script.Globals[nameof(PinItemToPoint)] = (Action<string, string, string, float, VTSItemAngleRelativityMode, float, VTSItemSizeRelativityMode, BarycentricCoordinate, Closure, Closure>)PinItemToPoint;
 			script.Globals[nameof(PinItemToRandom)] = (Action<string, string, string, float, VTSItemAngleRelativityMode, float, VTSItemSizeRelativityMode, Closure, Closure>)PinItemToRandom;
 			script.Globals[nameof(SetExpressionState)] = (Action<string, bool, Closure, Closure>)SetExpressionState;
-			
+
 			script.Globals[nameof(UnpinItem)] = (Action<string, Closure, Closure>)UnpinItem;
 		}
 
@@ -269,6 +273,19 @@ namespace LiveSplit.VTS
 		{
 			VTS_Connection.GetInstance().Plugin.UnpinItem(itemInstanceID,
 				(VTSItemPinResponseData success) =>
+				{
+					onSuccess?.Call(success);
+				},
+				(VTSErrorData error) =>
+				{
+					onError?.Call(error);
+				});
+		}
+
+		private static void LoadItem(string fileName, VTSItemLoadOptions loadOptions, Closure onSuccess, Closure onError)
+		{
+			VTS_Connection.GetInstance().Plugin.LoadItem(fileName, loadOptions,
+				(VTSItemLoadResponseData success) =>
 				{
 					onSuccess?.Call(success);
 				},

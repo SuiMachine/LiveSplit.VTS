@@ -2,39 +2,62 @@
 ---Make sure such post process presets are set up in VTS
 
 function ResetPostProcess()
-    local p = CreateVTSPostProcessingUpdateOptions()
+    local p = Create_VTSPostProcessingUpdateOptions()
     p.postProcessingOn = true
     p.setPostProcessingPreset = true
     p.presetToSet = "Nothing";
     p.postProcessingFadeTime = 0.4
-    SetPostProcessingEffectValues(p, {})
+    SetPostProcessingEffectValues(p, {},
+    function (onSuccess)
+        
+    end,
+    function (onError)
+        
+    end)
 end
 
 function SetRedPostProcess()
-    local p = CreateVTSPostProcessingUpdateOptions()
+    local p = Create_VTSPostProcessingUpdateOptions()
     p.postProcessingOn = true
     p.setPostProcessingPreset = true
     p.presetToSet = "RedSplits";
     p.postProcessingFadeTime = 0.4
-    SetPostProcessingEffectValues(p, {})
+    SetPostProcessingEffectValues(p, {},
+    function (onSuccess)
+        
+    end,
+    function (onError)
+        
+    end)
 end
 
 function SetGreenPostProcess()
-    local p = CreateVTSPostProcessingUpdateOptions()
+    local p = Create_VTSPostProcessingUpdateOptions()
     p.postProcessingOn = true
     p.setPostProcessingPreset = true
     p.presetToSet = "GreenSplits";
     p.postProcessingFadeTime = 0.4
-    SetPostProcessingEffectValues(p, {})
+    SetPostProcessingEffectValues(p, {}, 
+    function (onSuccess)
+        
+    end,
+    function (onError)
+        
+    end)
 end
 
 function SetGoldPostProcess()
-    local p = CreateVTSPostProcessingUpdateOptions()
+    local p = Create_VTSPostProcessingUpdateOptions()
     p.postProcessingOn = true
     p.setPostProcessingPreset = true
     p.presetToSet = "Gold";
     p.postProcessingFadeTime = 0.4
-    SetPostProcessingEffectValues(p, {})
+    SetPostProcessingEffectValues(p, {}, function (onSuccess)
+        
+    end,
+    function (onError)
+        
+    end)
 end
 
 ---This is performed when the timer starts

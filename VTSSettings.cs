@@ -26,12 +26,9 @@ namespace LiveSplit.VTS
 		[LiveSplitVTSStoreLayoutSetting]
 		[LiveSplitVTSSettingsAttributeBool("DebugLog", false)]
 		public bool DebugLog { get; set; }
-
-		public bool AutoReset { get; set; }
-		public bool AutoStart { get; set; }
-
-		private const bool DEFAULT_AUTORESET = false;
-		private const bool DEFAULT_AUTOSTART = true;
+		[LiveSplitVTSStoreLayoutSetting]
+		[LiveSplitVTSSettingsAttributeBool("LuaDebugger", false)]
+		public bool LuaDebugger { get; set; }
 
 		private List<(PropertyInfo Property, LiveSplitVTSSettingsAttribute Attribute)> mappings;
 		private List<(PropertyInfo Property, LiveSplitVTSSettingsAttribute Attribute)> layout_settingsMappings;
@@ -46,6 +43,7 @@ namespace LiveSplit.VTS
 			this.TB_Address.DataBindings.Add("Text", this, nameof(Api_Address), false, DataSourceUpdateMode.OnPropertyChanged);
 			this.CB_Log_DebugMessages.DataBindings.Add("Checked", this, nameof(DebugLog), false, DataSourceUpdateMode.OnPropertyChanged);
 			this.TB_ScriptFile.DataBindings.Add("Text", this, nameof(ScriptFile), false, DataSourceUpdateMode.OnPropertyChanged);
+			this.CB_EnableLuaDebugger.DataBindings.Add("Checked", this, nameof(LuaDebugger), false,  DataSourceUpdateMode.OnPropertyChanged);
 
 			//Stupid workaround
 			timer = new Timer();
@@ -111,9 +109,6 @@ namespace LiveSplit.VTS
 
 			settingsNode.AppendChild(doc.ToElement("Version", Assembly.GetExecutingAssembly().GetName().Version.ToString(3)));
 
-			settingsNode.AppendChild(doc.ToElement("AutoReset", this.AutoReset));
-			settingsNode.AppendChild(doc.ToElement("AutoStart", this.AutoStart));
-
 			foreach (var mapping in layout_settingsMappings)
 				mapping.Attribute.GetSetting(settingsNode, mapping.Property.GetValue(this));
 
@@ -123,9 +118,6 @@ namespace LiveSplit.VTS
 		public void SetSettings(XmlNode settings)
 		{
 			CreateMappings();
-
-			this.AutoReset = XML_Utils.ReadBool(settings, "AutoReset", DEFAULT_AUTORESET);
-			this.AutoStart = XML_Utils.ReadBool(settings, "AutoStart", DEFAULT_AUTOSTART);
 
 			foreach (var mapping in layout_settingsMappings)
 				mapping.Property.SetValue(this, mapping.Attribute.SetSetting(settings, mapping.Property.GetValue(this)));
@@ -186,12 +178,17 @@ namespace LiveSplit.VTS
 
 		private void ProcessLua()
 		{
-			LuaMapping.ReadFile(ScriptFile);
+			LuaMapping.ReadFile(ScriptFile, LuaDebugger);
 
 			if (LuaMapping.Compiled)
 				L_CompileState.Text = "Success";
 			else
 				L_CompileState.Text = "Failed to compile";
+		}
+
+		private void B_ReloadScript_Click(object sender, EventArgs e)
+		{
+			ProcessLua();
 		}
 	}
 }

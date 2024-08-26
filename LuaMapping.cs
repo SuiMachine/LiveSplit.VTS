@@ -1,4 +1,5 @@
 ﻿using MoonSharp.Interpreter;
+using MoonSharp.VsCodeDebugger;
 using System;
 using System.IO;
 using VTS.Core;
@@ -10,6 +11,7 @@ namespace LiveSplit.VTS
 		//TODO: Try and figure out how the call stack looks like and if elements get popped on responses
 		//or is there a chance that in some cases we will have stack overflow due to multiple nested calls
 		private static Script script;
+		private static MoonSharpVsCodeDebugServer debuggerServer = new MoonSharpVsCodeDebugServer();
 		public static bool Compiled { get; private set; } = false;
 
 		public static Closure OnStart { get; private set; }
@@ -24,7 +26,7 @@ namespace LiveSplit.VTS
 		public static Closure OnGoldSplit { get; private set; }
 
 
-		public static void ReadFile(string scriptFile)
+		public static void ReadFile(string scriptFile, bool luaDebugger)
 		{
 			Compiled = false;
 
@@ -39,7 +41,10 @@ namespace LiveSplit.VTS
 			OnGreenSplit = null;
 			OnGoldSplit = null;
 
-			if (!File.Exists(scriptFile))
+			if (debuggerServer.Current != null && script != null)
+				debuggerServer.Detach(script);
+
+				if (!File.Exists(scriptFile))
 				return;
 
 			UserData.RegisterType<TimeSpan>();
@@ -88,6 +93,7 @@ namespace LiveSplit.VTS
 			UserData.RegisterType<VTSItemMoveResponseData.Data>();
 			UserData.RegisterType<VTSItemMoveOptions>();
 			UserData.RegisterType<MovedItem>();
+			UserData.RegisterType<VTSItemMoveEntry>();
 
 			UserData.RegisterType<BarycentricCoordinate>();
 
@@ -117,6 +123,13 @@ namespace LiveSplit.VTS
 			{
 				Console.WriteLine(ex.ToString());
 			}
+
+			if (luaDebugger)
+			{
+				if(debuggerServer.Current == null)
+					debuggerServer.Start();
+				debuggerServer.AttachToScript(script, "VTS control script");
+			}
 		}
 
 		private static void SetGlobals(Script script)
@@ -132,6 +145,9 @@ namespace LiveSplit.VTS
 			script.Globals["Create_VTSItemLoadOptions"] = (Func<VTSItemLoadOptions>)(() => new VTSItemLoadOptions());
 			script.Globals["Create_VTSItemUnloadOptions"] = (Func<VTSItemUnloadOptions>)(() => new VTSItemUnloadOptions());
 			script.Globals["Create_VTSItemListOptions"] = (Func<VTSItemListOptions>)(() => new VTSItemListOptions());
+			script.Globals["Create_MovedItem"] = (Func<MovedItem>)(() => new MovedItem());
+			script.Globals["Create_VTSItemMoveEntry"] = (Func<VTSItemMoveEntry>)(() => new VTSItemMoveEntry());
+
 			script.Globals["GetCurrentModelID"] = (Func<string>)(() => VTS_Connection.GetInstance().CurrentModelId);
 			script.Globals["GetCurrentModelName"] = (Func<string>)(() => VTS_Connection.GetInstance().CurrentModelName);
 
@@ -336,7 +352,7 @@ namespace LiveSplit.VTS
 				(VTSItemLoadResponseData success) =>
 				{
 					onSuccess?.Call(success);
-					
+
 				},
 				(VTSErrorData error) =>
 				{
@@ -346,7 +362,7 @@ namespace LiveSplit.VTS
 
 		private static void MoveItem(VTSItemMoveEntry[] moveEntry, Closure onSuccess, Closure onError)
 		{
-			VTS_Connection.GetInstance().Plugin.MoveItem(moveEntry, 
+			VTS_Connection.GetInstance().Plugin.MoveItem(moveEntry,
 				(VTSItemMoveResponseData success) =>
 				{
 					onSuccess?.Call(success);

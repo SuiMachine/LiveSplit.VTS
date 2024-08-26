@@ -24,6 +24,10 @@ function Create_VTSItemListOptions() end
 ---@return MovedItem
 function Create_MovedItem() end
 
+---Creates VTSItemMoveEntry
+---@return VTSItemMoveEntry
+function Create_VTSItemMoveEntry() end
+
 ---Sets a post processing in VTS
 ---@param options VTSPostProcessingUpdateOptions
 ---@param value PostProcessingValue[]
@@ -73,6 +77,12 @@ function GetArtMeshList(onSuccess, onError) end
 ---@param onSuccess function Function that accepts VTSItemLoadResponseData as argument
 ---@param onError function Function that accepts VTSErrorData as argument
 function LoadItem(fileName, loadOptions, onSuccess, onError) end
+
+---Moves item / items
+---@param moveEntry VTSItemMoveEntry[]
+---@param onSuccess function Function that accepts VTSItemMoveResponseData as argument
+---@param onError function Function that accepts VTSErrorData as argument
+function MoveItem(moveEntry, onSuccess, onError) end
 
 ---Unloads an item from the scene
 ---@param VTSItemUnloadOptions VTSItemUnloadOptions

@@ -47,6 +47,9 @@
 			this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
 			this.gbLog = new System.Windows.Forms.GroupBox();
 			this.RB_LogText = new System.Windows.Forms.RichTextBox();
+			this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
+			this.B_ReloadScript = new System.Windows.Forms.Button();
+			this.CB_EnableLuaDebugger = new System.Windows.Forms.CheckBox();
 			this.gbStartSplits.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
@@ -54,6 +57,7 @@
 			this.tableLayoutPanel4.SuspendLayout();
 			this.tlpMain.SuspendLayout();
 			this.gbLog.SuspendLayout();
+			this.tableLayoutPanel5.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// gbStartSplits
@@ -71,16 +75,18 @@
 			// 
 			this.tableLayoutPanel1.ColumnCount = 1;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel5, 0, 3);
 			this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 0);
 			this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel3, 0, 1);
 			this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel4, 0, 2);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 16);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-			this.tableLayoutPanel1.RowCount = 3;
+			this.tableLayoutPanel1.RowCount = 4;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 39F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 101F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 43F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37F));
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(464, 351);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
@@ -284,6 +290,46 @@
 			this.RB_LogText.TabIndex = 0;
 			this.RB_LogText.Text = "";
 			// 
+			// tableLayoutPanel5
+			// 
+			this.tableLayoutPanel5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.tableLayoutPanel5.ColumnCount = 4;
+			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 79F));
+			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 64F));
+			this.tableLayoutPanel5.Controls.Add(this.B_ReloadScript, 2, 0);
+			this.tableLayoutPanel5.Controls.Add(this.CB_EnableLuaDebugger, 1, 0);
+			this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 121);
+			this.tableLayoutPanel5.Name = "tableLayoutPanel5";
+			this.tableLayoutPanel5.RowCount = 1;
+			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel5.Size = new System.Drawing.Size(458, 34);
+			this.tableLayoutPanel5.TabIndex = 4;
+			// 
+			// B_ReloadScript
+			// 
+			this.B_ReloadScript.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+			this.B_ReloadScript.Location = new System.Drawing.Point(318, 5);
+			this.B_ReloadScript.Name = "B_ReloadScript";
+			this.B_ReloadScript.Size = new System.Drawing.Size(73, 23);
+			this.B_ReloadScript.TabIndex = 6;
+			this.B_ReloadScript.Text = "Reload";
+			this.B_ReloadScript.UseVisualStyleBackColor = true;
+			this.B_ReloadScript.Click += new System.EventHandler(this.B_ReloadScript_Click);
+			// 
+			// CB_EnableLuaDebugger
+			// 
+			this.CB_EnableLuaDebugger.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+			this.CB_EnableLuaDebugger.AutoSize = true;
+			this.CB_EnableLuaDebugger.Location = new System.Drawing.Point(43, 8);
+			this.CB_EnableLuaDebugger.Name = "CB_EnableLuaDebugger";
+			this.CB_EnableLuaDebugger.Size = new System.Drawing.Size(269, 17);
+			this.CB_EnableLuaDebugger.TabIndex = 7;
+			this.CB_EnableLuaDebugger.Text = "Enable Lua Debugger";
+			this.CB_EnableLuaDebugger.UseVisualStyleBackColor = true;
+			// 
 			// VTSSettings
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -301,6 +347,8 @@
 			this.tableLayoutPanel4.PerformLayout();
 			this.tlpMain.ResumeLayout(false);
 			this.gbLog.ResumeLayout(false);
+			this.tableLayoutPanel5.ResumeLayout(false);
+			this.tableLayoutPanel5.PerformLayout();
 			this.ResumeLayout(false);
 
         }
@@ -325,5 +373,8 @@
 		private System.Windows.Forms.TextBox TB_ScriptFile;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Label L_CompileState;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
+		private System.Windows.Forms.Button B_ReloadScript;
+		private System.Windows.Forms.CheckBox CB_EnableLuaDebugger;
 	}
 }

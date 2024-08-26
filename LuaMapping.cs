@@ -64,6 +64,8 @@ namespace LiveSplit.VTS
 
 			UserData.RegisterType<VTSHotkeyTriggerData>();
 			UserData.RegisterType<VTSHotkeyTriggerData.Data>();
+			UserData.RegisterType<VTSExpressionActivationData>();
+			UserData.RegisterType<VTSArtMeshListData>();
 
 			UserData.RegisterType<VTSItemPinResponseData>();
 			UserData.RegisterType<VTSItemPinResponseData.Data>();
@@ -72,6 +74,20 @@ namespace LiveSplit.VTS
 			UserData.RegisterType<VTSItemUnloadOptions>();
 			UserData.RegisterType<VTSItemUnloadResponseData>();
 			UserData.RegisterType<VTSItemUnloadResponseData.Data>();
+
+			UserData.RegisterType<VTSItemLoadResponseData>();
+			UserData.RegisterType<VTSItemLoadResponseData.Data>();
+
+			UserData.RegisterType<VTSItemListResponseData>();
+			UserData.RegisterType<VTSItemListResponseData.Data>();
+			UserData.RegisterType<ItemInstance>();
+			UserData.RegisterType<ItemFile>();
+			UserData.RegisterType<VTSItemListOptions>();
+
+			UserData.RegisterType<VTSItemMoveResponseData>();
+			UserData.RegisterType<VTSItemMoveResponseData.Data>();
+			UserData.RegisterType<VTSItemMoveOptions>();
+			UserData.RegisterType<MovedItem>();
 
 			UserData.RegisterType<BarycentricCoordinate>();
 
@@ -115,16 +131,22 @@ namespace LiveSplit.VTS
 			script.Globals["Create_VTSPostProcessingUpdateOptions"] = (Func<VTSPostProcessingUpdateOptions>)(() => new VTSPostProcessingUpdateOptions());
 			script.Globals["Create_VTSItemLoadOptions"] = (Func<VTSItemLoadOptions>)(() => new VTSItemLoadOptions());
 			script.Globals["Create_VTSItemUnloadOptions"] = (Func<VTSItemUnloadOptions>)(() => new VTSItemUnloadOptions());
+			script.Globals["Create_VTSItemListOptions"] = (Func<VTSItemListOptions>)(() => new VTSItemListOptions());
+			script.Globals["GetCurrentModelID"] = (Func<string>)(() => VTS_Connection.GetInstance().CurrentModelId);
+			script.Globals["GetCurrentModelName"] = (Func<string>)(() => VTS_Connection.GetInstance().CurrentModelName);
 
 			script.Globals[nameof(SetPostProcessingEffectValues)] = (Action<VTSPostProcessingUpdateOptions, PostProcessingValue[], Closure, Closure>)SetPostProcessingEffectValues;
 			script.Globals[nameof(LoadModel)] = (Action<string, Closure, Closure>)LoadModel;
 			script.Globals[nameof(MoveModel)] = (Action<VTSMoveModelData.Data, Closure, Closure>)MoveModel;
 			script.Globals[nameof(TriggerHotkey)] = (Action<string, Closure, Closure>)TriggerHotkey;
 			script.Globals[nameof(GetCurrentModel)] = (Action<Closure, Closure>)GetCurrentModel;
+			script.Globals[nameof(GetArtMeshList)] = (Action<Closure, Closure>)GetArtMeshList;
 
 			script.Globals[nameof(AnimateItem)] = (Action<string, VTSItemAnimationControlOptions, Closure, Closure>)AnimateItem;
+			script.Globals[nameof(GetItemList)] = (Action<VTSItemListOptions, Closure, Closure>)GetItemList;
 			script.Globals[nameof(LoadItem)] = (Action<string, VTSItemLoadOptions, Closure, Closure>)LoadItem;
 			script.Globals[nameof(UnloadItem)] = (Action<VTSItemUnloadOptions, Closure, Closure>)UnloadItem;
+			script.Globals[nameof(MoveItem)] = (Action<VTSItemMoveEntry[], Closure, Closure>)MoveItem;
 
 			script.Globals[nameof(PinItemToCenter)] = (Action<string, string, string, float, VTSItemAngleRelativityMode, float, VTSItemSizeRelativityMode, Closure, Closure>)PinItemToCenter;
 			script.Globals[nameof(PinItemToPoint)] = (Action<string, string, string, float, VTSItemAngleRelativityMode, float, VTSItemSizeRelativityMode, BarycentricCoordinate, Closure, Closure>)PinItemToPoint;
@@ -214,6 +236,19 @@ namespace LiveSplit.VTS
 				});
 		}
 
+		private static void GetArtMeshList(Closure onSuccess, Closure onError)
+		{
+			VTS_Connection.GetInstance().Plugin.GetArtMeshList(
+				(VTSArtMeshListData success) =>
+				{
+					onSuccess?.Call(success);
+				},
+				(VTSErrorData error) =>
+				{
+					onError?.Call(error);
+				});
+		}
+
 		private static void SetExpressionState(string expersion, bool active, Closure onSuccess, Closure onError)
 		{
 			VTS_Connection.GetInstance().Plugin.SetExpressionState(expersion, active,
@@ -282,10 +317,10 @@ namespace LiveSplit.VTS
 				});
 		}
 
-		private static void LoadItem(string fileName, VTSItemLoadOptions loadOptions, Closure onSuccess, Closure onError)
+		private static void GetItemList(VTSItemListOptions options, Closure onSuccess, Closure onError)
 		{
-			VTS_Connection.GetInstance().Plugin.LoadItem(fileName, loadOptions,
-				(VTSItemLoadResponseData success) =>
+			VTS_Connection.GetInstance().Plugin.GetItemList(options,
+				(VTSItemListResponseData success) =>
 				{
 					onSuccess?.Call(success);
 				},
@@ -294,6 +329,34 @@ namespace LiveSplit.VTS
 					onError?.Call(error);
 				});
 		}
+
+		private static void LoadItem(string fileName, VTSItemLoadOptions loadOptions, Closure onSuccess, Closure onError)
+		{
+			VTS_Connection.GetInstance().Plugin.LoadItem(fileName, loadOptions,
+				(VTSItemLoadResponseData success) =>
+				{
+					onSuccess?.Call(success);
+					
+				},
+				(VTSErrorData error) =>
+				{
+					onError?.Call(error);
+				});
+		}
+
+		private static void MoveItem(VTSItemMoveEntry[] moveEntry, Closure onSuccess, Closure onError)
+		{
+			VTS_Connection.GetInstance().Plugin.MoveItem(moveEntry, 
+				(VTSItemMoveResponseData success) =>
+				{
+					onSuccess?.Call(success);
+				},
+				(VTSErrorData error) =>
+				{
+					onError?.Call(error);
+				});
+		}
+
 
 		private static void UnloadItem(VTSItemUnloadOptions options, Closure onSuccess, Closure onError)
 		{

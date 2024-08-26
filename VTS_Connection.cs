@@ -15,6 +15,9 @@ namespace LiveSplit.VTS
 		private VTSSettings m_settingsForm;
 		private VTS_TimerEvents timerEvents = new VTS_TimerEvents();
 		public LiveSplitState LiveSplitState { get; private set; }
+		public string CurrentModelId { get; private set; }
+		public string CurrentModelName { get; private set; }
+
 
 		public bool Connected
 		{
@@ -69,6 +72,8 @@ namespace LiveSplit.VTS
 					await Plugin.SubscribeToModelConfigChangedEvent((modelConfig) =>
 					{
 						Log($"Model changed to: {modelConfig.data.modelName}");
+						CurrentModelId = modelConfig.data.modelID;
+						CurrentModelName = modelConfig.data.modelName;
 					});
 
 					var VTSModelAnimationEventConfigOptions = new VTSModelAnimationEventConfigOptions();

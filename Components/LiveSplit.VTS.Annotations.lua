@@ -1,15 +1,32 @@
+---@return string ModelName Model name
+function GetCurrentModelName() end
+
+---@return string ModelID Model id
+function GetCurrentModelID() end
 
 ---Creates VTSItemLoadOptions
 ---@return VTSItemLoadOptions
 function Create_VTSItemLoadOptions() end
 
+---Creates VTSItemUnloadOptions
+---@return VTSItemUnloadOptions
+function Create_VTSItemUnloadOptions() end
+
 ---Creates VTSPostProcessingUpdateOptions
 ---@return VTSPostProcessingUpdateOptions
 function Create_VTSPostProcessingUpdateOptions() end
 
+---Creates VTSItemListOptions
+---@return VTSItemListOptions
+function Create_VTSItemListOptions() end
+
+---Creates MovedItem
+---@return MovedItem
+function Create_MovedItem() end
+
 ---Sets a post processing in VTS
 ---@param options VTSPostProcessingUpdateOptions
----@param value array<PostProcessingValue>
+---@param value PostProcessingValue[]
 ---@param onSuccess function Function that accepts VTSPostProcessingUpdateResponseData object as an argument
 ---@param onError function Function that accepts VTSErrorData as an argument 
 function SetPostProcessingEffectValues(options, value, onSuccess, onError) end
@@ -32,12 +49,23 @@ function MoveModel(position, onSuccess, onError) end
 ---@param onError function Function that accepts VTSErrorData as argument
 function TriggerHotkey(hotkey, onSuccess, onError) end
 
+---Gets a list of current items in the scene
+---@param options VTSItemListOptions
+---@param onSuccess function Function that accepts VTSItemListResponseData as an argument
+---@param onError function Function that accepts VTSErrorData as argument
+function GetItemList(options, onSuccess, onError) end
+
 ---Used to animate certain item
 ---@param itemInstanceId string
 ---@param options VTSItemAnimationControlOptions
 ---@param onSuccess function Function that accepts VTSItemAnimationControlOptions as argument
 ---@param onError function Function that accepts VTSErrorData as argument
 function AnimateItem(itemInstanceId, options, onSuccess, onError) end
+
+---Gets a list of art meshes
+---@param onSuccess function Function that accepts VTSArtMeshListData as argument
+---@param onError function Function that accepts VTSErrorData as argument
+function GetArtMeshList(onSuccess, onError) end
 
 ---Loads an item into a scene
 ---@param fileName string
@@ -591,6 +619,12 @@ EffectConfigs = {
 ---@field locked boolean
 ---@field unloadWhenPluginDisconnects boolean
 
+---@class VTSItemLoadResponseData
+---@field data VTSItemLoadResponseData_Data
+
+---@class VTSItemLoadResponseData_Data
+---@field instanceID string
+
 ---@class VTSItemUnloadOptions
 ---@field itemInstanceIDs string[]
 ---@field fileNames string[]
@@ -608,8 +642,6 @@ EffectConfigs = {
 ---@field instanceID string
 ---@field fileName string
 
-
----Used for pinning / unpinning item
 ---@class VTSItemPinResponseData
 ---@field data VTSItemPinResponseData_Data
 
@@ -618,7 +650,47 @@ EffectConfigs = {
 ---@field itemInstanceID string
 ---@field itemFileName string
 
+---@class VTSItemListOptions
+---@field includeAvailableSpots boolean
+---@field includeItemInstancesInScene boolean
+---@field includeAvailableItemFiles boolean
+---@field onlyItemsWithFileName string
+---@field onlyItemsWithInstanceID string
 
+---@class VTSItemListResponseData
+---@field data VTSItemListResponseData_Data
+
+---@class VTSItemListResponseData_Data
+---@field itemsInSceneCount integer
+---@field totalItemsAllowedCount integer
+---@field canLoadItemsRightNow boolean
+---@field availableSpots integer[]
+---@field itemInstancesInScene ItemInstance[]
+---@field availableItemFiles ItemFile[]
+
+---@class ItemInstance
+---@field fileName string
+---@field instanceID string
+---@field order integer
+---@field type string
+---@field censored boolean
+---@field flipped boolean
+---@field locked boolean
+---@field smoothing number
+---@field framerate number
+---@field frameCount integer
+---@field currentFrame integer
+---@field pinnedToModel boolean
+---@field pinnedModelID string
+---@field pinnedArtMeshID string
+---@field groupName string
+---@field sceneName string
+---@field fromWorkshop boolean
+
+---@class ItemFile
+---@field fileName string
+---@field type string
+---@field loadedCount integer
 
 ---@enum VTSItemAngleRelativityMode
 VTSItemAngleRelativityMode = {
@@ -649,3 +721,52 @@ VTSItemSizeRelativityMode = {
 ---@class VTSExpressionActivationData_Data
 ---@field expressionFile string
 ---@field active boolean
+
+---Something?
+---@class VTSArtMeshListData
+---@field data VTSArtMeshListData_Data
+
+---@class VTSArtMeshListData_Data
+---@field modelLoaded boolean
+---@field numberOfArtMeshNames integer
+---@field numberOfArtMeshTags integer
+---@field artMeshNames string[]
+---@field artMeshTags string[]
+
+---@class VTSItemMoveResponseData
+---@field data VTSItemMoveResponseData_Data
+
+---@class VTSItemMoveResponseData_Data
+---@field movedItems MovedItem[]
+
+---@class MovedItem
+---@field itemInstanceID string
+---@field success boolean
+---@field errorID ErrorID
+
+---@class VTSItemMoveEntry
+---@field itemInsanceID string
+---@field options VTSItemMoveOptions
+
+---@class VTSItemMoveOptions
+---@field timeInSeconds number
+---@field fadeMode VTSItemMotionCurve
+---@field positionX number
+---@field positionY number
+---@field order integer
+---@field size number
+---@field rotation number
+---@field setFlip boolean
+---@field flip boolean
+---@field userCanStop boolean
+
+---@enum VTSItemMotionCurve
+VTSItemMotionCurve = {
+	UNKNOW = -1,
+	LINEAR = 0,
+	EASE_IN = 1,
+	EASE_OUT = 2,
+	EASE_BOTH = 3,
+	OVERSHOOT = 4,
+	ZIP = 5
+}

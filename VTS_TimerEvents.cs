@@ -156,34 +156,36 @@ namespace LiveSplit.VTS
 					{
 						if (LuaMapping.OnGoldSplit != null)
 						{
-							try
+							_ = Task.Run(() =>
 							{
-								_ = Task.Run(() =>
+								try
 								{
 									LuaMapping.OnGoldSplit.Call();
-								});
-							}
-							catch (Exception ex)
-							{
-								vtsConnection.LogError(ex.ToString());
-							}
+								}
+								catch (Exception ex)
+								{
+									vtsConnection.LogError(ex.ToString());
+								}
+							});
 						}
 					}
 					else
 					{
 						if (LuaMapping.OnGreenSplit != null)
 						{
-							try
+							_ = Task.Run(() =>
 							{
-								_ = Task.Run(() =>
+								try
 								{
 									LuaMapping.OnGreenSplit.Call();
-								});
-							}
-							catch (Exception ex)
-							{
-								vtsConnection.LogError(ex.ToString());
-							}
+								}
+								catch (Exception ex)
+								{
+									vtsConnection.LogError(ex.ToString());
+								}
+							});
+
+
 						}
 					}
 
@@ -196,17 +198,17 @@ namespace LiveSplit.VTS
 		{
 			if (LuaMapping.OnStart != null)
 			{
-				try
+				_ = Task.Run(() =>
 				{
-					_ = Task.Run(() =>
+					try
 					{
 						LuaMapping.OnStart.Call();
-					});
-				}
-				catch (Exception ex)
-				{
-					vtsConnection.LogError(ex.ToString());
-				}
+					}
+					catch (Exception ex)
+					{
+						vtsConnection.LogError(ex.ToString());
+					}
+				});
 			}
 
 			if (ProcessTimeTask == null)
@@ -221,17 +223,17 @@ namespace LiveSplit.VTS
 			Flag_SendRedSplits = true;
 			if (LuaMapping.OnUndoSplit != null)
 			{
-				try
+				_ = Task.Run(() =>
 				{
-					_ = Task.Run(() =>
+					try
 					{
 						LuaMapping.OnUndoSplit.Call();
-					});
-				}
-				catch (Exception ex)
-				{
-					vtsConnection.LogError(ex.ToString());
-				}
+					}
+					catch (Exception ex)
+					{
+						vtsConnection.LogError(ex.ToString());
+					}
+				});
 			}
 		}
 
@@ -240,17 +242,17 @@ namespace LiveSplit.VTS
 			Flag_SendRedSplits = true;
 			if (LuaMapping.OnSkipSplit != null)
 			{
-				try
+				_ = Task.Run(() =>
 				{
-					_ = Task.Run(() =>
+					try
 					{
 						LuaMapping.OnSkipSplit.Call();
-					});
-				}
-				catch (Exception ex)
-				{
-					vtsConnection.LogError(ex.ToString());
-				}
+					}
+					catch (Exception ex)
+					{
+						vtsConnection.LogError(ex.ToString());
+					}
+				});
 			}
 		}
 

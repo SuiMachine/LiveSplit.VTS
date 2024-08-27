@@ -1,3 +1,23 @@
+---Logs a message
+---@param message string
+function Log(message) end
+
+---Logs an error
+---@param message string
+function LogError(message) end
+
+---Logs a warning
+---@param message string
+function LogWarning(message) end
+
+---Gets current LiveSplit state object
+---@return LiveSplitState
+function GetLiveSplitState() end
+
+---Gets Segments as an array
+---@return ISegment[]
+function GetRunAsArray() end
+
 ---Delays execution of task
 ---@param time integer Time in miliseconds
 function Sleep(time) end
@@ -768,4 +788,75 @@ VTSItemMotionCurve = {
 	EASE_BOTH = 3,
 	OVERSHOOT = 4,
 	ZIP = 5
+}
+
+---@class LiveSplitState
+---@field loadingTimes TimeSpan
+---@field isGameTimePaused boolean
+---@field Run IRun
+---@field AttemptStarted AtomicDateTime 
+---@field AttemptEnded AtomicDateTime
+---@field AdjustedStartTime TimeStamp
+---@field StartTimeWithOffset TimeStamp
+---@field StartTime TimeStamp
+---@field TimePausedAt TimeStamp
+---@field GameTimePauseTime TimeSpan
+---@field CurrentPhase TimerPhase
+---@field CurrentComparison string
+---@field CurrentTimingMethod TimingMethod
+---@field CurrentHotkeyProfile string
+---@field LoadingTimes TimeSpan
+---@field IsGameTimeInitialized boolean
+---@field IsGameTimePaused boolean
+---@field CurrentTime Time
+---@field PauseTime TimeSpan
+---@field CurrentAttemptDuration TimeSpan
+---@field CurrentSplitIndex integer
+---@field CurrentSplit ISegment
+
+
+---@class TimeSpan
+---@field TotalDays number Total amount of days the timespan lasts
+---@field TotalHours number Total amount of hours the timespan lasts
+---@field TotalMinutes number Total amount of minutes the timespan lasts
+---@field TotalSeconds number Total amount of seconds the timespan lasts
+---@field TotalMilliseconds number Total amount of milliseconds the timespan lasts
+---@field Days integer Returns the days component of a timespan
+---@field Hours integer Returns the hours component of a timespan
+---@field Minutes integer Returns the minutes component of a timespan
+---@field Seconds integer Returns the seconds component of a timespan
+---@field Milliseconds integer Returns the milliseconds component of a timespan
+
+---@class AtomicDateTime
+---@field Time DateTime
+---@field SyncedWithAtomicClock boolean
+
+---@class DateTime
+---@field todo number
+
+---@class TimeStamp
+---@field value TimeSpan
+
+---@class ISegment
+---@field Name string
+---@field PersonalBestSplitTime Time
+---@field BestSegmentTime Time
+---@field SplitTime Time
+
+---@class Time
+---@field RealTime TimeSpan
+---@field GameTime TimeSpan
+
+---@enum TimerPhase
+TimerPhase = {
+	NotRunning = 0,
+	Running = 1,
+	Ended = 2,
+	Paused = 3
+}
+
+---@enum TimingMethod
+TimingMethod = {
+	RealTime = 0,
+	GameTime = 1
 }

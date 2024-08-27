@@ -17,6 +17,9 @@ Configure
 ---------
 TODO 
 
+Known issues
+---------
+Switching threats breaks Lua calls - this needs to be resolved asap. This sadly happens when creating Tasks :-/
 
 Credits
 -------

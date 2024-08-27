@@ -1,8 +1,9 @@
-﻿using LiveSplit.Options;
+﻿using LiveSplit.Model;
 using MoonSharp.Interpreter;
 using MoonSharp.VsCodeDebugger;
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using VTS.Core;
 
@@ -63,7 +64,7 @@ namespace LiveSplit.VTS
 			UserData.RegisterType<VTSModelLoadedEventConfigOptions>();
 			UserData.RegisterType<VTSMoveModelData>();
 			UserData.RegisterType<VTSMoveModelData.Data>();
-			UserData.RegisterType<Model.LiveSplitState>();
+			UserData.RegisterType<LiveSplitState>();
 			UserData.RegisterType<PostProcessingValue>();
 
 			UserData.RegisterType<VTSPostProcessingUpdateOptions>();
@@ -103,10 +104,20 @@ namespace LiveSplit.VTS
 			UserData.RegisterType<VTSItemMoveOptions>();
 			UserData.RegisterType<MovedItem>();
 			UserData.RegisterType<VTSItemMoveEntry>();
+			UserData.RegisterType<ModelPosition>();
 
 			UserData.RegisterType<BarycentricCoordinate>();
 
 			UserData.RegisterType<VTSErrorData>();
+
+			UserData.RegisterType<TimeSpan>();
+			UserData.RegisterType<TimeSpan?>();
+			UserData.RegisterType<DateTime>();
+			UserData.RegisterType<DateTime?>();
+			UserData.RegisterType<Time>();
+			UserData.RegisterType<AtomicDateTime>();
+			UserData.RegisterType<ISegment>();
+			UserData.RegisterType<ISegment[]>();
 
 			script = new Script();
 			script.DoFile(scriptFile);
@@ -145,8 +156,8 @@ namespace LiveSplit.VTS
 			script.Globals["LogError"] = (Action<string>)VTS_Connection.GetInstance().LogError;
 			script.Globals["LogWarning"] = (Action<string>)VTS_Connection.GetInstance().LogWarning;
 
-			script.Globals["VTSPLugin"] = VTS_Connection.GetInstance().Plugin;
-			script.Globals["LiveSplitState"] = VTS_Connection.GetInstance().LiveSplitState;
+			script.Globals["GetLiveSplitState"] = (Func<LiveSplitState>)(() => VTS_Connection.GetInstance().LiveSplitState);
+			script.Globals["GetRunAsArray"] = (Func<ISegment[]>)(() => VTS_Connection.GetInstance().LiveSplitState.Run.ToArray());
 
 			script.Globals["Create_VTSPostProcessingUpdateOptions"] = (Func<VTSPostProcessingUpdateOptions>)(() => new VTSPostProcessingUpdateOptions());
 			script.Globals["Create_VTSItemLoadOptions"] = (Func<VTSItemLoadOptions>)(() => new VTSItemLoadOptions());
@@ -159,7 +170,6 @@ namespace LiveSplit.VTS
 			script.Globals["GetCurrentModelName"] = (Func<string>)(() => VTS_Connection.GetInstance().CurrentModelName);
 
 			script.Globals["Sleep"] = (Action<int>)((int sleep) => Task.Delay(sleep));
-
 
 			script.Globals[nameof(SetPostProcessingEffectValues)] = (Func<VTSPostProcessingUpdateOptions, PostProcessingValue[], VTSPostProcessingUpdateResponseData>)SetPostProcessingEffectValues;
 			script.Globals[nameof(LoadModel)] = (Func<string, VTSModelLoadData>)LoadModel;

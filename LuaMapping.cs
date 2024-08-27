@@ -1,7 +1,9 @@
-﻿using MoonSharp.Interpreter;
+﻿using LiveSplit.Options;
+using MoonSharp.Interpreter;
 using MoonSharp.VsCodeDebugger;
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using VTS.Core;
 
 namespace LiveSplit.VTS
@@ -132,7 +134,7 @@ namespace LiveSplit.VTS
 			}
 
 			if (luaDebugger)
-			{				
+			{
 				debuggerServer.AttachToScript(script, "VTS control script");
 			}
 		}
@@ -156,241 +158,45 @@ namespace LiveSplit.VTS
 			script.Globals["GetCurrentModelID"] = (Func<string>)(() => VTS_Connection.GetInstance().CurrentModelId);
 			script.Globals["GetCurrentModelName"] = (Func<string>)(() => VTS_Connection.GetInstance().CurrentModelName);
 
-			script.Globals[nameof(SetPostProcessingEffectValues)] = (Action<VTSPostProcessingUpdateOptions, PostProcessingValue[], Closure, Closure>)SetPostProcessingEffectValues;
-			script.Globals[nameof(LoadModel)] = (Action<string, Closure, Closure>)LoadModel;
-			script.Globals[nameof(MoveModel)] = (Action<VTSMoveModelData.Data, Closure, Closure>)MoveModel;
-			script.Globals[nameof(TriggerHotkey)] = (Action<string, Closure, Closure>)TriggerHotkey;
-			script.Globals[nameof(GetCurrentModel)] = (Action<Closure, Closure>)GetCurrentModel;
-			script.Globals[nameof(GetArtMeshList)] = (Action<Closure, Closure>)GetArtMeshList;
+			script.Globals["Sleep"] = (Action<int>)((int sleep) => Task.Delay(sleep));
 
-			script.Globals[nameof(AnimateItem)] = (Action<string, VTSItemAnimationControlOptions, Closure, Closure>)AnimateItem;
-			script.Globals[nameof(GetItemList)] = (Action<VTSItemListOptions, Closure, Closure>)GetItemList;
-			script.Globals[nameof(LoadItem)] = (Action<string, VTSItemLoadOptions, Closure, Closure>)LoadItem;
-			script.Globals[nameof(UnloadItem)] = (Action<VTSItemUnloadOptions, Closure, Closure>)UnloadItem;
-			script.Globals[nameof(MoveItem)] = (Action<VTSItemMoveEntry[], Closure, Closure>)MoveItem;
 
-			script.Globals[nameof(PinItemToCenter)] = (Action<string, string, string, float, VTSItemAngleRelativityMode, float, VTSItemSizeRelativityMode, Closure, Closure>)PinItemToCenter;
-			script.Globals[nameof(PinItemToPoint)] = (Action<string, string, string, float, VTSItemAngleRelativityMode, float, VTSItemSizeRelativityMode, BarycentricCoordinate, Closure, Closure>)PinItemToPoint;
-			script.Globals[nameof(PinItemToRandom)] = (Action<string, string, string, float, VTSItemAngleRelativityMode, float, VTSItemSizeRelativityMode, Closure, Closure>)PinItemToRandom;
-			script.Globals[nameof(UnpinItem)] = (Action<string, Closure, Closure>)UnpinItem;
+			script.Globals[nameof(SetPostProcessingEffectValues)] = (Func<VTSPostProcessingUpdateOptions, PostProcessingValue[], VTSPostProcessingUpdateResponseData>)SetPostProcessingEffectValues;
+			script.Globals[nameof(LoadModel)] = (Func<string, VTSModelLoadData>)LoadModel;
+			script.Globals[nameof(MoveModel)] = (Func<VTSMoveModelData.Data, VTSMoveModelData>)MoveModel;
+			script.Globals[nameof(TriggerHotkey)] = (Func<string, VTSHotkeyTriggerData>)TriggerHotkey;
+			script.Globals[nameof(GetCurrentModel)] = (Func<VTSCurrentModelData>)GetCurrentModel;
+			script.Globals[nameof(GetArtMeshList)] = (Func<VTSArtMeshListData>)GetArtMeshList;
 
-			script.Globals[nameof(SetExpressionState)] = (Action<string, bool, Closure, Closure>)SetExpressionState;
+			script.Globals[nameof(AnimateItem)] = (Func<string, VTSItemAnimationControlOptions, VTSItemAnimationControlResponseData>)AnimateItem;
+			script.Globals[nameof(GetItemList)] = (Func<VTSItemListOptions, VTSItemListResponseData>)GetItemList;
+			script.Globals[nameof(LoadItem)] = (Func<string, VTSItemLoadOptions, VTSItemLoadResponseData>)LoadItem;
+			script.Globals[nameof(UnloadItem)] = (Func<VTSItemUnloadOptions, VTSItemUnloadResponseData>)UnloadItem;
+			script.Globals[nameof(MoveItem)] = (Func<VTSItemMoveEntry[], VTSItemMoveResponseData>)MoveItem;
+
+			script.Globals[nameof(PinItemToCenter)] = (Func<string, string, string, float, VTSItemAngleRelativityMode, float, VTSItemSizeRelativityMode, VTSItemPinResponseData>)PinItemToCenter;
+			script.Globals[nameof(PinItemToPoint)] = (Func<string, string, string, float, VTSItemAngleRelativityMode, float, VTSItemSizeRelativityMode, BarycentricCoordinate, VTSItemPinResponseData>)PinItemToPoint;
+			script.Globals[nameof(PinItemToRandom)] = (Func<string, string, string, float, VTSItemAngleRelativityMode, float, VTSItemSizeRelativityMode, VTSItemPinResponseData>)PinItemToRandom;
+			script.Globals[nameof(UnpinItem)] = (Func<string, VTSItemPinResponseData>)UnpinItem;
+			script.Globals[nameof(SetExpressionState)] = (Func<string, bool, VTSExpressionActivationData>)SetExpressionState;
 
 		}
 
-		private static void SetPostProcessingEffectValues(VTSPostProcessingUpdateOptions options, PostProcessingValue[] values, Closure onSuccess, Closure onError)
-		{
-			VTS_Connection.GetInstance().Plugin?.SetPostProcessingEffectValues(options, values,
-				(VTSPostProcessingUpdateResponseData successData) =>
-				{
-					onSuccess?.Call(successData);
-				},
-				(VTSErrorData error) =>
-				{
-					onError?.Call(error);
-				}
-			);
-		}
-
-		private static void LoadModel(string modelId, Closure onSuccess, Closure onError)
-		{
-			VTS_Connection.GetInstance().Plugin?.LoadModel(modelId,
-				(VTSModelLoadData successData) =>
-				{
-					onSuccess?.Call(successData);
-				},
-				(VTSErrorData error) =>
-				{
-					onError?.Call(error);
-				}
-			);
-		}
-
-		private static void MoveModel(VTSMoveModelData.Data position, Closure onSuccess, Closure onError)
-		{
-			VTS_Connection.GetInstance().Plugin?.MoveModel(position,
-				(VTSMoveModelData moveData) =>
-				{
-					onSuccess?.Call(onSuccess);
-				},
-				(VTSErrorData error) =>
-				{
-					onError?.Call(error);
-				});
-		}
-
-		private static void TriggerHotkey(string hotkey, Closure onSuccess, Closure onError)
-		{
-			VTS_Connection.GetInstance().Plugin?.TriggerHotkey(hotkey,
-				(VTSHotkeyTriggerData data) =>
-				{
-					onSuccess?.Call(data);
-				},
-				(VTSErrorData error) =>
-				{
-					onError?.Call(error);
-				});
-		}
-
-		private static void AnimateItem(string itemInstanceId, VTSItemAnimationControlOptions options, Closure onSuccess, Closure onError)
-		{
-			VTS_Connection.GetInstance().Plugin?.AnimateItem(itemInstanceId, options,
-				(VTSItemAnimationControlResponseData data) =>
-				{
-					onSuccess?.Call(data);
-				},
-				(VTSErrorData error) =>
-				{
-					onError?.Call(error);
-				});
-		}
-
-		private static void GetCurrentModel(Closure onSuccess, Closure onError)
-		{
-			VTS_Connection.GetInstance().Plugin?.GetCurrentModel(
-				(VTSCurrentModelData success) =>
-				{
-					onSuccess?.Call(success);
-				},
-				(VTSErrorData error) =>
-				{
-					onError?.Call(error);
-				});
-		}
-
-		private static void GetArtMeshList(Closure onSuccess, Closure onError)
-		{
-			VTS_Connection.GetInstance().Plugin?.GetArtMeshList(
-				(VTSArtMeshListData success) =>
-				{
-					onSuccess?.Call(success);
-				},
-				(VTSErrorData error) =>
-				{
-					onError?.Call(error);
-				});
-		}
-
-		private static void SetExpressionState(string expersion, bool active, Closure onSuccess, Closure onError)
-		{
-			VTS_Connection.GetInstance().Plugin?.SetExpressionState(expersion, active,
-				(VTSExpressionActivationData data) =>
-				{
-					onSuccess?.Call(onSuccess);
-				},
-				(VTSErrorData error) =>
-				{
-					onError?.Call(error);
-				});
-		}
-
-		private static void PinItemToCenter(string itemInstanceID, string modelID, string artMeshID, float angle, VTSItemAngleRelativityMode angleRelativeTo, float size, VTSItemSizeRelativityMode sizeRelativeTo, Closure onSuccess, Closure onError)
-		{
-			VTS_Connection.GetInstance().Plugin?.PinItemToCenter(itemInstanceID, modelID, artMeshID,
-				angle, angleRelativeTo, size, sizeRelativeTo,
-				(VTSItemPinResponseData success) =>
-				{
-					onSuccess?.Call(success);
-				},
-				(VTSErrorData error) =>
-				{
-					onError?.Call(error);
-				});
-		}
-
-		private static void PinItemToPoint(string itemInstanceID, string modelID, string artMeshID, float angle, VTSItemAngleRelativityMode angleRelativeTo, float size, VTSItemSizeRelativityMode sizeRelativeTo, BarycentricCoordinate coordinate, Closure onSuccess, Closure onError)
-		{
-			VTS_Connection.GetInstance().Plugin?.PinItemToPoint(itemInstanceID, modelID, artMeshID,
-				angle, angleRelativeTo, size, sizeRelativeTo, coordinate,
-				(VTSItemPinResponseData success) =>
-				{
-					onSuccess?.Call(success);
-				},
-				(VTSErrorData error) =>
-				{
-					onError?.Call(error);
-				});
-		}
-
-		private static void PinItemToRandom(string itemInstanceID, string modelID, string artMeshID, float angle, VTSItemAngleRelativityMode angleRelativeTo, float size, VTSItemSizeRelativityMode sizeRelativeTo, Closure onSuccess, Closure onError)
-		{
-			VTS_Connection.GetInstance().Plugin?.PinItemToRandom(itemInstanceID, modelID, artMeshID,
-				angle, angleRelativeTo, size, sizeRelativeTo,
-				(VTSItemPinResponseData success) =>
-				{
-					onSuccess?.Call(success);
-				},
-				(VTSErrorData error) =>
-				{
-					onError?.Call(error);
-				});
-		}
-
-		private static void UnpinItem(string itemInstanceID, Closure onSuccess, Closure onError)
-		{
-			VTS_Connection.GetInstance().Plugin?.UnpinItem(itemInstanceID,
-				(VTSItemPinResponseData success) =>
-				{
-					onSuccess?.Call(success);
-				},
-				(VTSErrorData error) =>
-				{
-					onError?.Call(error);
-				});
-		}
-
-		private static void GetItemList(VTSItemListOptions options, Closure onSuccess, Closure onError)
-		{
-			VTS_Connection.GetInstance().Plugin?.GetItemList(options,
-				(VTSItemListResponseData success) =>
-				{
-					onSuccess?.Call(success);
-				},
-				(VTSErrorData error) =>
-				{
-					onError?.Call(error);
-				});
-		}
-
-		private static void LoadItem(string fileName, VTSItemLoadOptions loadOptions, Closure onSuccess, Closure onError)
-		{
-			VTS_Connection.GetInstance().Plugin?.LoadItem(fileName, loadOptions,
-				(VTSItemLoadResponseData success) =>
-				{
-					onSuccess?.Call(success);
-
-				},
-				(VTSErrorData error) =>
-				{
-					onError?.Call(error);
-				});
-		}
-
-		private static void MoveItem(VTSItemMoveEntry[] moveEntry, Closure onSuccess, Closure onError)
-		{
-			VTS_Connection.GetInstance().Plugin?.MoveItem(moveEntry,
-				(VTSItemMoveResponseData success) =>
-				{
-					onSuccess?.Call(success);
-				},
-				(VTSErrorData error) =>
-				{
-					onError?.Call(error);
-				});
-		}
-
-
-		private static void UnloadItem(VTSItemUnloadOptions options, Closure onSuccess, Closure onError)
-		{
-			VTS_Connection.GetInstance().Plugin?.UnloadItem(options,
-				(VTSItemUnloadResponseData success) =>
-				{
-					onSuccess?.Call(success);
-				},
-				(VTSErrorData error) =>
-				{
-					onError?.Call(error);
-				});
-		}
+		private static VTSPostProcessingUpdateResponseData SetPostProcessingEffectValues(VTSPostProcessingUpdateOptions options, PostProcessingValue[] values) => VTS_Connection.GetInstance().Plugin?.SetPostProcessingEffectValues(options, values).Result;
+		private static VTSModelLoadData LoadModel(string modelId) => VTS_Connection.GetInstance().Plugin?.LoadModel(modelId).Result;
+		private static VTSMoveModelData MoveModel(VTSMoveModelData.Data position) => VTS_Connection.GetInstance().Plugin?.MoveModel(position).Result;
+		private static VTSHotkeyTriggerData TriggerHotkey(string hotkey) => VTS_Connection.GetInstance().Plugin?.TriggerHotkey(hotkey).Result;
+		private static VTSItemAnimationControlResponseData AnimateItem(string itemInstanceId, VTSItemAnimationControlOptions options) => VTS_Connection.GetInstance().Plugin?.AnimateItem(itemInstanceId, options).Result;
+		private static VTSCurrentModelData GetCurrentModel() => VTS_Connection.GetInstance().Plugin?.GetCurrentModel().Result;
+		private static VTSArtMeshListData GetArtMeshList() => VTS_Connection.GetInstance().Plugin?.GetArtMeshList().Result;
+		private static VTSExpressionActivationData SetExpressionState(string expersion, bool active) => VTS_Connection.GetInstance().Plugin?.SetExpressionState(expersion, active).Result;
+		private static VTSItemPinResponseData PinItemToCenter(string itemInstanceID, string modelID, string artMeshID, float angle, VTSItemAngleRelativityMode angleRelativeTo, float size, VTSItemSizeRelativityMode sizeRelativeTo) => VTS_Connection.GetInstance().Plugin?.PinItemToCenter(itemInstanceID, modelID, artMeshID, angle, angleRelativeTo, size, sizeRelativeTo).Result;
+		private static VTSItemPinResponseData PinItemToPoint(string itemInstanceID, string modelID, string artMeshID, float angle, VTSItemAngleRelativityMode angleRelativeTo, float size, VTSItemSizeRelativityMode sizeRelativeTo, BarycentricCoordinate coordinate) => VTS_Connection.GetInstance().Plugin?.PinItemToPoint(itemInstanceID, modelID, artMeshID, angle, angleRelativeTo, size, sizeRelativeTo, coordinate).Result;
+		private static VTSItemPinResponseData PinItemToRandom(string itemInstanceID, string modelID, string artMeshID, float angle, VTSItemAngleRelativityMode angleRelativeTo, float size, VTSItemSizeRelativityMode sizeRelativeTo) => VTS_Connection.GetInstance().Plugin?.PinItemToRandom(itemInstanceID, modelID, artMeshID, angle, angleRelativeTo, size, sizeRelativeTo).Result;
+		private static VTSItemPinResponseData UnpinItem(string itemInstanceID) => VTS_Connection.GetInstance().Plugin?.UnpinItem(itemInstanceID).Result;
+		private static VTSItemListResponseData GetItemList(VTSItemListOptions options) => VTS_Connection.GetInstance().Plugin?.GetItemList(options).Result;
+		private static VTSItemLoadResponseData LoadItem(string fileName, VTSItemLoadOptions loadOptions) => VTS_Connection.GetInstance().Plugin?.LoadItem(fileName, loadOptions).Result;
+		private static VTSItemMoveResponseData MoveItem(VTSItemMoveEntry[] moveEntry) => VTS_Connection.GetInstance().Plugin?.MoveItem(moveEntry).Result;
+		private static VTSItemUnloadResponseData UnloadItem(VTSItemUnloadOptions options) => VTS_Connection.GetInstance().Plugin?.UnloadItem(options).Result;
 	}
 }

@@ -7,13 +7,7 @@ function ResetPostProcess()
     p.setPostProcessingPreset = true
     p.presetToSet = "Nothing";
     p.postProcessingFadeTime = 0.4
-    SetPostProcessingEffectValues(p, {},
-    function (onSuccess)
-        
-    end,
-    function (onError)
-        
-    end)
+    SetPostProcessingEffectValues(p, {})
 end
 
 function SetRedPostProcess()
@@ -22,13 +16,7 @@ function SetRedPostProcess()
     p.setPostProcessingPreset = true
     p.presetToSet = "RedSplits";
     p.postProcessingFadeTime = 0.4
-    SetPostProcessingEffectValues(p, {},
-    function (onSuccess)
-        
-    end,
-    function (onError)
-        
-    end)
+    SetPostProcessingEffectValues(p, {})
 end
 
 function SetGreenPostProcess()
@@ -37,13 +25,7 @@ function SetGreenPostProcess()
     p.setPostProcessingPreset = true
     p.presetToSet = "GreenSplits";
     p.postProcessingFadeTime = 0.4
-    SetPostProcessingEffectValues(p, {}, 
-    function (onSuccess)
-        
-    end,
-    function (onError)
-        
-    end)
+    SetPostProcessingEffectValues(p, {})
 end
 
 function SetGoldPostProcess()
@@ -52,12 +34,7 @@ function SetGoldPostProcess()
     p.setPostProcessingPreset = true
     p.presetToSet = "Gold";
     p.postProcessingFadeTime = 0.4
-    SetPostProcessingEffectValues(p, {}, function (onSuccess)
-        
-    end,
-    function (onError)
-        
-    end)
+    SetPostProcessingEffectValues(p, {})
 end
 
 ---This is performed when the timer starts

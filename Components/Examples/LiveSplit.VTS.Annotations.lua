@@ -1,3 +1,7 @@
+---Delays execution of task
+---@param time integer Time in miliseconds
+function Sleep(time) end
+
 ---@return string ModelName Model name
 function GetCurrentModelName() end
 
@@ -31,69 +35,58 @@ function Create_VTSItemMoveEntry() end
 ---Sets a post processing in VTS
 ---@param options VTSPostProcessingUpdateOptions
 ---@param value PostProcessingValue[]
----@param onSuccess function Function that accepts VTSPostProcessingUpdateResponseData object as an argument
----@param onError function Function that accepts VTSErrorData as an argument 
-function SetPostProcessingEffectValues(options, value, onSuccess, onError) end
+---@return VTSPostProcessingUpdateResponseData
+function SetPostProcessingEffectValues(options, value) end
 
 ---Sets a model in VTS
 ---@param modelId string Id of the model
----@param onSuccess function Function that accepts VTSModelLoadData object as an argument
----@param onError function Function that accepts VTSErrorData as an argument 
-function LoadModel(modelId, onSuccess, onError) end
+---@return VTSModelLoadData
+function LoadModel(modelId) end
 
 ---Moves a model
 ---@param position VTSMoveModelData_Data
----@param onSuccess function Function that accepts VTSMoveModelData as an argument
----@param onError function Function that accepts VTSErrorData as argument
-function MoveModel(position, onSuccess, onError) end
+---@return VTSMoveModelData
+function MoveModel(position) end
 
 ---Triggers a Hotkey action in VTS
 ---@param hotkey string
----@param onSuccess function Function that accepts VTSHotkeyTriggerData as argument
----@param onError function Function that accepts VTSErrorData as argument
-function TriggerHotkey(hotkey, onSuccess, onError) end
+---@return VTSHotkeyTriggerData
+function TriggerHotkey(hotkey) end
 
 ---Gets a list of current items in the scene
 ---@param options VTSItemListOptions
----@param onSuccess function Function that accepts VTSItemListResponseData as an argument
----@param onError function Function that accepts VTSErrorData as argument
-function GetItemList(options, onSuccess, onError) end
+---@return VTSItemListResponseData
+function GetItemList(options) end
 
 ---Used to animate certain item
 ---@param itemInstanceId string
 ---@param options VTSItemAnimationControlOptions
----@param onSuccess function Function that accepts VTSItemAnimationControlOptions as argument
----@param onError function Function that accepts VTSErrorData as argument
-function AnimateItem(itemInstanceId, options, onSuccess, onError) end
+---@return VTSItemAnimationControlOptions
+function AnimateItem(itemInstanceId, options) end
 
 ---Gets a list of art meshes
----@param onSuccess function Function that accepts VTSArtMeshListData as argument
----@param onError function Function that accepts VTSErrorData as argument
-function GetArtMeshList(onSuccess, onError) end
+---@return VTSArtMeshListData
+function GetArtMeshList() end
 
 ---Loads an item into a scene
 ---@param fileName string
 ---@param loadOptions VTSItemLoadOptions
----@param onSuccess function Function that accepts VTSItemLoadResponseData as argument
----@param onError function Function that accepts VTSErrorData as argument
-function LoadItem(fileName, loadOptions, onSuccess, onError) end
+---@return VTSItemLoadResponseData
+function LoadItem(fileName, loadOptions) end
 
 ---Moves item / items
 ---@param moveEntry VTSItemMoveEntry[]
----@param onSuccess function Function that accepts VTSItemMoveResponseData as argument
----@param onError function Function that accepts VTSErrorData as argument
-function MoveItem(moveEntry, onSuccess, onError) end
+---@return VTSItemMoveResponseData
+function MoveItem(moveEntry) end
 
 ---Unloads an item from the scene
 ---@param VTSItemUnloadOptions VTSItemUnloadOptions
----@param onSuccess function Function that accepts VTSItemUnloadOptions as argument
----@param onError function Function that accepts VTSErrorData as argument
-function UnloadItem(VTSItemUnloadOptions, onSuccess, onError) end
+---@return VTSItemUnloadOptions
+function UnloadItem(VTSItemUnloadOptions) end
 
 ---Used to obtain current model info
----@param onSuccess function Function that accepts VTSCurrentModelData as argument
----@param onError function Function that accepts VTSErrorData as argument
-function GetCurrentModel(onSuccess, onError) end
+---@return VTSCurrentModelData CurrentModel
+function GetCurrentModel() end
 
 ---Pins and item to a random spot?
 ---@param itemInstanceID string Instance ID of an item
@@ -103,9 +96,8 @@ function GetCurrentModel(onSuccess, onError) end
 ---@param angleRelativeTo VTSItemAngleRelativityMode Angle mode
 ---@param size number Size
 ---@param sizeRelativeTo VTSItemSizeRelativityMode Scale mode
----@param onSuccess function Function that accepts VTSItemPinResponseData as an argument
----@param onError function Function that accepts VTSErrorData as argument
-function PinItemToRandom(itemInstanceID, modelID, artMeshID, angle, angleRelativeTo, size, sizeRelativeTo, onSuccess, onError) end
+---@return VTSItemPinResponseData
+function PinItemToRandom(itemInstanceID, modelID, artMeshID, angle, angleRelativeTo, size, sizeRelativeTo) end
 
 ---Pins an item to a center?
 ---@param itemInstanceID string Instance ID of an item
@@ -115,9 +107,8 @@ function PinItemToRandom(itemInstanceID, modelID, artMeshID, angle, angleRelativ
 ---@param angleRelativeTo VTSItemAngleRelativityMode
 ---@param size number
 ---@param sizeRelativeTo VTSItemSizeRelativityMode
----@param onSuccess function Function that accepts VTSItemPinResponseData as an argument
----@param onError function Function that accepts VTSErrorData as argument
-function PinItemToCenter(itemInstanceID, modelID, artMeshID, angle, angleRelativeTo, size, sizeRelativeTo, onSuccess, onError) end
+---@return VTSItemPinResponseData
+function PinItemToCenter(itemInstanceID, modelID, artMeshID, angle, angleRelativeTo, size, sizeRelativeTo) end
 
 ---Pins an item to a point
 ---@param itemInstanceID string Instance ID of an item
@@ -127,22 +118,19 @@ function PinItemToCenter(itemInstanceID, modelID, artMeshID, angle, angleRelativ
 ---@param angleRelativeTo VTSItemAngleRelativityMode Angle mode
 ---@param size number Size
 ---@param sizeRelativeTo VTSItemSizeRelativityMode Scale mode
----@param onSuccess function Function that accepts VTSItemPinResponseData as an argument
----@param onError function Function that accepts VTSErrorData as argument
-function PinItemToPoint(itemInstanceID, modelID, artMeshID, angle, angleRelativeTo, size, sizeRelativeTo, onSuccess, onError) end
+---@return VTSItemPinResponseData
+function PinItemToPoint(itemInstanceID, modelID, artMeshID, angle, angleRelativeTo, size, sizeRelativeTo) end
 
 ---Used to unpin an item
 ---@param itemInstanceID string
----@param onSuccess VTSItemPinResponseData
----@param onError VTSErrorData
-function UnpinItem(itemInstanceID, onSuccess, onError) end
+---@return VTSItemPinResponseData
+function UnpinItem(itemInstanceID) end
 
 ---Sets an expression
 ---@param expersion string
 ---@param active boolean
----@param onSuccess function Function that accepts VTSExpressionActivationData as an argument
----@param onError function 
-function SetExpressionState(expersion, active, onSuccess, onError) end
+---@return VTSExpressionActivationData
+function SetExpressionState(expersion, active) end
 
 ---For moving objects in general
 ---@class VTSMoveModelData
@@ -586,6 +574,7 @@ EffectConfigs = {
 
 ---For responses to getting current model
 ---@class VTSCurrentModelData
+---@field data VTSCurrentModelData_Data
 
 ---@class VTSCurrentModelData_Data
 ---@field live2DModelName string

@@ -48,7 +48,10 @@ namespace LiveSplit.VTS
 			{
 				try
 				{
-					LuaMapping.OnPause.Call();
+					_ = Task.Run(() =>
+					{
+						LuaMapping.OnPause.Call();
+					});
 				}
 				catch (Exception ex)
 				{
@@ -71,7 +74,10 @@ namespace LiveSplit.VTS
 			{
 				try
 				{
-					LuaMapping.OnReset.Call();
+					_ = Task.Run(() =>
+					{
+						LuaMapping.OnReset.Call();
+					});
 				}
 				catch (Exception ex)
 				{
@@ -88,7 +94,10 @@ namespace LiveSplit.VTS
 			{
 				try
 				{
-					LuaMapping.OnResume.Call();
+					_ = Task.Run(() =>
+					{
+						LuaMapping.OnResume.Call();
+					});
 				}
 				catch (Exception ex)
 				{
@@ -103,7 +112,10 @@ namespace LiveSplit.VTS
 			{
 				try
 				{
-					LuaMapping.OnSplit.Call();
+					_ = Task.Run(() =>
+					{
+						LuaMapping.OnSplit.Call();
+					});
 				}
 				catch (Exception ex)
 				{
@@ -122,7 +134,10 @@ namespace LiveSplit.VTS
 					{
 						try
 						{
-							LuaMapping.OnRedSplit.Call();
+							_ = Task.Run(() =>
+							{
+								LuaMapping.OnRedSplit.Call();
+							});
 						}
 						catch (Exception ex)
 						{
@@ -143,7 +158,10 @@ namespace LiveSplit.VTS
 						{
 							try
 							{
-								LuaMapping.OnGoldSplit.Call();
+								_ = Task.Run(() =>
+								{
+									LuaMapping.OnGoldSplit.Call();
+								});
 							}
 							catch (Exception ex)
 							{
@@ -157,7 +175,10 @@ namespace LiveSplit.VTS
 						{
 							try
 							{
-								LuaMapping.OnGreenSplit.Call();
+								_ = Task.Run(() =>
+								{
+									LuaMapping.OnGreenSplit.Call();
+								});
 							}
 							catch (Exception ex)
 							{
@@ -177,7 +198,10 @@ namespace LiveSplit.VTS
 			{
 				try
 				{
-					LuaMapping.OnStart.Call();
+					_ = Task.Run(() =>
+					{
+						LuaMapping.OnStart.Call();
+					});
 				}
 				catch (Exception ex)
 				{
@@ -199,7 +223,10 @@ namespace LiveSplit.VTS
 			{
 				try
 				{
-					LuaMapping.OnUndoSplit.Call();
+					_ = Task.Run(() =>
+					{
+						LuaMapping.OnUndoSplit.Call();
+					});
 				}
 				catch (Exception ex)
 				{
@@ -215,7 +242,10 @@ namespace LiveSplit.VTS
 			{
 				try
 				{
-					LuaMapping.OnSkipSplit.Call();
+					_ = Task.Run(() =>
+					{
+						LuaMapping.OnSkipSplit.Call();
+					});
 				}
 				catch (Exception ex)
 				{

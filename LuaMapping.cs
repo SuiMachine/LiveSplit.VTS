@@ -11,7 +11,7 @@ namespace LiveSplit.VTS
 		//TODO: Try and figure out how the call stack looks like and if elements get popped on responses
 		//or is there a chance that in some cases we will have stack overflow due to multiple nested calls
 		private static Script script;
-		private static MoonSharpVsCodeDebugServer debuggerServer = new MoonSharpVsCodeDebugServer();
+		private static MoonSharpVsCodeDebugServer debuggerServer;
 		public static bool Compiled { get; private set; } = false;
 
 		public static Closure OnStart { get; private set; }
@@ -41,10 +41,17 @@ namespace LiveSplit.VTS
 			OnGreenSplit = null;
 			OnGoldSplit = null;
 
-			if (debuggerServer.Current != null && script != null)
+			if (debuggerServer != null && debuggerServer.Current != null && script != null)
+			{
 				debuggerServer.Detach(script);
+			}
+			else if (debuggerServer == null && luaDebugger)
+			{
+				debuggerServer = new MoonSharpVsCodeDebugServer();
+				debuggerServer.Start();
+			}
 
-				if (!File.Exists(scriptFile))
+			if (!File.Exists(scriptFile))
 				return;
 
 			UserData.RegisterType<TimeSpan>();
@@ -125,9 +132,7 @@ namespace LiveSplit.VTS
 			}
 
 			if (luaDebugger)
-			{
-				if(debuggerServer.Current == null)
-					debuggerServer.Start();
+			{				
 				debuggerServer.AttachToScript(script, "VTS control script");
 			}
 		}
@@ -167,14 +172,15 @@ namespace LiveSplit.VTS
 			script.Globals[nameof(PinItemToCenter)] = (Action<string, string, string, float, VTSItemAngleRelativityMode, float, VTSItemSizeRelativityMode, Closure, Closure>)PinItemToCenter;
 			script.Globals[nameof(PinItemToPoint)] = (Action<string, string, string, float, VTSItemAngleRelativityMode, float, VTSItemSizeRelativityMode, BarycentricCoordinate, Closure, Closure>)PinItemToPoint;
 			script.Globals[nameof(PinItemToRandom)] = (Action<string, string, string, float, VTSItemAngleRelativityMode, float, VTSItemSizeRelativityMode, Closure, Closure>)PinItemToRandom;
+			script.Globals[nameof(UnpinItem)] = (Action<string, Closure, Closure>)UnpinItem;
+
 			script.Globals[nameof(SetExpressionState)] = (Action<string, bool, Closure, Closure>)SetExpressionState;
 
-			script.Globals[nameof(UnpinItem)] = (Action<string, Closure, Closure>)UnpinItem;
 		}
 
 		private static void SetPostProcessingEffectValues(VTSPostProcessingUpdateOptions options, PostProcessingValue[] values, Closure onSuccess, Closure onError)
 		{
-			VTS_Connection.GetInstance().Plugin.SetPostProcessingEffectValues(options, values,
+			VTS_Connection.GetInstance().Plugin?.SetPostProcessingEffectValues(options, values,
 				(VTSPostProcessingUpdateResponseData successData) =>
 				{
 					onSuccess?.Call(successData);
@@ -188,7 +194,7 @@ namespace LiveSplit.VTS
 
 		private static void LoadModel(string modelId, Closure onSuccess, Closure onError)
 		{
-			VTS_Connection.GetInstance().Plugin.LoadModel(modelId,
+			VTS_Connection.GetInstance().Plugin?.LoadModel(modelId,
 				(VTSModelLoadData successData) =>
 				{
 					onSuccess?.Call(successData);
@@ -202,7 +208,7 @@ namespace LiveSplit.VTS
 
 		private static void MoveModel(VTSMoveModelData.Data position, Closure onSuccess, Closure onError)
 		{
-			VTS_Connection.GetInstance().Plugin.MoveModel(position,
+			VTS_Connection.GetInstance().Plugin?.MoveModel(position,
 				(VTSMoveModelData moveData) =>
 				{
 					onSuccess?.Call(onSuccess);
@@ -215,7 +221,7 @@ namespace LiveSplit.VTS
 
 		private static void TriggerHotkey(string hotkey, Closure onSuccess, Closure onError)
 		{
-			VTS_Connection.GetInstance().Plugin.TriggerHotkey(hotkey,
+			VTS_Connection.GetInstance().Plugin?.TriggerHotkey(hotkey,
 				(VTSHotkeyTriggerData data) =>
 				{
 					onSuccess?.Call(data);
@@ -228,7 +234,7 @@ namespace LiveSplit.VTS
 
 		private static void AnimateItem(string itemInstanceId, VTSItemAnimationControlOptions options, Closure onSuccess, Closure onError)
 		{
-			VTS_Connection.GetInstance().Plugin.AnimateItem(itemInstanceId, options,
+			VTS_Connection.GetInstance().Plugin?.AnimateItem(itemInstanceId, options,
 				(VTSItemAnimationControlResponseData data) =>
 				{
 					onSuccess?.Call(data);
@@ -241,7 +247,7 @@ namespace LiveSplit.VTS
 
 		private static void GetCurrentModel(Closure onSuccess, Closure onError)
 		{
-			VTS_Connection.GetInstance().Plugin.GetCurrentModel(
+			VTS_Connection.GetInstance().Plugin?.GetCurrentModel(
 				(VTSCurrentModelData success) =>
 				{
 					onSuccess?.Call(success);
@@ -254,7 +260,7 @@ namespace LiveSplit.VTS
 
 		private static void GetArtMeshList(Closure onSuccess, Closure onError)
 		{
-			VTS_Connection.GetInstance().Plugin.GetArtMeshList(
+			VTS_Connection.GetInstance().Plugin?.GetArtMeshList(
 				(VTSArtMeshListData success) =>
 				{
 					onSuccess?.Call(success);
@@ -267,7 +273,7 @@ namespace LiveSplit.VTS
 
 		private static void SetExpressionState(string expersion, bool active, Closure onSuccess, Closure onError)
 		{
-			VTS_Connection.GetInstance().Plugin.SetExpressionState(expersion, active,
+			VTS_Connection.GetInstance().Plugin?.SetExpressionState(expersion, active,
 				(VTSExpressionActivationData data) =>
 				{
 					onSuccess?.Call(onSuccess);
@@ -280,7 +286,7 @@ namespace LiveSplit.VTS
 
 		private static void PinItemToCenter(string itemInstanceID, string modelID, string artMeshID, float angle, VTSItemAngleRelativityMode angleRelativeTo, float size, VTSItemSizeRelativityMode sizeRelativeTo, Closure onSuccess, Closure onError)
 		{
-			VTS_Connection.GetInstance().Plugin.PinItemToCenter(itemInstanceID, modelID, artMeshID,
+			VTS_Connection.GetInstance().Plugin?.PinItemToCenter(itemInstanceID, modelID, artMeshID,
 				angle, angleRelativeTo, size, sizeRelativeTo,
 				(VTSItemPinResponseData success) =>
 				{
@@ -294,7 +300,7 @@ namespace LiveSplit.VTS
 
 		private static void PinItemToPoint(string itemInstanceID, string modelID, string artMeshID, float angle, VTSItemAngleRelativityMode angleRelativeTo, float size, VTSItemSizeRelativityMode sizeRelativeTo, BarycentricCoordinate coordinate, Closure onSuccess, Closure onError)
 		{
-			VTS_Connection.GetInstance().Plugin.PinItemToPoint(itemInstanceID, modelID, artMeshID,
+			VTS_Connection.GetInstance().Plugin?.PinItemToPoint(itemInstanceID, modelID, artMeshID,
 				angle, angleRelativeTo, size, sizeRelativeTo, coordinate,
 				(VTSItemPinResponseData success) =>
 				{
@@ -308,7 +314,7 @@ namespace LiveSplit.VTS
 
 		private static void PinItemToRandom(string itemInstanceID, string modelID, string artMeshID, float angle, VTSItemAngleRelativityMode angleRelativeTo, float size, VTSItemSizeRelativityMode sizeRelativeTo, Closure onSuccess, Closure onError)
 		{
-			VTS_Connection.GetInstance().Plugin.PinItemToRandom(itemInstanceID, modelID, artMeshID,
+			VTS_Connection.GetInstance().Plugin?.PinItemToRandom(itemInstanceID, modelID, artMeshID,
 				angle, angleRelativeTo, size, sizeRelativeTo,
 				(VTSItemPinResponseData success) =>
 				{
@@ -322,7 +328,7 @@ namespace LiveSplit.VTS
 
 		private static void UnpinItem(string itemInstanceID, Closure onSuccess, Closure onError)
 		{
-			VTS_Connection.GetInstance().Plugin.UnpinItem(itemInstanceID,
+			VTS_Connection.GetInstance().Plugin?.UnpinItem(itemInstanceID,
 				(VTSItemPinResponseData success) =>
 				{
 					onSuccess?.Call(success);
@@ -335,7 +341,7 @@ namespace LiveSplit.VTS
 
 		private static void GetItemList(VTSItemListOptions options, Closure onSuccess, Closure onError)
 		{
-			VTS_Connection.GetInstance().Plugin.GetItemList(options,
+			VTS_Connection.GetInstance().Plugin?.GetItemList(options,
 				(VTSItemListResponseData success) =>
 				{
 					onSuccess?.Call(success);
@@ -348,7 +354,7 @@ namespace LiveSplit.VTS
 
 		private static void LoadItem(string fileName, VTSItemLoadOptions loadOptions, Closure onSuccess, Closure onError)
 		{
-			VTS_Connection.GetInstance().Plugin.LoadItem(fileName, loadOptions,
+			VTS_Connection.GetInstance().Plugin?.LoadItem(fileName, loadOptions,
 				(VTSItemLoadResponseData success) =>
 				{
 					onSuccess?.Call(success);
@@ -362,7 +368,7 @@ namespace LiveSplit.VTS
 
 		private static void MoveItem(VTSItemMoveEntry[] moveEntry, Closure onSuccess, Closure onError)
 		{
-			VTS_Connection.GetInstance().Plugin.MoveItem(moveEntry,
+			VTS_Connection.GetInstance().Plugin?.MoveItem(moveEntry,
 				(VTSItemMoveResponseData success) =>
 				{
 					onSuccess?.Call(success);
@@ -376,7 +382,7 @@ namespace LiveSplit.VTS
 
 		private static void UnloadItem(VTSItemUnloadOptions options, Closure onSuccess, Closure onError)
 		{
-			VTS_Connection.GetInstance().Plugin.UnloadItem(options,
+			VTS_Connection.GetInstance().Plugin?.UnloadItem(options,
 				(VTSItemUnloadResponseData success) =>
 				{
 					onSuccess?.Call(success);

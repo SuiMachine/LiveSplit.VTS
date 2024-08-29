@@ -1,5 +1,6 @@
----This script should set post processing to "Nothing" on restart, "RedSplits", "GreenSplits" and "Gold"
----Make sure such post process presets are set up in VTS
+---This script will load beverage_Soda_Cola (@7MDigital).png and beverage_Creature (@7MDigital).png items.
+---Make sure you hae such items.
+---Alost make sure to configure offset of items in relation to your character
 
 PositionOffsetFromCharacterRoot = {
     x = 0,

@@ -47,7 +47,7 @@ namespace LiveSplit.VTS
 
 		public async Task Connect()
 		{
-			if (!Connected)
+			if (!IsAutheniticated)
 			{
 				try
 				{

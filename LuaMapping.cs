@@ -142,6 +142,7 @@ namespace LiveSplit.VTS
 			catch (Exception ex)
 			{
 				Console.WriteLine(ex.ToString());
+				return;
 			}
 
 			if (luaDebugger)
@@ -169,7 +170,7 @@ namespace LiveSplit.VTS
 			script.Globals["GetCurrentModelID"] = (Func<string>)(() => VTS_Connection.GetInstance().CurrentModelId);
 			script.Globals["GetCurrentModelName"] = (Func<string>)(() => VTS_Connection.GetInstance().CurrentModelName);
 
-			script.Globals["Sleep"] = (Action<int>)((int sleep) => Task.Delay(sleep));
+			script.Globals["Sleep"] = (Action<int>)((int sleep) => Task.Delay(sleep).GetAwaiter().GetResult());
 
 			script.Globals[nameof(SetPostProcessingEffectValues)] = (Func<VTSPostProcessingUpdateOptions, PostProcessingValue[], VTSPostProcessingUpdateResponseData>)SetPostProcessingEffectValues;
 			script.Globals[nameof(LoadModel)] = (Func<string, VTSModelLoadData>)LoadModel;
@@ -189,7 +190,6 @@ namespace LiveSplit.VTS
 			script.Globals[nameof(PinItemToRandom)] = (Func<string, string, string, float, VTSItemAngleRelativityMode, float, VTSItemSizeRelativityMode, VTSItemPinResponseData>)PinItemToRandom;
 			script.Globals[nameof(UnpinItem)] = (Func<string, VTSItemPinResponseData>)UnpinItem;
 			script.Globals[nameof(SetExpressionState)] = (Func<string, bool, VTSExpressionActivationData>)SetExpressionState;
-
 		}
 
 		private static VTSPostProcessingUpdateResponseData SetPostProcessingEffectValues(VTSPostProcessingUpdateOptions options, PostProcessingValue[] values) => VTS_Connection.GetInstance().Plugin?.SetPostProcessingEffectValues(options, values).Result;

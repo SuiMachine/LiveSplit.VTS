@@ -1,4 +1,45 @@
 <updates>
+    <update version="0.7.0">
+    <files>
+        <file path="Components/LiveSplit.VTS.dll" status="changed"/>
+    </files>
+    <changelog>
+        <change>Improved user UI feedback related to connection state to VTS.</change>
+        <change>Improved user UI feedback related to script compilation status.</change>
+        <change>Fixed some bugs with disconnecting and estabilishing connection to VTS.</change>
+        <change>Removed a debugger option for Lua. Lua VS Code debugger can always be connected to now.</change>
+    </changelog>
+    </update>
+    <update version="0.6.0">
+    <files>
+        <file path="Components/LiveSplit.VTS.dll" status="changed"/>
+    </files>
+    <changelog>
+        <change>Reworked Lua event calls to utilize an asychronous Lua call to Lua, which then is synchronous on Lua's side to make sure function calls inside of events avoid racing conditions or jumping between threads (which is not supported by MoonSharp Lua interpreter).</change>
+    </changelog>
+    </update>
+    <update version="0.5.0">
+    <files>
+        <file path="Components/LiveSplit.VTS.dll" status="changed"/>
+        <file path="Components/MoonSharp.Interpreter.dll" status="changed"/>
+        <file path="Components/MoonSharp.VsCodeDebugger.dll" status="changed"/>
+    </files>
+    <changelog>
+        <change>Added more missing mappings to Lua.</change>
+        <change>Introduced fields CurrentModelId and CurrentModelName to be able to get model id and model name without needed to wait for asynchronous call to VTS.</change>
+        <change>Added Lua VSCode debugger.</change>    
+        <change>Renamed some Lua functions for consistency.</change>
+    </changelog>
+    </update>
+    <update version="0.4.0">
+    <files>
+        <file path="Components/LiveSplit.VTS.dll" status="changed"/>
+    </files>
+    <changelog>
+        <change>Reworked Lua syntax to avoid mess with nested function calls.</change>
+        <change>Massively increased the amount of exposed functions to lua.</change>    
+    </changelog>
+    </update>
     <update version="0.3.0">
     <files>
         <file path="Components/LiveSplit.VTS.dll" status="changed"/>

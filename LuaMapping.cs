@@ -29,7 +29,7 @@ namespace LiveSplit.VTS
 		public static Closure OnGoldSplit { get; private set; }
 
 
-		public static void ReadFile(string scriptFile, bool luaDebugger)
+		public static void ReadFile(string scriptFile)
 		{
 			Compiled = false;
 
@@ -48,7 +48,7 @@ namespace LiveSplit.VTS
 			{
 				debuggerServer.Detach(script);
 			}
-			else if (debuggerServer == null && luaDebugger)
+			else if (debuggerServer == null)
 			{
 				debuggerServer = new MoonSharpVsCodeDebugServer();
 				debuggerServer.Start();
@@ -145,10 +145,7 @@ namespace LiveSplit.VTS
 				return;
 			}
 
-			if (luaDebugger)
-			{
-				debuggerServer.AttachToScript(script, "VTS control script");
-			}
+			debuggerServer.AttachToScript(script, "VTS control script");
 		}
 
 		private static void SetGlobals(Script script)

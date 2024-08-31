@@ -30,6 +30,9 @@
         {
 			this.gbStartSplits = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+			this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
+			this.L_CompileState = new System.Windows.Forms.Label();
+			this.B_ReloadScript = new System.Windows.Forms.Button();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.TB_Address = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
@@ -40,24 +43,20 @@
 			this.CB_Log_DebugMessages = new System.Windows.Forms.CheckBox();
 			this.B_Connect = new System.Windows.Forms.Button();
 			this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+			this.label3 = new System.Windows.Forms.Label();
 			this.B_BrowseScript = new System.Windows.Forms.Button();
 			this.TB_ScriptFile = new System.Windows.Forms.TextBox();
-			this.label3 = new System.Windows.Forms.Label();
-			this.L_CompileState = new System.Windows.Forms.Label();
 			this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
 			this.gbLog = new System.Windows.Forms.GroupBox();
 			this.RB_LogText = new System.Windows.Forms.RichTextBox();
-			this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
-			this.B_ReloadScript = new System.Windows.Forms.Button();
-			this.CB_EnableLuaDebugger = new System.Windows.Forms.CheckBox();
 			this.gbStartSplits.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
+			this.tableLayoutPanel5.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
 			this.tableLayoutPanel3.SuspendLayout();
 			this.tableLayoutPanel4.SuspendLayout();
 			this.tlpMain.SuspendLayout();
 			this.gbLog.SuspendLayout();
-			this.tableLayoutPanel5.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// gbStartSplits
@@ -89,6 +88,45 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37F));
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(464, 351);
 			this.tableLayoutPanel1.TabIndex = 0;
+			// 
+			// tableLayoutPanel5
+			// 
+			this.tableLayoutPanel5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.tableLayoutPanel5.ColumnCount = 2;
+			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 64F));
+			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanel5.Controls.Add(this.L_CompileState, 0, 0);
+			this.tableLayoutPanel5.Controls.Add(this.B_ReloadScript, 1, 0);
+			this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 121);
+			this.tableLayoutPanel5.Name = "tableLayoutPanel5";
+			this.tableLayoutPanel5.RowCount = 1;
+			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel5.Size = new System.Drawing.Size(458, 34);
+			this.tableLayoutPanel5.TabIndex = 4;
+			// 
+			// L_CompileState
+			// 
+			this.L_CompileState.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+			this.L_CompileState.AutoSize = true;
+			this.L_CompileState.Location = new System.Drawing.Point(3, 10);
+			this.L_CompileState.Name = "L_CompileState";
+			this.L_CompileState.Size = new System.Drawing.Size(388, 13);
+			this.L_CompileState.TabIndex = 6;
+			this.L_CompileState.Text = "Failed";
+			this.L_CompileState.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
+			// B_ReloadScript
+			// 
+			this.B_ReloadScript.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+			this.B_ReloadScript.Location = new System.Drawing.Point(397, 5);
+			this.B_ReloadScript.Name = "B_ReloadScript";
+			this.B_ReloadScript.Size = new System.Drawing.Size(58, 23);
+			this.B_ReloadScript.TabIndex = 6;
+			this.B_ReloadScript.Text = "Reload";
+			this.B_ReloadScript.UseVisualStyleBackColor = true;
+			this.B_ReloadScript.Click += new System.EventHandler(this.B_ReloadScript_Click);
 			// 
 			// tableLayoutPanel2
 			// 
@@ -201,40 +239,20 @@
 			// 
 			this.tableLayoutPanel4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.tableLayoutPanel4.ColumnCount = 4;
+			this.tableLayoutPanel4.ColumnCount = 3;
 			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 79F));
 			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 64F));
-			this.tableLayoutPanel4.Controls.Add(this.B_BrowseScript, 0, 0);
-			this.tableLayoutPanel4.Controls.Add(this.TB_ScriptFile, 0, 0);
+			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel4.Controls.Add(this.label3, 0, 0);
-			this.tableLayoutPanel4.Controls.Add(this.L_CompileState, 3, 0);
+			this.tableLayoutPanel4.Controls.Add(this.B_BrowseScript, 2, 0);
+			this.tableLayoutPanel4.Controls.Add(this.TB_ScriptFile, 1, 0);
 			this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 78);
 			this.tableLayoutPanel4.Name = "tableLayoutPanel4";
 			this.tableLayoutPanel4.RowCount = 1;
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel4.Size = new System.Drawing.Size(458, 34);
 			this.tableLayoutPanel4.TabIndex = 3;
-			// 
-			// B_BrowseScript
-			// 
-			this.B_BrowseScript.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-			this.B_BrowseScript.Location = new System.Drawing.Point(318, 5);
-			this.B_BrowseScript.Name = "B_BrowseScript";
-			this.B_BrowseScript.Size = new System.Drawing.Size(73, 23);
-			this.B_BrowseScript.TabIndex = 5;
-			this.B_BrowseScript.Text = "Browse";
-			this.B_BrowseScript.UseVisualStyleBackColor = true;
-			this.B_BrowseScript.Click += new System.EventHandler(this.B_BrowseScript_Click);
-			// 
-			// TB_ScriptFile
-			// 
-			this.TB_ScriptFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-			this.TB_ScriptFile.Location = new System.Drawing.Point(43, 7);
-			this.TB_ScriptFile.Name = "TB_ScriptFile";
-			this.TB_ScriptFile.Size = new System.Drawing.Size(269, 20);
-			this.TB_ScriptFile.TabIndex = 4;
 			// 
 			// label3
 			// 
@@ -246,15 +264,24 @@
 			this.label3.TabIndex = 3;
 			this.label3.Text = "Script";
 			// 
-			// L_CompileState
+			// B_BrowseScript
 			// 
-			this.L_CompileState.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-			this.L_CompileState.AutoSize = true;
-			this.L_CompileState.Location = new System.Drawing.Point(397, 10);
-			this.L_CompileState.Name = "L_CompileState";
-			this.L_CompileState.Size = new System.Drawing.Size(58, 13);
-			this.L_CompileState.TabIndex = 6;
-			this.L_CompileState.Text = "Failed";
+			this.B_BrowseScript.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+			this.B_BrowseScript.Location = new System.Drawing.Point(397, 5);
+			this.B_BrowseScript.Name = "B_BrowseScript";
+			this.B_BrowseScript.Size = new System.Drawing.Size(58, 23);
+			this.B_BrowseScript.TabIndex = 5;
+			this.B_BrowseScript.Text = "Browse";
+			this.B_BrowseScript.UseVisualStyleBackColor = true;
+			this.B_BrowseScript.Click += new System.EventHandler(this.B_BrowseScript_Click);
+			// 
+			// TB_ScriptFile
+			// 
+			this.TB_ScriptFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+			this.TB_ScriptFile.Location = new System.Drawing.Point(43, 7);
+			this.TB_ScriptFile.Name = "TB_ScriptFile";
+			this.TB_ScriptFile.Size = new System.Drawing.Size(348, 20);
+			this.TB_ScriptFile.TabIndex = 4;
 			// 
 			// tlpMain
 			// 
@@ -290,46 +317,6 @@
 			this.RB_LogText.TabIndex = 0;
 			this.RB_LogText.Text = "";
 			// 
-			// tableLayoutPanel5
-			// 
-			this.tableLayoutPanel5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.tableLayoutPanel5.ColumnCount = 4;
-			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 79F));
-			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 64F));
-			this.tableLayoutPanel5.Controls.Add(this.B_ReloadScript, 2, 0);
-			this.tableLayoutPanel5.Controls.Add(this.CB_EnableLuaDebugger, 1, 0);
-			this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 121);
-			this.tableLayoutPanel5.Name = "tableLayoutPanel5";
-			this.tableLayoutPanel5.RowCount = 1;
-			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel5.Size = new System.Drawing.Size(458, 34);
-			this.tableLayoutPanel5.TabIndex = 4;
-			// 
-			// B_ReloadScript
-			// 
-			this.B_ReloadScript.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-			this.B_ReloadScript.Location = new System.Drawing.Point(318, 5);
-			this.B_ReloadScript.Name = "B_ReloadScript";
-			this.B_ReloadScript.Size = new System.Drawing.Size(73, 23);
-			this.B_ReloadScript.TabIndex = 6;
-			this.B_ReloadScript.Text = "Reload";
-			this.B_ReloadScript.UseVisualStyleBackColor = true;
-			this.B_ReloadScript.Click += new System.EventHandler(this.B_ReloadScript_Click);
-			// 
-			// CB_EnableLuaDebugger
-			// 
-			this.CB_EnableLuaDebugger.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-			this.CB_EnableLuaDebugger.AutoSize = true;
-			this.CB_EnableLuaDebugger.Location = new System.Drawing.Point(43, 8);
-			this.CB_EnableLuaDebugger.Name = "CB_EnableLuaDebugger";
-			this.CB_EnableLuaDebugger.Size = new System.Drawing.Size(269, 17);
-			this.CB_EnableLuaDebugger.TabIndex = 7;
-			this.CB_EnableLuaDebugger.Text = "Enable Lua Debugger";
-			this.CB_EnableLuaDebugger.UseVisualStyleBackColor = true;
-			// 
 			// VTSSettings
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -337,8 +324,11 @@
 			this.Controls.Add(this.tlpMain);
 			this.Name = "VTSSettings";
 			this.Size = new System.Drawing.Size(476, 382);
+			this.VisibleChanged += new System.EventHandler(this.VTSSettings_VisibleChanged);
 			this.gbStartSplits.ResumeLayout(false);
 			this.tableLayoutPanel1.ResumeLayout(false);
+			this.tableLayoutPanel5.ResumeLayout(false);
+			this.tableLayoutPanel5.PerformLayout();
 			this.tableLayoutPanel2.ResumeLayout(false);
 			this.tableLayoutPanel2.PerformLayout();
 			this.tableLayoutPanel3.ResumeLayout(false);
@@ -347,8 +337,6 @@
 			this.tableLayoutPanel4.PerformLayout();
 			this.tlpMain.ResumeLayout(false);
 			this.gbLog.ResumeLayout(false);
-			this.tableLayoutPanel5.ResumeLayout(false);
-			this.tableLayoutPanel5.PerformLayout();
 			this.ResumeLayout(false);
 
         }
@@ -375,6 +363,5 @@
 		private System.Windows.Forms.Label L_CompileState;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
 		private System.Windows.Forms.Button B_ReloadScript;
-		private System.Windows.Forms.CheckBox CB_EnableLuaDebugger;
 	}
 }

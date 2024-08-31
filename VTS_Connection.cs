@@ -18,19 +18,6 @@ namespace LiveSplit.VTS
 		public string CurrentModelId { get; private set; }
 		public string CurrentModelName { get; private set; }
 
-
-		public bool Connected
-		{
-			get => m_Connected;
-			private set
-			{
-				m_Connected = value;
-				if (OnConnectionChanged != null)
-					OnConnectionChanged.Invoke(m_Connected);
-			}
-		}
-
-		private bool m_Connected = false;
 		public Action<bool> OnConnectionChanged;
 		public bool IsAutheniticated => Plugin != null ? Plugin.IsAuthenticated : false;
 
@@ -55,7 +42,7 @@ namespace LiveSplit.VTS
 					Plugin = new CoreVTSPlugin(instance.Logger, 100, "LiveSplit-VTS", "SuiMachine", "");
 					await Plugin.InitializeAsync(new WebSocketImpl(Logger), new NewtonsoftJsonUtilityImpl(), new TokenStorageImpl(""), () => LogWarning("Disconnected!"));
 					Log("Connected!");
-					Connected = true;
+					OnConnectionChanged?.Invoke(true);
 					var apiState = await Plugin.GetAPIState();
 
 					Log("Using VTubeStudio " + apiState.data.vTubeStudioVersion);
@@ -96,7 +83,7 @@ namespace LiveSplit.VTS
 				}
 				catch (VTSException error)
 				{
-					Connected = false;
+					OnConnectionChanged?.Invoke(false);
 					LogError(error.ToString());
 				}
 			}
@@ -104,16 +91,18 @@ namespace LiveSplit.VTS
 
 		public async Task Disconnect()
 		{
-			if (Connected && Plugin.IsAuthenticated)
+			if (Plugin.IsAuthenticated)
 			{
 				var apiState = await Plugin.GetAPIState();
 				if (!apiState.data.currentSessionAuthenticated || !apiState.data.active)
 					return;
 
 				Plugin.Disconnect();
-				Connected = false;
+				OnConnectionChanged?.Invoke(false);
 
 				Plugin.Dispose();
+				Plugin = null;
+				Logger = null;
 				Log("Disconnected");
 			}
 		}

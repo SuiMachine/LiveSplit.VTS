@@ -26,9 +26,6 @@ namespace LiveSplit.VTS
 		[LiveSplitVTSStoreLayoutSetting]
 		[LiveSplitVTSSettingsAttributeBool("DebugLog", false)]
 		public bool DebugLog { get; set; }
-		[LiveSplitVTSStoreLayoutSetting]
-		[LiveSplitVTSSettingsAttributeBool("LuaDebugger", false)]
-		public bool LuaDebugger { get; set; }
 
 		private List<(PropertyInfo Property, LiveSplitVTSSettingsAttribute Attribute)> mappings;
 		private List<(PropertyInfo Property, LiveSplitVTSSettingsAttribute Attribute)> layout_settingsMappings;
@@ -43,7 +40,6 @@ namespace LiveSplit.VTS
 			this.TB_Address.DataBindings.Add("Text", this, nameof(Api_Address), false, DataSourceUpdateMode.OnPropertyChanged);
 			this.CB_Log_DebugMessages.DataBindings.Add("Checked", this, nameof(DebugLog), false, DataSourceUpdateMode.OnPropertyChanged);
 			this.TB_ScriptFile.DataBindings.Add("Text", this, nameof(ScriptFile), false, DataSourceUpdateMode.OnPropertyChanged);
-			this.CB_EnableLuaDebugger.DataBindings.Add("Checked", this, nameof(LuaDebugger), false,  DataSourceUpdateMode.OnPropertyChanged);
 
 			//Stupid workaround
 			timer = new Timer();
@@ -55,6 +51,46 @@ namespace LiveSplit.VTS
 			ApplyDefaults();
 			VTS_Connection.GetInstance().SetFormReference(this);
 			ProcessLua();
+		}
+
+		private void VTSSettings_VisibleChanged(object sender, EventArgs e)
+		{
+			if (this.Visible)
+			{
+				ConnectionStatusChanged(VTS_Connection.GetInstance().IsAutheniticated);
+				VTS_Connection.GetInstance().OnConnectionChanged += ConnectionStatusChanged;
+			}
+			else
+			{
+				VTS_Connection.GetInstance().OnConnectionChanged -= ConnectionStatusChanged;
+			}
+		}
+
+		private void ConnectionStatusChanged(bool active)
+		{
+			if (this.InvokeRequired)
+			{
+				this.Invoke(new Action(() =>
+				{
+					ConnectionStatusChanged(active);
+				}));
+				return;
+			}
+			else
+			{
+				if (active)
+				{
+					L_ConnectionStatus.Text = "Connected";
+					L_ConnectionStatus.ForeColor = System.Drawing.Color.Green;
+					B_Connect.Text = "Disconnect";
+				}
+				else
+				{
+					L_ConnectionStatus.Text = "Disconnected";
+					L_ConnectionStatus.ForeColor = System.Drawing.Color.Red;
+					B_Connect.Text = "Connect";
+				}
+			}
 		}
 
 		private void CreateMappings()
@@ -125,7 +161,7 @@ namespace LiveSplit.VTS
 			if (!Loaded)
 			{
 				Loaded = true;
-				if (this.Autoconnect && !VTS_Connection.GetInstance().Connected)
+				if (this.Autoconnect && !VTS_Connection.GetInstance().IsAutheniticated)
 				{
 					Task.Factory.StartNew(VTS_Connection.GetInstance().Connect);
 				}
@@ -136,7 +172,7 @@ namespace LiveSplit.VTS
 
 		private void B_Connect_Click(object sender, EventArgs e)
 		{
-			if (!VTS_Connection.GetInstance().Connected)
+			if (!VTS_Connection.GetInstance().IsAutheniticated)
 				Task.Factory.StartNew(VTS_Connection.GetInstance().Connect);
 			else
 				Task.Factory.StartNew(VTS_Connection.GetInstance().Disconnect);
@@ -178,12 +214,18 @@ namespace LiveSplit.VTS
 
 		private void ProcessLua()
 		{
-			LuaMapping.ReadFile(ScriptFile, LuaDebugger);
+			LuaMapping.ReadFile(ScriptFile);
 
 			if (LuaMapping.Compiled)
-				L_CompileState.Text = "Success";
+			{
+				L_CompileState.Text = "Script compiled successfully";
+				L_CompileState.ForeColor = System.Drawing.Color.Green;
+			}
 			else
-				L_CompileState.Text = "Failed to compile";
+			{
+				L_CompileState.Text = "Failed to compile - check log!";
+				L_CompileState.ForeColor = System.Drawing.Color.Red;
+			}
 		}
 
 		private void B_ReloadScript_Click(object sender, EventArgs e)

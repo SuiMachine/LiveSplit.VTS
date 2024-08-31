@@ -94,11 +94,11 @@ namespace LiveSplit.VTS
 			if (Plugin.IsAuthenticated)
 			{
 				var apiState = await Plugin.GetAPIState();
-				if (!apiState.data.currentSessionAuthenticated || !apiState.data.active)
-					return;
-
-				Plugin.Disconnect();
-				OnConnectionChanged?.Invoke(false);
+				if (apiState.data.currentSessionAuthenticated && apiState.data.active)
+				{
+					Plugin.Disconnect();
+					OnConnectionChanged?.Invoke(false);
+				}
 
 				Plugin.Dispose();
 				Plugin = null;
@@ -109,7 +109,7 @@ namespace LiveSplit.VTS
 
 		public void Log(string message)
 		{
-			Logger.Log(message);
+			Logger?.Log(message);
 			if (m_settingsForm != null && m_settingsForm.DebugLog)
 			{
 				string t = "[Lua VTS]: " + message;
@@ -120,7 +120,7 @@ namespace LiveSplit.VTS
 
 		public void LogWarning(string message)
 		{
-			Logger.Log(message);
+			Logger?.Log(message);
 			if (m_settingsForm != null && m_settingsForm.DebugLog)
 			{
 				string t = "[Lua VTS] Warning: " + message;
@@ -131,7 +131,7 @@ namespace LiveSplit.VTS
 
 		public void LogError(string error)
 		{
-			Logger.LogError(error); // Log any errors that occur during initialization
+			Logger?.LogError(error); // Log any errors that occur during initialization
 			if (m_settingsForm != null && m_settingsForm.DebugLog)
 			{
 				string t = "[Lua VTS] Error: " + error;

@@ -186,7 +186,7 @@ namespace LiveSplit.VTS
 			script.Globals[nameof(PinItemToPoint)] = (Func<string, string, string, float, VTSItemAngleRelativityMode, float, VTSItemSizeRelativityMode, BarycentricCoordinate, VTSItemPinResponseData>)PinItemToPoint;
 			script.Globals[nameof(PinItemToRandom)] = (Func<string, string, string, float, VTSItemAngleRelativityMode, float, VTSItemSizeRelativityMode, VTSItemPinResponseData>)PinItemToRandom;
 			script.Globals[nameof(UnpinItem)] = (Func<string, VTSItemPinResponseData>)UnpinItem;
-			script.Globals[nameof(SetExpressionState)] = (Func<string, bool, VTSExpressionActivationData>)SetExpressionState;
+			script.Globals[nameof(ExtendedDropImages)] = (Func<string, bool, VTSExtendedDropItemOptionsResponse>)ExtendedDropImages;
 		}
 
 		private static VTSPostProcessingUpdateResponseData SetPostProcessingEffectValues(VTSPostProcessingUpdateOptions options, PostProcessingValue[] values) => VTS_Connection.GetInstance().Plugin?.SetPostProcessingEffectValues(options, values).Result;
@@ -205,5 +205,7 @@ namespace LiveSplit.VTS
 		private static VTSItemLoadResponseData LoadItem(string fileName, VTSItemLoadOptions loadOptions) => VTS_Connection.GetInstance().Plugin?.LoadItem(fileName, loadOptions).Result;
 		private static VTSItemMoveResponseData MoveItem(VTSItemMoveEntry[] moveEntry) => VTS_Connection.GetInstance().Plugin?.MoveItem(moveEntry).Result;
 		private static VTSItemUnloadResponseData UnloadItem(VTSItemUnloadOptions options) => VTS_Connection.GetInstance().Plugin?.UnloadItem(options).Result;
+		private static VTSExtendedDropItemOptionsResponse ExtendedDropImages(string expersion, bool active) => VTS_Connection.GetInstance().Plugin?.ExtendedDropImages(new VTSExtendedDropItemOptions()).Result;
+
 	}
 }

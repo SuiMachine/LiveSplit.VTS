@@ -860,3 +860,23 @@ TimingMethod = {
 	RealTime = 0,
 	GameTime = 1
 }
+
+---Warning
+---Functions below requires Sui's VTube Studio API Extension
+---@param options VTSExtendedDropItemOptions
+---@return VTSExtendedDropItemOptionsResponse options
+function ExtendedDropImages(options) end
+
+---Creates VTSExtendedDropItemOptions object
+---@return VTSExtendedDropItemOptions
+function Create_VTSExtendedDropItemOptions() end
+
+---@class VTSExtendedDropItemOptions
+---@field fileName string
+---@field scale number
+
+---@class VTSExtendedDropItemOptionsResponse
+---@field data VTSExtendedDropItemOptionsResponse_Data
+
+---@class VTSExtendedDropItemOptionsResponse_Data
+---@field absolutely_fucking_nothing nil

@@ -106,6 +106,7 @@ namespace LiveSplit.VTS
 			UserData.RegisterType<VTSItemMoveEntry>();
 			UserData.RegisterType<ModelPosition>();
 
+			
 			UserData.RegisterType<BarycentricCoordinate>();
 
 			UserData.RegisterType<VTSErrorData>();
@@ -118,6 +119,13 @@ namespace LiveSplit.VTS
 			UserData.RegisterType<AtomicDateTime>();
 			UserData.RegisterType<ISegment>();
 			UserData.RegisterType<ISegment[]>();
+
+			//Extendend API
+			UserData.RegisterType<VTSExtendedDropItemOptions>();
+			UserData.RegisterType<VTSExtendedDropItemResponse>();
+			UserData.RegisterType<VTSExtendedDropItemResponse.Data>();
+			UserData.RegisterType<VTSExtendedDropItemOptionsRequestData>();
+
 
 			script = new Script();
 			script.DoFile(scriptFile);
@@ -164,6 +172,8 @@ namespace LiveSplit.VTS
 			script.Globals["Create_MovedItem"] = (Func<MovedItem>)(() => new MovedItem());
 			script.Globals["Create_VTSItemMoveEntry"] = (Func<VTSItemMoveEntry>)(() => new VTSItemMoveEntry());
 
+
+
 			script.Globals["GetCurrentModelID"] = (Func<string>)(() => VTS_Connection.GetInstance().CurrentModelId);
 			script.Globals["GetCurrentModelName"] = (Func<string>)(() => VTS_Connection.GetInstance().CurrentModelName);
 
@@ -186,7 +196,10 @@ namespace LiveSplit.VTS
 			script.Globals[nameof(PinItemToPoint)] = (Func<string, string, string, float, VTSItemAngleRelativityMode, float, VTSItemSizeRelativityMode, BarycentricCoordinate, VTSItemPinResponseData>)PinItemToPoint;
 			script.Globals[nameof(PinItemToRandom)] = (Func<string, string, string, float, VTSItemAngleRelativityMode, float, VTSItemSizeRelativityMode, VTSItemPinResponseData>)PinItemToRandom;
 			script.Globals[nameof(UnpinItem)] = (Func<string, VTSItemPinResponseData>)UnpinItem;
-			script.Globals[nameof(ExtendedDropImages)] = (Func<string, bool, VTSExtendedDropItemOptionsResponse>)ExtendedDropImages;
+
+			//Extended API
+			script.Globals["Create_VTSExtendedDropItemOptions"] = (Func<VTSExtendedDropItemOptions>)(() => new VTSExtendedDropItemOptions());
+			script.Globals[nameof(ExtendedDropImages)] = (Func<VTSExtendedDropItemOptions, VTSExtendedDropItemResponse>)ExtendedDropImages;
 		}
 
 		private static VTSPostProcessingUpdateResponseData SetPostProcessingEffectValues(VTSPostProcessingUpdateOptions options, PostProcessingValue[] values) => VTS_Connection.GetInstance().Plugin?.SetPostProcessingEffectValues(options, values).Result;
@@ -205,7 +218,7 @@ namespace LiveSplit.VTS
 		private static VTSItemLoadResponseData LoadItem(string fileName, VTSItemLoadOptions loadOptions) => VTS_Connection.GetInstance().Plugin?.LoadItem(fileName, loadOptions).Result;
 		private static VTSItemMoveResponseData MoveItem(VTSItemMoveEntry[] moveEntry) => VTS_Connection.GetInstance().Plugin?.MoveItem(moveEntry).Result;
 		private static VTSItemUnloadResponseData UnloadItem(VTSItemUnloadOptions options) => VTS_Connection.GetInstance().Plugin?.UnloadItem(options).Result;
-		private static VTSExtendedDropItemOptionsResponse ExtendedDropImages(string expersion, bool active) => VTS_Connection.GetInstance().Plugin?.ExtendedDropImages(new VTSExtendedDropItemOptions()).Result;
+		private static VTSExtendedDropItemResponse ExtendedDropImages(VTSExtendedDropItemOptions options) => VTS_Connection.GetInstance().Plugin?.ExtendedDropItem(options).Result;
 
 	}
 }

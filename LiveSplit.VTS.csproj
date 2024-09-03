@@ -57,9 +57,6 @@
       <HintPath>C:\LiveSplit\UpdateManager.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="VTS-Sharp">
-      <HintPath>Libs\VTS-Sharp.dll</HintPath>
-    </Reference>
     <Reference Include="websocket-sharp">
       <HintPath>Libs\websocket-sharp.dll</HintPath>
     </Reference>
@@ -96,6 +93,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\VTS-Sharp\VTS-Sharp.csproj">
+      <Project>{9aa6bdb6-6d1e-426d-bfe8-9b012876e4e8}</Project>
+      <Name>VTS-Sharp</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

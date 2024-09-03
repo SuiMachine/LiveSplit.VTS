@@ -1,107 +1,34 @@
 ---This script requires Sui's VTube Studio API extension
+---It also requires beverage_Creature (@7MDigital).png and beverage_Soda_Cola (@7MDigital).png items
 
-PositionOffsetFromCharacterRoot = {
-    x = 0,
-    y = 1
-}
-
-SpawnSpace = 1
-
-function ResetPostProcess()
-    local p = Create_VTSItemUnloadOptions()
-    p.unloadAllInScene = true
-    UnloadItem(p)
-end
-
-function SetRedPostProcess()
-    local res = GetCurrentModel()
-    -- If there is no model, return
-    if res == nil then 
-        return
-    end
-
-
-    local modelPosition = res.data.modelPosition
-
-    local center = modelPosition.positionX + PositionOffsetFromCharacterRoot.x
-    local spawnPointX = center - SpawnSpace / 2
-    local lastSplit = GetLiveSplitState().CurrentSplitIndex - 1
-    local splitCount = #GetRunAsArray() - 1
-    local percent = lastSplit / splitCount
-    local offsetX = SpawnSpace * percent
-    Log("Progress" .. tostring(lastSplit) .. "/" .. tostring(splitCount))
-    
-    local p = Create_VTSItemLoadOptions();
-    p.fadeTime = 0.4
-    p.size = 0.1
-    p.order = 10
-    p.positionX = spawnPointX + offsetX
-    p.positionY = modelPosition.positionY + PositionOffsetFromCharacterRoot.y
-
-    local loadResult = LoadItem("beverage_Creature (@7MDigital).png", p)
-end
-
-function SetGreenPostProcess()
+function SpawnRedLookingStuff()
     local p = Create_VTSExtendedDropItemOptions()
-    p.fileName = "bread (@denchisoft).png"
-    p.count = 10
+    p.fileName = "beverage_Soda_Cola (@7MDigital).png"
+    p.count = 5
     
     local result = ExtendedDropImages(p)
 end
 
-function SetGoldPostProcess()
-    SetGreenPostProcess()
-end
-
----This is performed when the timer starts
-function OnStart()
-end
-
----This is performed when the timer pauses
-function OnPause()
-end
-
----This is performed when the timer restarts
----You probably want to restart things to default here
-function OnReset()
-    ResetPostProcess()
-end
-
----This is performed when the timer resumes after pause
-function OnResume()
-end
-
----This is performed when the timer splits
----generally you probably don't want to handle this manualy and want to use
----OnGreenSplit() / OnRedSplit() / OnGoldSplit instead
----but if you want advanced behaviours, you can write them here
-function OnSplit()
-end
-
----This is performed when you undo a split
----Probably you want to restart things here to previous state or default
-function OnUndoSplit()
-    ResetPostProcess()
-end
-
----This is performed when you skip split
----You may want to restart things here to default
-function OnSkipSplit()
-    ResetPostProcess()
+function SpawnGreenLookingStuff()
+    local p = Create_VTSExtendedDropItemOptions()
+    p.fileName = "beverage_Creature (@7MDigital).png"
+    p.count = 5
+    
+    local result = ExtendedDropImages(p)
 end
 
 ---This is executed when you end up loosing time and is executed both
 ---when splitting on red or when the current split ends up red already
 function OnRedSplit()
-    SetRedPostProcess()
+    SpawnRedLookingStuff()
 end
 
 ---This is executed on split when you end up in the green
 function OnGreenSplit()
-    SetGreenPostProcess()
+    SpawnGreenLookingStuff()
 end
 
 ---This is executed on new best split, but only if you are ahead of PB
 function OnGoldSplit()
-    SetGoldPostProcess()
+    SpawnGreenLookingStuff()
 end

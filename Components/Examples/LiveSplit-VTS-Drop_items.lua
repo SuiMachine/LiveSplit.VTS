@@ -44,7 +44,7 @@ end
 function SetGreenPostProcess()
     local p = Create_VTSExtendedDropItemOptions()
     p.fileName = "bread (@denchisoft).png"
-    p.scale = 2
+    p.count = 10
     
     local result = ExtendedDropImages(p)
 end

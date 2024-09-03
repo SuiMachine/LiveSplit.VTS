@@ -873,7 +873,7 @@ function Create_VTSExtendedDropItemOptions() end
 
 ---@class VTSExtendedDropItemOptions
 ---@field fileName string
----@field scale number
+---@field count integer
 
 ---@class VTSExtendedDropItemOptionsResponse
 ---@field data VTSExtendedDropItemOptionsResponse_Data

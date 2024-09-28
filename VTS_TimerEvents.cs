@@ -179,6 +179,10 @@ namespace LiveSplit.VTS
 					Flag_SendRedSplits = true;
 				}
 			}
+			else
+			{
+
+			}
 		}
 
 		private void State_OnStart(object sender, System.EventArgs e)

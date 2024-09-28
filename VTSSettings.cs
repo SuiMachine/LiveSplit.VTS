@@ -1,5 +1,6 @@
 ﻿using LiveSplit.VTS.CustomAttributes;
 using LiveSplit.VTS.Extensions;
+using MoonSharp.Interpreter;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -192,6 +193,7 @@ namespace LiveSplit.VTS
 				if (!string.IsNullOrEmpty(message))
 				{
 					RB_LogText.AppendText(message + "\n");
+					ScrollLogToEnd();
 				}
 			}
 		}
@@ -243,9 +245,180 @@ namespace LiveSplit.VTS
 			if (string.IsNullOrEmpty(ScriptFile) || !System.IO.File.Exists(ScriptFile))
 				return;
 
-			var fileInfo = new System.IO.FileInfo(ScriptFile);
-			if(fileInfo.LastWriteTime != LastFileUpdate)
+			System.IO.FileInfo fileInfo = new System.IO.FileInfo(ScriptFile);
+			if (fileInfo.LastWriteTime != LastFileUpdate)
 				ProcessLua();
+		}
+
+		private void B_Test_OnStart_Click(object sender, EventArgs e)
+		{
+			if (!LuaMapping.Compiled)
+				return;
+
+			if (LuaMapping.OnStart == null)
+			{
+				RB_LogText.AppendText("Error: No OnStart function in LuaFile\n");
+				ScrollLogToEnd();
+				return;
+			}
+
+			LuaMapping.OnStart.CallAsync();
+		}
+
+		private void B_Test_OnPause_Click(object sender, EventArgs e)
+		{
+			if (!LuaMapping.Compiled)
+				return;
+
+			if (LuaMapping.OnPause == null)
+			{
+				RB_LogText.AppendText("Error: No OnPause function in LuaFile\n");
+				ScrollLogToEnd();
+				return;
+			}
+
+			LuaMapping.OnPause.CallAsync();
+		}
+
+		private void B_Test_OnReset_Click(object sender, EventArgs e)
+		{
+			if (!LuaMapping.Compiled)
+				return;
+
+			if (LuaMapping.OnReset == null)
+			{
+				RB_LogText.AppendText("Error: No OnReset function in LuaFile\n");
+				ScrollLogToEnd();
+				return;
+			}
+
+			LuaMapping.OnReset.CallAsync();
+		}
+
+		private void B_Test_OnResume_Click(object sender, EventArgs e)
+		{
+			if (!LuaMapping.Compiled)
+				return;
+
+			if (LuaMapping.OnResume == null)
+			{
+				RB_LogText.AppendText("Error: No OnResume function in LuaFile\n");
+				ScrollLogToEnd();
+				return;
+			}
+
+			LuaMapping.OnResume.CallAsync();
+		}
+
+		private void B_Test_OnSplit_Click(object sender, EventArgs e)
+		{
+			if (!LuaMapping.Compiled)
+				return;
+
+			if (LuaMapping.OnSplit == null)
+			{
+				RB_LogText.AppendText("Error: No OnSplit function in LuaFile\n");
+				ScrollLogToEnd();
+				return;
+			}
+
+			LuaMapping.OnSplit.CallAsync();
+		}
+
+		private void B_Test_OnUndoSplit_Click(object sender, EventArgs e)
+		{
+			if (!LuaMapping.Compiled)
+				return;
+
+			if (LuaMapping.OnUndoSplit == null)
+			{
+				RB_LogText.AppendText("Error: No OnUndoSplit function in LuaFile\n");
+				ScrollLogToEnd();
+				return;
+			}
+
+			LuaMapping.OnUndoSplit.CallAsync();
+		}
+
+		private void B_Test_OnSkipSplit_Click(object sender, EventArgs e)
+		{
+			if (!LuaMapping.Compiled)
+				return;
+
+			if (LuaMapping.OnUndoSplit == null)
+			{
+				RB_LogText.AppendText("Error: No OnUndoSplit function in LuaFile\n");
+				ScrollLogToEnd();
+				return;
+			}
+
+			LuaMapping.OnUndoSplit.CallAsync();
+		}
+
+		private void B_Test_OnRedSplit_Click(object sender, EventArgs e)
+		{
+			if (!LuaMapping.Compiled)
+				return;
+
+			if (LuaMapping.OnRedSplit == null)
+			{
+				RB_LogText.AppendText("Error: No OnRedSplit function in LuaFile\n");
+				ScrollLogToEnd();
+				return;
+			}
+
+			LuaMapping.OnRedSplit.CallAsync();
+		}
+
+		private void B_Test_OnGreenSplit_Click(object sender, EventArgs e)
+		{
+			if (!LuaMapping.Compiled)
+				return;
+
+			if (LuaMapping.OnGreenSplit == null)
+			{
+				RB_LogText.AppendText("Error: No OnGreenSplit function in LuaFile\n");
+				ScrollLogToEnd();
+				return;
+			}
+
+			LuaMapping.OnGreenSplit.CallAsync();
+		}
+
+		private void B_Test_OnGoldSplit_Click(object sender, EventArgs e)
+		{
+			if (!LuaMapping.Compiled)
+				return;
+
+			if (LuaMapping.OnGoldSplit == null)
+			{
+				RB_LogText.AppendText("Error: No OnGoldSplit function in LuaFile\n");
+				ScrollLogToEnd();
+				return;
+			}
+
+			LuaMapping.OnGoldSplit.CallAsync();
+		}
+
+		private void B_Test_OnGold_Click(object sender, EventArgs e)
+		{
+			if (!LuaMapping.Compiled)
+				return;
+
+			if (LuaMapping.OnGold == null)
+			{
+				RB_LogText.AppendText("Error: No OnGold function in LuaFile\n");
+				ScrollLogToEnd();
+				return;
+			}
+
+			LuaMapping.OnGold.CallAsync();
+		}
+
+		private void ScrollLogToEnd()
+		{
+			RB_LogText.SelectionStart = RB_LogText.Text.Length;
+			RB_LogText.ScrollToCaret();
 		}
 	}
 }

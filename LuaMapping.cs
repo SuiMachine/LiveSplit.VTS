@@ -27,7 +27,7 @@ namespace LiveSplit.VTS
 		public static Closure OnRedSplit { get; private set; }
 		public static Closure OnGreenSplit { get; private set; }
 		public static Closure OnGoldSplit { get; private set; }
-
+		public static Closure OnGold { get; private set; }
 
 		public static void ReadFile(string scriptFile)
 		{
@@ -43,6 +43,7 @@ namespace LiveSplit.VTS
 			OnRedSplit = null;
 			OnGreenSplit = null;
 			OnGoldSplit = null;
+			OnGold = null;
 
 			if (debuggerServer != null && debuggerServer.Current != null && script != null)
 			{
@@ -146,6 +147,7 @@ namespace LiveSplit.VTS
 				OnRedSplit = (Closure)script.Globals["OnRedSplit"];
 				OnGreenSplit = (Closure)script.Globals["OnGreenSplit"];
 				OnGoldSplit = (Closure)script.Globals["OnGoldSplit"];
+				OnGold = (Closure)script.Globals["OnGold"];
 				Compiled = true;
 			}
 			catch (Exception ex)

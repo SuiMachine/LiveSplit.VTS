@@ -40,7 +40,7 @@ namespace LiveSplit.VTS
 				{
 					Logger = new ConsoleVTSLoggerImpl(); // Create a logger to log messages to the console (you can use your own logger implementation here like in the Advanced example)
 					Plugin = new CoreVTSPlugin(instance.Logger, 100, "LiveSplit-VTS", "SuiMachine", "");
-					await Plugin.InitializeAsync(new WebSocketImpl(Logger), new NewtonsoftJsonUtilityImpl(), new TokenStorageImpl(""), () => LogWarning("Disconnected!"));
+					await Plugin.InitializeAsync(new WebSocketImpl(Logger), new NewtonsoftJsonUtilityImpl(), new TokenStorageImpl(""), Disconnected);
 					Log("Connected!");
 					OnConnectionChanged?.Invoke(true);
 					var apiState = await Plugin.GetAPIState();
@@ -93,18 +93,34 @@ namespace LiveSplit.VTS
 		{
 			if (Plugin.IsAuthenticated)
 			{
-				var apiState = await Plugin.GetAPIState();
-				if (apiState.data.currentSessionAuthenticated && apiState.data.active)
+				try
 				{
-					Plugin.Disconnect();
-					OnConnectionChanged?.Invoke(false);
+					var apiState = await Plugin.GetAPIState();
+					if (apiState.data.currentSessionAuthenticated && apiState.data.active)
+					{
+						Plugin.Disconnect();
+						OnConnectionChanged?.Invoke(false);
+					}
 				}
+				catch (Exception ex)
+				{
+					Log("Error" + ex.ToString());
+				}
+
 
 				Plugin.Dispose();
 				Plugin = null;
 				Logger = null;
 				Log("Disconnected");
 			}
+		}
+
+		private void Disconnected()
+		{
+			Plugin.Disconnect();
+			Plugin = null;
+			Logger = null;
+			Log("Disconnected");
 		}
 
 		public void Log(string message)

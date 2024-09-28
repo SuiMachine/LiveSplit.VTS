@@ -2,21 +2,17 @@
 ---It also requires beverage_Creature (@7MDigital).png and beverage_Soda_Cola (@7MDigital).png items
 
 function SpawnRedLookingStuff()
-    LogWarning("Kurwa");
     local p = Create_VTSExtendedDropItemRequest()
     p.fileName = "beverage_Soda_Cola (@7MDigital).png"
     p.count = 5
-    p.dropDefinition = Create_VTSVTSExtendedDropItemDefinition()
 
     local result = ExtendedDropImages(p)
 end
 
 function SpawnGreenLookingStuff()
-    LogWarning("Kurwa");
     local p = Create_VTSExtendedDropItemRequest()
     p.fileName = "beverage_Creature (@7MDigital).png"
     p.count = 5
-    p.dropDefinition = Create_VTSVTSExtendedDropItemDefinition()
     
     local result = ExtendedDropImages(p)
 end
@@ -25,9 +21,9 @@ function SpawnLoadsOfGreenLookingStuff()
     local p = Create_VTSExtendedDropItemRequest()
     p.fileName = "beverage_Creature (@7MDigital).png"
     p.count = 50
-    p.dropDefinition.bottomEdgeBounce = 0
 
     local result = ExtendedDropImages(p)
+
 end
 
 ---This is executed when you end up loosing time and is executed both

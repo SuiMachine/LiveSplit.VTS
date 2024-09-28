@@ -31,6 +31,7 @@ namespace LiveSplit.VTS
 		private List<(PropertyInfo Property, LiveSplitVTSSettingsAttribute Attribute)> layout_settingsMappings;
 		private volatile Queue<string> messagesToAdd = new Queue<string>(); //Because invokes don't seem to work and I can't be bothered
 		private Timer timer;
+		private DateTime LastFileUpdate;
 
 		public VTSSettings()
 		{
@@ -214,7 +215,11 @@ namespace LiveSplit.VTS
 
 		private void ProcessLua()
 		{
+			System.Diagnostics.Debug.WriteLine("Processing lua");
 			LuaMapping.ReadFile(ScriptFile);
+
+			var fileInfo = new System.IO.FileInfo(ScriptFile);
+			LastFileUpdate = fileInfo.LastWriteTime;
 
 			if (LuaMapping.Compiled)
 			{
@@ -231,6 +236,16 @@ namespace LiveSplit.VTS
 		private void B_ReloadScript_Click(object sender, EventArgs e)
 		{
 			ProcessLua();
+		}
+
+		internal void CheckLuaFile()
+		{
+			if (string.IsNullOrEmpty(ScriptFile) || !System.IO.File.Exists(ScriptFile))
+				return;
+
+			var fileInfo = new System.IO.FileInfo(ScriptFile);
+			if(fileInfo.LastWriteTime != LastFileUpdate)
+				ProcessLua();
 		}
 	}
 }

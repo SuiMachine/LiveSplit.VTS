@@ -149,5 +149,11 @@ namespace LiveSplit.VTS
 		}
 
 		public void UnregisterEvents(LiveSplitState state) => timerEvents.UnregisterEvents(state);
+
+		internal void CheckLuaFile()
+		{
+			if (m_settingsForm != null)
+				m_settingsForm.CheckLuaFile();
+		}
 	}
 }

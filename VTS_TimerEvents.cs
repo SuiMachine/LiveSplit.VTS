@@ -12,11 +12,15 @@ namespace LiveSplit.VTS
 		System.Timers.Timer ProcessTimeTask;
 		LiveSplitState state;
 		private bool Flag_SendRedSplits;
+		System.Timers.Timer WatchForFileChanges = new System.Timers.Timer(500);
 
 		public void RegisterEvents(LiveSplitState state, VTS_Connection vtsConnection)
 		{
 			this.state = state;
 			this.vtsConnection = vtsConnection;
+			WatchForFileChanges.AutoReset = true;
+			WatchForFileChanges.Elapsed += WatchForFileChanges_Elapsed;
+			WatchForFileChanges.Start();
 			state.OnPause += State_OnPause;
 			state.OnReset += State_OnReset;
 			state.OnResume += State_OnResume;
@@ -26,8 +30,13 @@ namespace LiveSplit.VTS
 			state.OnSkipSplit += State_OnSkipSplit;
 		}
 
+		private void WatchForFileChanges_Elapsed(object sender, System.Timers.ElapsedEventArgs e) => vtsConnection.CheckLuaFile();
+
 		public void UnregisterEvents(LiveSplitState state)
 		{
+			WatchForFileChanges.Stop();
+			WatchForFileChanges.Elapsed -= WatchForFileChanges_Elapsed;
+
 			state.OnPause -= State_OnPause;
 			state.OnReset -= State_OnReset;
 			state.OnResume -= State_OnResume;
@@ -60,6 +69,8 @@ namespace LiveSplit.VTS
 
 		private void State_OnReset(object sender, TimerPhase value)
 		{
+			WatchForFileChanges.Start();
+
 			if (ProcessTimeTask != null)
 			{
 				ProcessTimeTask.Stop();
@@ -172,6 +183,8 @@ namespace LiveSplit.VTS
 
 		private void State_OnStart(object sender, System.EventArgs e)
 		{
+			WatchForFileChanges.Stop();
+
 			if (LuaMapping.OnStart != null)
 			{
 				try

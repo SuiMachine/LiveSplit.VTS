@@ -41,3 +41,13 @@ end
 function OnGoldSplit()
     SpawnLoadsOfGreenLookingStuff()
 end
+
+---This is executed when you finish the run and you didn't get to PB
+function OnRunFinishedWithoutPB()
+    OnRedSplit()
+end
+
+---This is executed when you finish the run and you managed to get a PB - congrats!
+function OnRunFinishedWithPB()
+    OnGoldSplit()
+end

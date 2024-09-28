@@ -2,6 +2,7 @@
 using LiveSplit.VTS.Extensions;
 using MoonSharp.Interpreter;
 using System;
+using System.Linq;
 using VTS.Core;
 
 namespace LiveSplit.VTS
@@ -9,9 +10,7 @@ namespace LiveSplit.VTS
 	public class VTS_TimerEvents
 	{
 		private VTS_Connection vtsConnection;
-		System.Timers.Timer ProcessTimeTask;
 		LiveSplitState state;
-		private bool Flag_SendRedSplits;
 		System.Timers.Timer WatchForFileChanges = new System.Timers.Timer(500);
 
 		public void RegisterEvents(LiveSplitState state, VTS_Connection vtsConnection)
@@ -63,19 +62,11 @@ namespace LiveSplit.VTS
 					vtsConnection.LogError(ex.ToString());
 				}
 			}
-
-			Flag_SendRedSplits = true;
 		}
 
 		private void State_OnReset(object sender, TimerPhase value)
 		{
 			WatchForFileChanges.Start();
-
-			if (ProcessTimeTask != null)
-			{
-				ProcessTimeTask.Stop();
-				ProcessTimeTask = null;
-			}
 
 			if (LuaMapping.OnReset != null)
 			{
@@ -88,8 +79,6 @@ namespace LiveSplit.VTS
 					vtsConnection.LogError(ex.ToString());
 				}
 			}
-
-			Flag_SendRedSplits = true;
 		}
 
 		private void State_OnResume(object sender, System.EventArgs e)
@@ -128,26 +117,44 @@ namespace LiveSplit.VTS
 
 				if (currentTime > pbTime)
 				{
-					if (LuaMapping.OnRedSplit != null)
+					var personalBestSegmentTime = state.Run[state.CurrentSplitIndex - 1].BestSegmentTime[state.CurrentTimingMethod];
+					var lastSegmentTime = state.Run.GetLastSegmentTime(state.CurrentSplitIndex - 1, state.CurrentTimingMethod);
+
+					if (lastSegmentTime < personalBestSegmentTime)
 					{
-						try
+						if (LuaMapping.OnGold != null)
 						{
-							LuaMapping.OnRedSplit.CallAsync();
-						}
-						catch (Exception ex)
-						{
-							vtsConnection.LogError(ex.ToString());
+							try
+							{
+								LuaMapping.OnGold.CallAsync();
+							}
+							catch (Exception ex)
+							{
+								vtsConnection.LogError(ex.ToString());
+							}
 						}
 					}
-
-					Flag_SendRedSplits = false;
+					else
+					{
+						if (LuaMapping.OnRedSplit != null)
+						{
+							try
+							{
+								LuaMapping.OnRedSplit.CallAsync();
+							}
+							catch (Exception ex)
+							{
+								vtsConnection.LogError(ex.ToString());
+							}
+						}
+					}
 				}
 				else
 				{
-					var personalBest = state.Run[state.CurrentSplitIndex - 1].BestSegmentTime[state.CurrentTimingMethod];
+					var personalBestSegmentTime = state.Run[state.CurrentSplitIndex - 1].BestSegmentTime[state.CurrentTimingMethod];
 					var lastSegmentTime = state.Run.GetLastSegmentTime(state.CurrentSplitIndex - 1, state.CurrentTimingMethod);
 
-					if (lastSegmentTime < personalBest)
+					if (lastSegmentTime < personalBestSegmentTime)
 					{
 						if (LuaMapping.OnGoldSplit != null)
 						{
@@ -175,13 +182,47 @@ namespace LiveSplit.VTS
 							}
 						}
 					}
-
-					Flag_SendRedSplits = true;
 				}
 			}
-			else
+			else if (state.CurrentPhase == TimerPhase.Ended)
 			{
+				var currentEndRunTime = state.CurrentTime[state.CurrentTimingMethod];
+				var pbRunTime = state.Run.Last().PersonalBestSplitTime[state.CurrentTimingMethod];
 
+				if (currentEndRunTime > pbRunTime)
+				{
+					try
+					{
+						if (LuaMapping.OnRunFinishedWithoutPB == null)
+						{
+							if (LuaMapping.OnRedSplit != null)
+								LuaMapping.OnRedSplit.CallAsync();
+						}
+						else
+							LuaMapping.OnRunFinishedWithoutPB.CallAsync();
+					}
+					catch (Exception ex)
+					{
+						vtsConnection.LogError(ex.ToString());
+					}
+				}
+				else
+				{
+					try
+					{
+						if (LuaMapping.OnRunFinishedWithPB == null)
+						{
+							if (LuaMapping.OnGoldSplit != null)
+								LuaMapping.OnGoldSplit.CallAsync();
+						}
+						else
+							LuaMapping.OnRunFinishedWithPB.CallAsync();
+					}
+					catch (Exception ex)
+					{
+						vtsConnection.LogError(ex.ToString());
+					}
+				}
 			}
 		}
 
@@ -200,24 +241,10 @@ namespace LiveSplit.VTS
 					vtsConnection.LogError(ex.ToString());
 				}
 			}
-
-			if (ProcessTimeTask == null)
-			{
-				ProcessTimeTask = new System.Timers.Timer()
-				{
-					AutoReset = true,
-					Interval = 200,
-				};
-				ProcessTimeTask.Elapsed += ProcessTimeTask_Elapsed;
-				ProcessTimeTask.Start();
-			}
-
-			Flag_SendRedSplits = true;
 		}
 
 		private void State_OnUndoSplit(object sender, System.EventArgs e)
 		{
-			Flag_SendRedSplits = true;
 			if (LuaMapping.OnUndoSplit != null)
 			{
 				try
@@ -233,7 +260,6 @@ namespace LiveSplit.VTS
 
 		private void State_OnSkipSplit(object sender, System.EventArgs e)
 		{
-			Flag_SendRedSplits = true;
 			if (LuaMapping.OnSkipSplit != null)
 			{
 				try
@@ -243,28 +269,6 @@ namespace LiveSplit.VTS
 				catch (Exception ex)
 				{
 					vtsConnection.LogError(ex.ToString());
-				}
-			}
-		}
-
-		private void ProcessTimeTask_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
-		{
-			if (state.CurrentSplit != null && Flag_SendRedSplits)
-			{
-				var time = state.CurrentSplit.PersonalBestSplitTime[state.CurrentTimingMethod];
-
-				if (state.CurrentTime[state.CurrentTimingMethod] > time)
-				{
-					try
-					{
-						LuaMapping.OnRedSplit.CallAsync();
-					}
-					catch (Exception ex)
-					{
-						vtsConnection.LogError(ex.ToString());
-					}
-
-					Flag_SendRedSplits = false;
 				}
 			}
 		}

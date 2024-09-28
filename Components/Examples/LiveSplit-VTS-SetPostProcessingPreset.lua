@@ -89,3 +89,15 @@ end
 function OnGoldSplit()
     SetGoldPostProcess()
 end
+
+---This is executed on a new best split, but it can be behind the PB
+function OnGold()
+end
+
+---This is executed when you finish the run and you didn't get to PB
+function OnRunFinishedWithoutPB()
+end
+
+---This is executed when you finish the run and you managed to get a PB - congrats!
+function OnRunFinishedWithPB()
+end

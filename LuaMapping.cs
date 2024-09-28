@@ -28,6 +28,9 @@ namespace LiveSplit.VTS
 		public static Closure OnGreenSplit { get; private set; }
 		public static Closure OnGoldSplit { get; private set; }
 		public static Closure OnGold { get; private set; }
+		public static Closure OnRunFinishedWithoutPB { get; private set; }
+		public static Closure OnRunFinishedWithPB { get; private set; }
+
 
 		public static void ReadFile(string scriptFile)
 		{
@@ -44,6 +47,8 @@ namespace LiveSplit.VTS
 			OnGreenSplit = null;
 			OnGoldSplit = null;
 			OnGold = null;
+			OnRunFinishedWithoutPB = null;
+			OnRunFinishedWithPB = null;
 
 			if (debuggerServer != null && debuggerServer.Current != null && script != null)
 			{
@@ -128,7 +133,6 @@ namespace LiveSplit.VTS
 			UserData.RegisterType<VTSExtendedDropItemResponse.Data>();
 			UserData.RegisterType<VTSExtendedDropItemOptionsRequestData>();
 
-
 			script = new Script();
 			script.DoFile(scriptFile);
 			SetGlobals(script);
@@ -148,6 +152,10 @@ namespace LiveSplit.VTS
 				OnGreenSplit = (Closure)script.Globals["OnGreenSplit"];
 				OnGoldSplit = (Closure)script.Globals["OnGoldSplit"];
 				OnGold = (Closure)script.Globals["OnGold"];
+
+				OnRunFinishedWithoutPB = (Closure)script.Globals["OnRunFinishedWithoutPB"];
+				OnRunFinishedWithPB = (Closure)script.Globals["OnRunFinishedWithPB"];
+
 				Compiled = true;
 			}
 			catch (Exception ex)

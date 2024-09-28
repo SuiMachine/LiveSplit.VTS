@@ -200,8 +200,6 @@ namespace LiveSplit.VTS
 
 			//Extended API
 			script.Globals["Create_VTSExtendedDropItemRequest"] = (Func<VTSExtendedDropItemRequest>)(() => new VTSExtendedDropItemRequest());
-			script.Globals["Create_VTSVTSExtendedDropItemDefinition"] = (Func<VTSExtendedDropItemDefinition>)(() => new VTSExtendedDropItemDefinition());
-
 
 			script.Globals[nameof(ExtendedDropImages)] = (Func<VTSExtendedDropItemRequest, VTSExtendedDropItemResponse>)ExtendedDropImages;
 		}

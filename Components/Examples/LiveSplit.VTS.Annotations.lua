@@ -871,10 +871,6 @@ function ExtendedDropImages(options) end
 ---@return VTSExtendedDropItemRequest
 function Create_VTSExtendedDropItemRequest() end
 
----Creates Create_VTSVTSExtendedDropItemDefinition object
----@return VTSExtendedDropItemDefinition
-function Create_VTSVTSExtendedDropItemDefinition() end
-
 ---@class VTSExtendedDropItemRequest
 ---@field fileName string
 ---@field count integer

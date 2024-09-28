@@ -25,10 +25,8 @@ function SpawnLoadsOfGreenLookingStuff()
     local p = Create_VTSExtendedDropItemRequest()
     p.fileName = "beverage_Creature (@7MDigital).png"
     p.count = 50
-    p.dropDefinition = Create_VTSVTSExtendedDropItemDefinition()
-    p.dropDefinition.dropSpeed = 0
-    p.dropDefinition.sizeScale = 0.1
-    
+    p.dropDefinition.bottomEdgeBounce = 0
+
     local result = ExtendedDropImages(p)
 end
 

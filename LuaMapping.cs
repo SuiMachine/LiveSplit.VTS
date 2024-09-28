@@ -121,7 +121,8 @@ namespace LiveSplit.VTS
 			UserData.RegisterType<ISegment[]>();
 
 			//Extendend API
-			UserData.RegisterType<VTSExtendedDropItemOptions>();
+			UserData.RegisterType<VTSExtendedDropItemRequest>();
+			UserData.RegisterType<VTSExtendedDropItemDefinition>();
 			UserData.RegisterType<VTSExtendedDropItemResponse>();
 			UserData.RegisterType<VTSExtendedDropItemResponse.Data>();
 			UserData.RegisterType<VTSExtendedDropItemOptionsRequestData>();
@@ -198,8 +199,11 @@ namespace LiveSplit.VTS
 			script.Globals[nameof(UnpinItem)] = (Func<string, VTSItemPinResponseData>)UnpinItem;
 
 			//Extended API
-			script.Globals["Create_VTSExtendedDropItemOptions"] = (Func<VTSExtendedDropItemOptions>)(() => new VTSExtendedDropItemOptions());
-			script.Globals[nameof(ExtendedDropImages)] = (Func<VTSExtendedDropItemOptions, VTSExtendedDropItemResponse>)ExtendedDropImages;
+			script.Globals["Create_VTSExtendedDropItemRequest"] = (Func<VTSExtendedDropItemRequest>)(() => new VTSExtendedDropItemRequest());
+			script.Globals["Create_VTSVTSExtendedDropItemDefinition"] = (Func<VTSExtendedDropItemDefinition>)(() => new VTSExtendedDropItemDefinition());
+
+
+			script.Globals[nameof(ExtendedDropImages)] = (Func<VTSExtendedDropItemRequest, VTSExtendedDropItemResponse>)ExtendedDropImages;
 		}
 
 		private static VTSPostProcessingUpdateResponseData SetPostProcessingEffectValues(VTSPostProcessingUpdateOptions options, PostProcessingValue[] values) => VTS_Connection.GetInstance().Plugin?.SetPostProcessingEffectValues(options, values).Result;
@@ -218,7 +222,6 @@ namespace LiveSplit.VTS
 		private static VTSItemLoadResponseData LoadItem(string fileName, VTSItemLoadOptions loadOptions) => VTS_Connection.GetInstance().Plugin?.LoadItem(fileName, loadOptions).Result;
 		private static VTSItemMoveResponseData MoveItem(VTSItemMoveEntry[] moveEntry) => VTS_Connection.GetInstance().Plugin?.MoveItem(moveEntry).Result;
 		private static VTSItemUnloadResponseData UnloadItem(VTSItemUnloadOptions options) => VTS_Connection.GetInstance().Plugin?.UnloadItem(options).Result;
-		private static VTSExtendedDropItemResponse ExtendedDropImages(VTSExtendedDropItemOptions options) => VTS_Connection.GetInstance().Plugin?.ExtendedDropItem(options).Result;
-
+		private static VTSExtendedDropItemResponse ExtendedDropImages(VTSExtendedDropItemRequest options) => VTS_Connection.GetInstance().Plugin?.ExtendedDropItem(options).Result;
 	}
 }

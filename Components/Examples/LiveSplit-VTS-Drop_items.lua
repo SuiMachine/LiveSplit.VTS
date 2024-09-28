@@ -2,25 +2,32 @@
 ---It also requires beverage_Creature (@7MDigital).png and beverage_Soda_Cola (@7MDigital).png items
 
 function SpawnRedLookingStuff()
-    local p = Create_VTSExtendedDropItemOptions()
+    LogWarning("Kurwa");
+    local p = Create_VTSExtendedDropItemRequest()
     p.fileName = "beverage_Soda_Cola (@7MDigital).png"
     p.count = 5
-    
+    p.dropDefinition = Create_VTSVTSExtendedDropItemDefinition()
+
     local result = ExtendedDropImages(p)
 end
 
 function SpawnGreenLookingStuff()
-    local p = Create_VTSExtendedDropItemOptions()
+    LogWarning("Kurwa");
+    local p = Create_VTSExtendedDropItemRequest()
     p.fileName = "beverage_Creature (@7MDigital).png"
     p.count = 5
+    p.dropDefinition = Create_VTSVTSExtendedDropItemDefinition()
     
     local result = ExtendedDropImages(p)
 end
 
 function SpawnLoadsOfGreenLookingStuff()
-    local p = Create_VTSExtendedDropItemOptions()
+    local p = Create_VTSExtendedDropItemRequest()
     p.fileName = "beverage_Creature (@7MDigital).png"
     p.count = 50
+    p.dropDefinition = Create_VTSVTSExtendedDropItemDefinition()
+    p.dropDefinition.dropSpeed = 0
+    p.dropDefinition.sizeScale = 0.1
     
     local result = ExtendedDropImages(p)
 end

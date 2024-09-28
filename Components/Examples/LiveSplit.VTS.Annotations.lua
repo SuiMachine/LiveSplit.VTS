@@ -863,20 +863,41 @@ TimingMethod = {
 
 ---Warning
 ---Functions below requires Sui's VTube Studio API Extension
----@param options VTSExtendedDropItemOptions
+---@param options VTSExtendedDropItemRequest
 ---@return VTSExtendedDropItemOptionsResponse options
 function ExtendedDropImages(options) end
 
----Creates VTSExtendedDropItemOptions object
----@return VTSExtendedDropItemOptions
-function Create_VTSExtendedDropItemOptions() end
+---Creates VTSExtendedDropItemRequest object
+---@return VTSExtendedDropItemRequest
+function Create_VTSExtendedDropItemRequest() end
 
----@class VTSExtendedDropItemOptions
+---Creates Create_VTSVTSExtendedDropItemDefinition object
+---@return VTSExtendedDropItemDefinition
+function Create_VTSVTSExtendedDropItemDefinition() end
+
+---@class VTSExtendedDropItemRequest
 ---@field fileName string
 ---@field count integer
+---@field dropDefinition VTSExtendedDropItemDefinition
 
 ---@class VTSExtendedDropItemOptionsResponse
 ---@field data VTSExtendedDropItemOptionsResponse_Data
+
+---@class VTSExtendedDropItemDefinition
+---@field normalizeScale boolean
+---@field startWithSmoothBorder boolean
+---@field lifeTime number Default 3
+---@field opacity number Default 1
+---@field animationSpeed number 1
+---@field gravity number 1
+---@field sizeScale number 1
+---@field dropSpeed number 0.6
+---@field bounciness number 0.4
+---@field rotation number 1.0
+---@field bottomEdgeBounce number 2
+---@field topEdgeBounce number 2
+---@field leftEdgeBounce number 2
+---@field rightEdgeBounce number 2
 
 ---@class VTSExtendedDropItemOptionsResponse_Data
 ---@field absolutely_fucking_nothing nil

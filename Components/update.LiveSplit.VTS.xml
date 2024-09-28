@@ -1,4 +1,16 @@
 <updates>
+    <update version="0.8.0">
+    <files>
+        <file path="Components/LiveSplit.VTS.dll" status="changed"/>
+    </files>
+    <changelog>
+        <change>Add missing handling of the last split.</change>
+        <change>Scrap OnRedSplit when loosing PB pace, but before split.</change>
+        <change>Test buttons added to settings form to more easily test the code.</change>
+        <change>Added automatic checking of the current Lua file for file changes and automatic reload of that file if it was changed and the timer is not running.</change>
+        <change>Further expended support for dropping images using Sui's VTS Extensions.</change>
+    </changelog>
+    </update>
     <update version="0.7.0">
     <files>
         <file path="Components/LiveSplit.VTS.dll" status="changed"/>

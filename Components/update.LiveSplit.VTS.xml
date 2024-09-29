@@ -1,4 +1,12 @@
 <updates>
+    <update version="0.8.1">
+    <files>
+        <file path="Components/LiveSplit.VTS.dll" status="changed"/>
+    </files>
+    <changelog>
+        <change>Improved layout.</change>
+    </changelog>
+    </update>
     <update version="0.8.0">
     <files>
         <file path="Components/LiveSplit.VTS.dll" status="changed"/>

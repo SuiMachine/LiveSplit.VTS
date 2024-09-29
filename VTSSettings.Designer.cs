@@ -469,7 +469,7 @@
 			this.tlpMain.RowCount = 2;
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tlpMain.Size = new System.Drawing.Size(476, 521);
+			this.tlpMain.Size = new System.Drawing.Size(476, 539);
 			this.tlpMain.TabIndex = 0;
 			// 
 			// gbLog
@@ -478,7 +478,7 @@
 			this.gbLog.Dock = System.Windows.Forms.DockStyle.Top;
 			this.gbLog.Location = new System.Drawing.Point(3, 356);
 			this.gbLog.Name = "gbLog";
-			this.gbLog.Size = new System.Drawing.Size(470, 162);
+			this.gbLog.Size = new System.Drawing.Size(470, 180);
 			this.gbLog.TabIndex = 6;
 			this.gbLog.TabStop = false;
 			this.gbLog.Text = "Log";
@@ -488,7 +488,7 @@
 			this.RB_LogText.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.RB_LogText.Location = new System.Drawing.Point(3, 16);
 			this.RB_LogText.Name = "RB_LogText";
-			this.RB_LogText.Size = new System.Drawing.Size(464, 143);
+			this.RB_LogText.Size = new System.Drawing.Size(464, 161);
 			this.RB_LogText.TabIndex = 0;
 			this.RB_LogText.Text = "";
 			// 
@@ -498,7 +498,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.tlpMain);
 			this.Name = "VTSSettings";
-			this.Size = new System.Drawing.Size(476, 524);
+			this.Size = new System.Drawing.Size(476, 539);
 			this.VisibleChanged += new System.EventHandler(this.VTSSettings_VisibleChanged);
 			this.gbStartSplits.ResumeLayout(false);
 			this.tableLayoutPanel1.ResumeLayout(false);

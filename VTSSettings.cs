@@ -310,21 +310,6 @@ namespace LiveSplit.VTS
 			LuaMapping.OnResume.CallAsync();
 		}
 
-		private void B_Test_OnSplit_Click(object sender, EventArgs e)
-		{
-			if (!LuaMapping.Compiled)
-				return;
-
-			if (LuaMapping.OnSplit == null)
-			{
-				RB_LogText.AppendText("Error: No OnSplit function in LuaFile\n");
-				ScrollLogToEnd();
-				return;
-			}
-
-			LuaMapping.OnSplit.CallAsync();
-		}
-
 		private void B_Test_OnUndoSplit_Click(object sender, EventArgs e)
 		{
 			if (!LuaMapping.Compiled)

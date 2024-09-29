@@ -8,3 +8,4 @@ bin/
 *.rar
 .vs/
 packages/*
+*.7z

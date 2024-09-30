@@ -20,7 +20,7 @@ end
 function SpawnLoadsOfGreenLookingStuff()
     local p = Create_VTSExtendedDropItemRequest()
     p.fileName = "beverage_Creature (@7MDigital).png"
-    p.count = 50
+    p.count = 30
 
     local result = ExtendedDropImages(p)
 
@@ -35,6 +35,15 @@ end
 ---This is executed on split when you end up in the green
 function OnGreenSplit()
     SpawnGreenLookingStuff()
+end
+
+function OnGold()
+    SpawnRedLookingStuff()
+
+    local p2 = Create_VTSExtendedDropItemRequest()
+    p2.fileName = "beverage_Creature (@7MDigital).png"
+    p2.count = 1
+    local result2 = ExtendedDropImages(p2)
 end
 
 ---This is executed on new best split, but only if you are ahead of PB

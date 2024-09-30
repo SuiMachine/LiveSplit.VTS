@@ -1,4 +1,13 @@
 <updates>
+    <update version="0.8.2">
+    <files>
+        <file path="Components/LiveSplit.VTS.dll" status="changed"/>
+        <file path="Components/VTS-Sharp.dll" status="changed"/>
+    </files>
+    <changelog>
+        <change>Exposed an option to adjust the fadeout time for dropped images.</change>
+    </changelog>
+    </update>
     <update version="0.8.1">
     <files>
         <file path="Components/LiveSplit.VTS.dll" status="changed"/>

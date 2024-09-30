@@ -883,6 +883,7 @@ function Create_VTSExtendedDropItemRequest() end
 ---@field normalizeScale boolean
 ---@field startWithSmoothBorder boolean
 ---@field lifeTime number Default 3
+---@field disappearTime number Default 3
 ---@field opacity number Default 1
 ---@field animationSpeed number 1
 ---@field gravity number 1

@@ -5,7 +5,7 @@ function ResetPostProcess()
     local p = Create_VTSPostProcessingUpdateOptions()
     p.postProcessingOn = true
     p.setPostProcessingPreset = true
-    p.presetToSet = "Nothing";
+    p.presetToSet = "Nothing"
     p.postProcessingFadeTime = 0.4
     SetPostProcessingEffectValues(p, {})
 end
@@ -14,52 +14,42 @@ function SetRedPostProcess()
     local p = Create_VTSPostProcessingUpdateOptions()
     p.postProcessingOn = true
     p.setPostProcessingPreset = true
-    p.presetToSet = "RedSplits";
+    p.presetToSet = "RedSplits"
     p.postProcessingFadeTime = 0.4
     SetPostProcessingEffectValues(p, {})
+
+    Sleep(1);
+    ResetPostProcess()
 end
 
 function SetGreenPostProcess()
     local p = Create_VTSPostProcessingUpdateOptions()
     p.postProcessingOn = true
     p.setPostProcessingPreset = true
-    p.presetToSet = "GreenSplits";
+    p.presetToSet = "GreenSplits"
     p.postProcessingFadeTime = 0.4
     SetPostProcessingEffectValues(p, {})
+
+    Sleep(1);
+    ResetPostProcess()
 end
 
 function SetGoldPostProcess()
     local p = Create_VTSPostProcessingUpdateOptions()
     p.postProcessingOn = true
     p.setPostProcessingPreset = true
-    p.presetToSet = "Gold";
+    p.presetToSet = "Gold"
     p.postProcessingFadeTime = 0.4
     SetPostProcessingEffectValues(p, {})
-end
 
----This is performed when the timer starts
-function OnStart()
-end
-
----This is performed when the timer pauses
-function OnPause()
+    Sleep(1);
+    ResetPostProcess()
 end
 
 ---This is performed when the timer restarts
 ---You probably want to restart things to default here
 function OnReset()
     ResetPostProcess()
-end
-
----This is performed when the timer resumes after pause
-function OnResume()
-end
-
----This is performed when the timer splits
----generally you probably don't want to handle this manualy and want to use
----OnGreenSplit() / OnRedSplit() / OnGoldSplit instead
----but if you want advanced behaviours, you can write them here
-function OnSplit()
 end
 
 ---This is performed when you undo a split
@@ -92,12 +82,5 @@ end
 
 ---This is executed on a new best split, but it can be behind the PB
 function OnGold()
-end
-
----This is executed when you finish the run and you didn't get to PB
-function OnRunFinishedWithoutPB()
-end
-
----This is executed when you finish the run and you managed to get a PB - congrats!
-function OnRunFinishedWithPB()
+    SetGoldPostProcess();
 end

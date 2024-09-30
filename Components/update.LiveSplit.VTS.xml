@@ -1,4 +1,12 @@
 <updates>
+    <update version="0.8.3">
+    <files>
+        <file path="Components/LiveSplit.VTS.dll" status="changed"/>
+    </files>
+    <changelog>
+        <change>Sleep is now a float point where 1 = 1s (1000ms) instead of 1=1ms</change>
+    </changelog>
+    </update>
     <update version="0.8.2">
     <files>
         <file path="Components/LiveSplit.VTS.dll" status="changed"/>

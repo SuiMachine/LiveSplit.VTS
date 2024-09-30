@@ -183,12 +183,10 @@ namespace LiveSplit.VTS
 			script.Globals["Create_MovedItem"] = (Func<MovedItem>)(() => new MovedItem());
 			script.Globals["Create_VTSItemMoveEntry"] = (Func<VTSItemMoveEntry>)(() => new VTSItemMoveEntry());
 
-
-
 			script.Globals["GetCurrentModelID"] = (Func<string>)(() => VTS_Connection.GetInstance().CurrentModelId);
 			script.Globals["GetCurrentModelName"] = (Func<string>)(() => VTS_Connection.GetInstance().CurrentModelName);
 
-			script.Globals["Sleep"] = (Action<int>)((int sleep) => Task.Delay(sleep).GetAwaiter().GetResult());
+			script.Globals["Sleep"] = (Action<float>)((float sleep) => Task.Delay((int)(sleep * 1000)).GetAwaiter().GetResult());
 
 			script.Globals[nameof(SetPostProcessingEffectValues)] = (Func<VTSPostProcessingUpdateOptions, PostProcessingValue[], VTSPostProcessingUpdateResponseData>)SetPostProcessingEffectValues;
 			script.Globals[nameof(LoadModel)] = (Func<string, VTSModelLoadData>)LoadModel;

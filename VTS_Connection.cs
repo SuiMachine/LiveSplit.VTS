@@ -40,6 +40,21 @@ namespace LiveSplit.VTS
 				{
 					Logger = new ConsoleVTSLoggerImpl(); // Create a logger to log messages to the console (you can use your own logger implementation here like in the Advanced example)
 					Plugin = new CoreVTSPlugin(instance.Logger, 100, "LiveSplit-VTS", "SuiMachine", "");
+
+					var apiPath = m_settingsForm.Api_Address;
+					if (apiPath.StartsWith("ws://"))
+						apiPath = apiPath.Substring(5);
+
+					string[] split = apiPath.Split(':');
+					if (split.Length == 2)
+					{
+						Plugin.SetIPAddress(split[0]);
+						if (uint.TryParse(split[1], out var port))
+						{
+							Plugin.SetPort((int)port);
+						}
+					}
+
 					await Plugin.InitializeAsync(new WebSocketImpl(Logger), new NewtonsoftJsonUtilityImpl(), new TokenStorageImpl(""), Disconnected);
 					Log("Connected!");
 					OnConnectionChanged?.Invoke(true);

@@ -1,4 +1,13 @@
 <updates>
+    <update version="0.8.4">
+    <files>
+        <file path="Components/LiveSplit.VTS.dll" status="changed"/>
+        <file path="Components/VTS-Sharp.dll" status="changed"/>
+    </files>
+    <changelog>
+        <change>Handle custom API address to be able to handle remote VTS instances.</change>
+    </changelog>
+    </update>
     <update version="0.8.3">
     <files>
         <file path="Components/LiveSplit.VTS.dll" status="changed"/>

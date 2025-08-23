@@ -113,8 +113,10 @@ namespace LiveSplit.VTS
 			UserData.RegisterType<MovedItem>();
 			UserData.RegisterType<VTSItemMoveEntry>();
 			UserData.RegisterType<ModelPosition>();
+			UserData.RegisterType<ColorTint>();
+			UserData.RegisterType<VTSColorTintData>();
+			UserData.RegisterType<ArtMeshMatcher>();
 
-			
 			UserData.RegisterType<BarycentricCoordinate>();
 
 			UserData.RegisterType<VTSErrorData>();
@@ -190,6 +192,25 @@ namespace LiveSplit.VTS
 			script.Globals["Create_MovedItem"] = (Func<MovedItem>)(() => new MovedItem());
 			script.Globals["Create_VTSItemMoveEntry"] = (Func<VTSItemMoveEntry>)(() => new VTSItemMoveEntry());
 
+			script.Globals["Create_ColorTint"] = (Func<byte, byte, byte, ColorTint>)((byte r, byte g, byte b) => new ColorTint()
+			{
+				colorR = r, colorG = g, colorB = b, colorA = 255,
+			});
+			script.Globals["Create_ColorTintWithAlpha"] = (Func<byte, byte, byte, byte, ColorTint>)((byte r, byte g, byte b, byte a) => new ColorTint()
+			{
+				colorR = r,	colorG = g, colorB = b, colorA = a
+			});
+
+			script.Globals["Create_ArtMeshMatcher"] = (Func<ArtMeshMatcher>)(() => new ArtMeshMatcher()
+			{
+				artMeshNumber = new int[0],
+				tintAll = false,
+				nameContains = new string[0],
+				nameExact = new string[0],
+				tagExact = new string[0],
+				tagContains = new string[0]
+			});
+
 			script.Globals["GetCurrentModelID"] = (Func<string>)(() => VTS_Connection.GetInstance().CurrentModelId);
 			script.Globals["GetCurrentModelName"] = (Func<string>)(() => VTS_Connection.GetInstance().CurrentModelName);
 
@@ -201,7 +222,7 @@ namespace LiveSplit.VTS
 			script.Globals[nameof(TriggerHotkey)] = (Func<string, VTSHotkeyTriggerData>)TriggerHotkey;
 			script.Globals[nameof(GetCurrentModel)] = (Func<VTSCurrentModelData>)GetCurrentModel;
 			script.Globals[nameof(GetArtMeshList)] = (Func<VTSArtMeshListData>)GetArtMeshList;
-
+			script.Globals[nameof(TintArtMesh)] = (Func<ColorTint, float, ArtMeshMatcher, VTSColorTintData>)TintArtMesh;
 			script.Globals[nameof(AnimateItem)] = (Func<string, VTSItemAnimationControlOptions, VTSItemAnimationControlResponseData>)AnimateItem;
 			script.Globals[nameof(GetItemList)] = (Func<VTSItemListOptions, VTSItemListResponseData>)GetItemList;
 			script.Globals[nameof(LoadItem)] = (Func<string, VTSItemLoadOptions, VTSItemLoadResponseData>)LoadItem;
@@ -226,6 +247,7 @@ namespace LiveSplit.VTS
 		private static VTSItemAnimationControlResponseData AnimateItem(string itemInstanceId, VTSItemAnimationControlOptions options) => VTS_Connection.GetInstance().Plugin?.AnimateItem(itemInstanceId, options).Result;
 		private static VTSCurrentModelData GetCurrentModel() => VTS_Connection.GetInstance().Plugin?.GetCurrentModel().Result;
 		private static VTSArtMeshListData GetArtMeshList() => VTS_Connection.GetInstance().Plugin?.GetArtMeshList().Result;
+		public static VTSColorTintData TintArtMesh(ColorTint tint, float mixWithSceneLightingColor, ArtMeshMatcher matcher) => VTS_Connection.GetInstance().Plugin?.TintArtMesh(tint, mixWithSceneLightingColor, matcher).Result;
 		private static VTSExpressionActivationData SetExpressionState(string expersion, bool active) => VTS_Connection.GetInstance().Plugin?.SetExpressionState(expersion, active).Result;
 		private static VTSItemPinResponseData PinItemToCenter(string itemInstanceID, string modelID, string artMeshID, float angle, VTSItemAngleRelativityMode angleRelativeTo, float size, VTSItemSizeRelativityMode sizeRelativeTo) => VTS_Connection.GetInstance().Plugin?.PinItemToCenter(itemInstanceID, modelID, artMeshID, angle, angleRelativeTo, size, sizeRelativeTo).Result;
 		private static VTSItemPinResponseData PinItemToPoint(string itemInstanceID, string modelID, string artMeshID, float angle, VTSItemAngleRelativityMode angleRelativeTo, float size, VTSItemSizeRelativityMode sizeRelativeTo, BarycentricCoordinate coordinate) => VTS_Connection.GetInstance().Plugin?.PinItemToPoint(itemInstanceID, modelID, artMeshID, angle, angleRelativeTo, size, sizeRelativeTo, coordinate).Result;

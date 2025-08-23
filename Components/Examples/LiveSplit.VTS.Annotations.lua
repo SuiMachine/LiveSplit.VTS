@@ -78,6 +78,13 @@ function TriggerHotkey(hotkey) end
 ---@return VTSItemListResponseData
 function GetItemList(options) end
 
+---Tints found art meshes
+---@param tint ColorTint
+---@param mixWithSceneLightingColor number
+---@param matcher ArtMeshMatcher
+---@return VTSItemListResponseData
+function TintArtMesh(tint, mixWithSceneLightingColor, matcher) end
+
 ---Used to animate certain item
 ---@param itemInstanceId string
 ---@param options VTSItemAnimationControlOptions
@@ -871,6 +878,18 @@ function ExtendedDropImages(options) end
 ---@return VTSExtendedDropItemRequest
 function Create_VTSExtendedDropItemRequest() end
 
+---Creates ColorTint object
+---@return ColorTint result
+function Create_ColorTint(r,g,b) end
+
+---Creates ColorTint object
+---@return ColorTint result
+function Create_ColorTintWithAlpha(r,g,b,a) end
+
+---Creates ArtMeshMatcher object
+---@return ArtMeshMatcher result
+function Create_ArtMeshMatcher() end
+
 ---@class VTSExtendedDropItemRequest
 ---@field fileName string
 ---@field count integer
@@ -898,3 +917,18 @@ function Create_VTSExtendedDropItemRequest() end
 
 ---@class VTSExtendedDropItemOptionsResponse_Data
 ---@field absolutely_fucking_nothing nil
+
+---@class ColorTint
+---@field colorR number Red value between 0-255
+---@field colorG number Green value between 0-255
+---@field colorB number Blue value between 0-255
+---@field colorA number Alpha value between 0-255
+
+---@class ArtMeshMatcher
+---@field tintAll boolean Whatever to int all
+---@field artMeshNumber number[] Art mesh numbers to find
+---@field nameExact string[] Exact names to find
+---@field nameContains string[] Fragments of names to find
+---@field tagExact string[] Exact tags to find
+---@field tagContains string[] Fragments of tags to find
+

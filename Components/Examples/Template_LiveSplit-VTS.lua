@@ -1,5 +1,10 @@
 ---This script a template file - you can write your functions using it
 
+---This is run right after the script ends up parsing - you can use it to initialize data
+---Warning, this can run before LiveSplit connects to VTS, so it might be a bad idea to call VTS functions here
+function OnInitialize()
+end
+
 ---This is performed when the timer starts
 function OnStart()
 end

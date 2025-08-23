@@ -17,6 +17,7 @@ namespace LiveSplit.VTS
 		private static MoonSharpVsCodeDebugServer debuggerServer;
 		public static bool Compiled { get; private set; } = false;
 
+		public static Closure OnInitialize { get; private set; }
 		public static Closure OnStart { get; private set; }
 		public static Closure OnPause { get; private set; }
 		public static Closure OnReset { get; private set; }
@@ -36,6 +37,7 @@ namespace LiveSplit.VTS
 		{
 			Compiled = false;
 
+			OnInitialize = null;
 			OnStart = null;
 			OnPause = null;
 			OnReset = null;
@@ -126,7 +128,7 @@ namespace LiveSplit.VTS
 			UserData.RegisterType<ISegment>();
 			UserData.RegisterType<ISegment[]>();
 
-			//Extendend API
+			//Extended API
 			UserData.RegisterType<VTSExtendedDropItemRequest>();
 			UserData.RegisterType<VTSExtendedDropItemDefinition>();
 			UserData.RegisterType<VTSExtendedDropItemResponse>();
@@ -139,6 +141,7 @@ namespace LiveSplit.VTS
 
 			try
 			{
+				OnInitialize = (Closure)script.Globals["OnInitialize"];
 				OnStart = (Closure)script.Globals["OnStart"];
 				OnPause = (Closure)script.Globals["OnPause"];
 				OnReset = (Closure)script.Globals["OnReset"];
@@ -165,6 +168,10 @@ namespace LiveSplit.VTS
 			}
 
 			debuggerServer.AttachToScript(script, "VTS control script");
+			if (OnInitialize != null)
+			{
+				OnInitialize?.Call();
+			}
 		}
 
 		private static void SetGlobals(Script script)

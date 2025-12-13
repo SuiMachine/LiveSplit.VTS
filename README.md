@@ -21,6 +21,6 @@ Install
 
 Credits
 -------
-  * [SuiMachine](http://twitch.tv/suimachine)
+  * [Sui_VT / SuiMachine](http://twitch.tv/sui_vt)
   * Plugin uses a fork of [VTS-Sharp](https://github.com/FomTarro/VTS-Sharp) by FomTarro.
   * [MoonSharp Lua interpreter](https://www.moonsharp.org/).
